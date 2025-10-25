@@ -37,7 +37,7 @@ final class SwiftDataCoffeeRepository: CoffeeRepository {
     }
     
     func delete(_ coffee: Coffee) throws {
-        
+        context.delete(coffee)
     }
     
     
