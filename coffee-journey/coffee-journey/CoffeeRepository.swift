@@ -14,6 +14,7 @@ protocol CoffeeRepository {
     func delete(_ coffee: Coffee) throws
 }
 
+@MainActor
 final class SwiftDataCoffeeRepository: CoffeeRepository {
     private let context: ModelContext
     init(context: ModelContext) { self.context = context }
