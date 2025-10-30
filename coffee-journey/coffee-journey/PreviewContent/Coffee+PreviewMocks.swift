@@ -2,6 +2,7 @@ import Foundation
 
 // MARK: - Coffee Preview Mocks
 // These mocks are intended for SwiftUI previews and tests.
+#if DEBUG
 extension Coffee {
     struct Mock {
         // Canonical, deterministic examples
@@ -33,3 +34,4 @@ extension Coffee {
         )
     }
 }
+#endif
