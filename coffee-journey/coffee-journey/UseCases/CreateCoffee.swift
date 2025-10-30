@@ -9,6 +9,7 @@ import Foundation
 @MainActor struct CreateCoffee {
     let repository: CoffeeRepository
     
+    @discardableResult
     func callAsFunction(creationRequest: CreateCoffeeRequest) throws -> Coffee {
         let newCoffee = Coffee(
             name: creationRequest.name,
