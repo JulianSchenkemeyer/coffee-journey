@@ -28,7 +28,7 @@ final class SwiftDataCoffeeRepository: CoffeeRepository {
     }
     
     func fetchAll() throws -> [Coffee] {
-        (try? context.fetch(FetchDescriptor<Coffee>())) ?? []
+        try context.fetch(FetchDescriptor<Coffee>())
     }
     
     func update(_ coffee: Coffee) throws -> Coffee {
@@ -39,9 +39,8 @@ final class SwiftDataCoffeeRepository: CoffeeRepository {
     
     func delete(_ coffee: Coffee) throws {
         context.delete(coffee)
+        try context.save()
     }
-    
-    
 }
 
 

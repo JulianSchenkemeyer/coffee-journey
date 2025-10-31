@@ -5,7 +5,6 @@ import Foundation
 #if DEBUG
 extension Coffee {
     struct Mock {
-        // Canonical, deterministic examples
         static let espresso = Coffee(
             name: "Ethiopia Yirgacheffe",
             roaster: "Blue Bottle",
