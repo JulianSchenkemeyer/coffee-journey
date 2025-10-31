@@ -12,6 +12,7 @@ import SwiftUI
 
 struct UseCases {
     var createCoffee: @MainActor (CreateCoffeeRequest) throws -> Coffee
+    var createEquipement: @MainActor (CreateEquipmentRequest) throws -> Equipment
 }
 
 
@@ -19,7 +20,10 @@ private struct UseCasesKey: EnvironmentKey {
     
     static let defaultValue = UseCases(
         createCoffee: {
-            creationRequest in fatalError("UseCases not injected")
+            _ in fatalError("UseCases not injected")
+        },
+        createEquipement: {
+            _ in fatalError("UseCases not injected")
         }
     )
 }

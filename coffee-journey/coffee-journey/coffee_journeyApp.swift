@@ -28,9 +28,11 @@ struct coffee_journeyApp: App {
     func makeUseCases(container: ModelContainer) -> UseCases {
         let context = ModelContext(container)
         let coffeeRepository = SwiftDataCoffeeRepository(context: context)
+        let equipmentRepository = SwiftDataEquipmentRepository(context: context)
         
         let createCoffee = CreateCoffee(repository: coffeeRepository).callAsFunction
+        let createEquipment = CreateEquipment(repository: equipmentRepository).callAsFunction
         
-        return UseCases(createCoffee: createCoffee)
+        return UseCases(createCoffee: createCoffee, createEquipement: createEquipment)
     }
 }

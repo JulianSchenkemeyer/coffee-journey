@@ -126,7 +126,7 @@ struct AddCoffeeFormView: View {
                 rating: req.rating,
                 notes: req.notes
             )
-        }))
+        }, createEquipement: { _ in fatalError("Not implemented")}))
 }
 
 
