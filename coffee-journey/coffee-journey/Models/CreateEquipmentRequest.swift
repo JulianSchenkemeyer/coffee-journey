@@ -8,7 +8,12 @@
 import Foundation
 
 enum EquipmentType: String, Codable, CaseIterable {
-    case kettle, grinder, scale, milkFrother, mug, machine, dripper, filter
+    case kettle
+    case grinder
+    case scale
+    case milkFrother = "Milk Frother"
+    case mug
+    case machine = "Espresso Maschine"
 }
 
 struct CreateEquipmentRequest {
