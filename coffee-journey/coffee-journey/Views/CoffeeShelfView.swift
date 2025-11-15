@@ -36,4 +36,6 @@ struct CoffeeShelfView: View {
 
 #Preview {
     CoffeeShelfView()
+        .modelContainer(PreviewContainer.seeded(with: Coffee.Mock.coffees))
+
 }
