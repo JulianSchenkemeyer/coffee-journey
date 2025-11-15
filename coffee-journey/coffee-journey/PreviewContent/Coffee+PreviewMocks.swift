@@ -31,6 +31,8 @@ extension Coffee {
             rating: 3.5,
             notes: "Chocolate, spice, low acidity"
         )
+        
+        static let coffees = [espresso, filter, darkRoast]
     }
 }
 #endif
