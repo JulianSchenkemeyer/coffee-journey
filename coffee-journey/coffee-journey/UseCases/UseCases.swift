@@ -15,10 +15,9 @@ struct UseCases {
     var createEquipement: @MainActor (CreateEquipmentRequest) throws -> Equipment
 }
 
-
-private struct UseCasesKey: EnvironmentKey {
     
-    static let defaultValue = UseCases(
+extension EnvironmentValues {
+    @Entry var useCases: UseCases = UseCases(
         createCoffee: {
             _ in fatalError("UseCases not injected")
         },
@@ -26,11 +25,4 @@ private struct UseCasesKey: EnvironmentKey {
             _ in fatalError("UseCases not injected")
         }
     )
-}
-
-extension EnvironmentValues {
-    var useCases: UseCases {
-        get { self[UseCasesKey.self] }
-        set { self[UseCasesKey.self] = newValue }
-    }
 }
