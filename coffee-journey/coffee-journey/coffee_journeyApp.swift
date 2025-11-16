@@ -10,10 +10,7 @@ import SwiftData
 
 @main
 struct coffee_journeyApp: App {
-    let container: ModelContainer = {
-        let schema = Schema([Coffee.self, Equipment.self])
-        return try! ModelContainer(for: schema)
-    }()
+    let container: ModelContainer = ContainerFactory.createDefault()
     
     
     var body: some Scene {

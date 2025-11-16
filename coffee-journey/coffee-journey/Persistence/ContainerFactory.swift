@@ -9,7 +9,7 @@ import SwiftData
 
 
 @MainActor
-enum Container {
+enum ContainerFactory {
     
     static func create(configuration: [ModelConfiguration]) -> ModelContainer {
         let schema = Schema([Coffee.self, Equipment.self])

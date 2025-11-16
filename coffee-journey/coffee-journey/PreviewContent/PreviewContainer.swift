@@ -15,7 +15,7 @@ public enum PreviewContainer {
     /// - Parameter instances: Array of PersistentModel instances to insert.
     /// - Returns: A ModelContainer seeded with the provided instances.
     public static func seeded(with instances: [any PersistentModel]) -> ModelContainer {
-        let container = Container.createInMemory()
+        let container = ContainerFactory.createInMemory()
         let context = ModelContext(container)
 
         for instance in instances {
