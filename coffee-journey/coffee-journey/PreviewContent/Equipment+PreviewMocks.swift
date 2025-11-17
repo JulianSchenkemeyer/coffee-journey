@@ -10,7 +10,9 @@ extension Equipment {
     struct Mock {
         static let leverMachine = Equipment(name: "Lever Machine", brand: "Generic", type: EquipmentType.machine.rawValue, notes: "")
         static let kettle = Equipment(name: "Electric Kettle", brand: "Generic", type: EquipmentType.kettle.rawValue, notes: "")
-
+        
+        static let all: [Equipment] = [leverMachine, kettle]
     }
+    
 }
 #endif
