@@ -18,23 +18,7 @@ struct CoffeeShelfView: View {
     var body: some View {
         NavigationStack {
             List(coffees) { coffee in
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(coffee.name)
-                        .font(.title3)
-                    
-                    HStack {
-                        Text(coffee.roaster)
-                        Spacer()
-                        Text(
-                            coffee.roastDate,
-                            format: .dateTime
-                                .hour(.omitted)
-                                .minute(.omitted)
-                        )
-                    }
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                }
+                CoffeeShelfEntryView(coffee: coffee)
             }
             .navigationTitle("Coffee Shelf")
             .toolbar {
