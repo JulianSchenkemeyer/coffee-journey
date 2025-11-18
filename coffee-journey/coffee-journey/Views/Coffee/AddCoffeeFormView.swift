@@ -101,6 +101,7 @@ struct AddCoffeeFormView: View {
             name: name.trimmingCharacters(in: .whitespacesAndNewlines),
             roaster: roaster.trimmingCharacters(in: .whitespacesAndNewlines),
             roastCategory: roastCategory,
+            amount: 250,
             roastDate: roastDate,
             rating: rating,
             notes: notes.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -122,6 +123,8 @@ struct AddCoffeeFormView: View {
                 name: req.name,
                 roaster: req.roaster,
                 roastCategory: req.roastCategory.rawValue,
+                amount: req.amount,
+                amountLeft: req.amount,
                 roastDate: req.roastDate,
                 rating: req.rating,
                 notes: req.notes

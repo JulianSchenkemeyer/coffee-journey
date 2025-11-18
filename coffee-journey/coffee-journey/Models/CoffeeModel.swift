@@ -14,6 +14,9 @@ import SwiftData
     var roaster: String
     var roastCategory: String
     
+    var amount: Double
+    var amountLeft: Double
+    
     var roastDate: Date
     var rating: Double
     var notes: String
@@ -22,6 +25,8 @@ import SwiftData
         name: String,
         roaster: String,
         roastCategory: String,
+        amount: Double,
+        amountLeft: Double,
         roastDate: Date,
         rating: Double,
         notes: String
@@ -29,6 +34,8 @@ import SwiftData
         self.name = name
         self.roaster = roaster
         self.roastCategory = roastCategory
+        self.amount = amount
+        self.amountLeft = amountLeft
         self.roastDate = roastDate
         self.rating = rating
         self.notes = notes
@@ -40,6 +47,8 @@ import SwiftData
         self.roaster = ""
         self.roastCategory = ""
         self.roastDate = Date()
+        self.amount = 0.0
+        self.amountLeft = 0.0
         self.rating = 0.0
         self.notes = ""
     }

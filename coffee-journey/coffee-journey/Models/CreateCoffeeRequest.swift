@@ -21,6 +21,7 @@ struct CreateCoffeeRequest {
     let name: String
     let roaster: String
     let roastCategory: RoastCategory
+    let amount: Double
     let roastDate: Date
     let rating: Double
     let notes: String

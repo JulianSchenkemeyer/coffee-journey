@@ -15,6 +15,8 @@ import Foundation
             name: creationRequest.name,
             roaster: creationRequest.roaster,
             roastCategory: creationRequest.roastCategory.rawValue,
+            amount: creationRequest.amount,
+            amountLeft: creationRequest.amount,
             roastDate: creationRequest.roastDate,
             rating: creationRequest.rating,
             notes: creationRequest.notes

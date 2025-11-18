@@ -9,6 +9,8 @@ extension Coffee {
             name: "Ethiopia Yirgacheffe",
             roaster: "Blue Bottle",
             roastCategory: "Light",
+            amount: 250,
+            amountLeft: 250,
             roastDate: Calendar.current.date(byAdding: .day, value: -7, to: .now) ?? .now,
             rating: 4.5,
             notes: "Floral, citrus, tea-like body"
@@ -18,6 +20,8 @@ extension Coffee {
             name: "Colombia Huila",
             roaster: "Square Mile",
             roastCategory: "Medium",
+            amount: 250,
+            amountLeft: 75.5,
             roastDate: Calendar.current.date(byAdding: .day, value: -14, to: .now) ?? .now,
             rating: 4.0,
             notes: "Caramel, red apple, balanced"
@@ -27,6 +31,8 @@ extension Coffee {
             name: "Sumatra Mandheling",
             roaster: "Local Roasters",
             roastCategory: "Dark",
+            amount: 250,
+            amountLeft: 0,
             roastDate: Calendar.current.date(byAdding: .day, value: -3, to: .now) ?? .now,
             rating: 3.5,
             notes: "Chocolate, spice, low acidity"
