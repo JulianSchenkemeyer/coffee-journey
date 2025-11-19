@@ -23,7 +23,22 @@ struct CoffeeShelfView: View {
         NavigationStack {
             List(coffees) { coffee in
                 CoffeeShelfEntryView(coffee: coffee)
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            print("Brew")
+                        } label: {
+                            Label("Brew", systemImage: "cup.and.heat.waves.fill")
+                        }
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button {
+                            print("Refill")
+                        } label: {
+                            Label("Refill", systemImage: "arrow.trianglehead.clockwise")
+                        }
+                    }
             }
+            
             .navigationTitle("Coffee Shelf")
             .toolbar {
                 Button("Add Coffee", systemImage: "plus") {
@@ -41,6 +56,5 @@ struct CoffeeShelfView: View {
 #Preview {
     CoffeeShelfView()
         .modelContainer(PreviewContainer.seeded(with: Coffee.Mock.coffees))
-
 }
 
