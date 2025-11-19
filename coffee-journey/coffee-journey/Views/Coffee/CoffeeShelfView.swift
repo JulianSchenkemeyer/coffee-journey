@@ -13,7 +13,11 @@ import SwiftData
 struct CoffeeShelfView: View {
     @State private var showAddCoffee: Bool = false
     
-    @Query var coffees: [Coffee] = []
+    @Query(sort: [
+        SortDescriptor(\Coffee.roastDate, order: .reverse),
+        SortDescriptor(\Coffee.amountLeft, order: .reverse)
+    ]) var coffees: [Coffee] = []
+    
     
     var body: some View {
         NavigationStack {
@@ -39,3 +43,4 @@ struct CoffeeShelfView: View {
         .modelContainer(PreviewContainer.seeded(with: Coffee.Mock.coffees))
 
 }
+

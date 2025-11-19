@@ -13,19 +13,29 @@ struct CoffeeShelfEntryView: View {
     var coffee: Coffee
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
+        VStack(alignment: .leading, spacing: 6) {
             Text(coffee.name)
                 .font(.title3)
             
             HStack {
-                Text(coffee.roaster)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(coffee.roaster)
+                    Text(
+                        coffee.roastDate,
+                        format: .dateTime
+                            .hour(.omitted)
+                            .minute(.omitted)
+                    )
+                }
+                
                 Spacer()
-                Text(
-                    coffee.roastDate,
-                    format: .dateTime
-                        .hour(.omitted)
-                        .minute(.omitted)
-                )
+                
+                VStack(spacing: 4) {
+                    Text(Measurement(value: coffee.amountLeft, unit: UnitMass.grams), format: .measurement(width: .abbreviated, usage: .asProvided))
+                        .foregroundStyle(.primary)
+                    
+                    
+                }
             }
             .font(.caption)
             .foregroundStyle(.secondary)
@@ -35,4 +45,6 @@ struct CoffeeShelfEntryView: View {
 
 #Preview {
     CoffeeShelfEntryView(coffee: Coffee.Mock.espresso)
+    CoffeeShelfEntryView(coffee: Coffee.Mock.filter)
+    CoffeeShelfEntryView(coffee: Coffee.Mock.darkRoast)
 }
