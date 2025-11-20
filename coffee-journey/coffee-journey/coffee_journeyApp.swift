@@ -11,13 +11,18 @@ import SwiftData
 @main
 struct coffee_journeyApp: App {
     let container: ModelContainer = ContainerFactory.createDefault()
+    let context: ModelContext
+    
+    init() {
+        self.context = ModelContext(container)
+    }
     
     
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
-        .environment(\.modelContext, ModelContext(container))
-        .environment(\.useCases, UseCaseFactory.make(container: container))
+        .environment(\.modelContext, context)
+        .environment(\.useCases, UseCaseFactory.make(context: context))
     }
 }

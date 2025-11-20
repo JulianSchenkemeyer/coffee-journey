@@ -20,8 +20,7 @@ struct UseCases {
 enum UseCaseFactory {
     
     @MainActor
-    static func make(container: ModelContainer) -> UseCases {
-        let context = ModelContext(container)
+    static func make(context: ModelContext) -> UseCases {
         let coffeeRepository = SwiftDataCoffeeRepository(context: context)
         let equipmentRepository = SwiftDataEquipmentRepository(context: context)
         
