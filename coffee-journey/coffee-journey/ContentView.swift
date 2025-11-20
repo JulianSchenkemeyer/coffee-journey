@@ -20,5 +20,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    PreviewUseCaseEnvironment {
+        ContentView()
+    }
 }

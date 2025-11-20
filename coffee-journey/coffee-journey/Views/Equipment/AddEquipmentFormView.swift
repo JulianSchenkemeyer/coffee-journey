@@ -98,22 +98,9 @@ struct AddEquipmentFormView: View {
 }
 
 #Preview {
-    AddEquipmentFormView()
-        .environment(
-            \.useCases,
-             UseCases(
-                createCoffee: { _ in
-                    fatalError("Not implemented")
-                }, brewDrink: { _ in fatalError("Not implemented")},
-                createEquipement: { req in
-                    Equipment(
-                        name: req.name,
-                        brand: req.brand,
-                        type: req.type.rawValue,
-                        notes: req.notes
-                    )
-                })
-        )
+    PreviewUseCaseEnvironment {
+        AddEquipmentFormView()
+    }
 }
 
 

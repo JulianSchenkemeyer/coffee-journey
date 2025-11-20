@@ -42,7 +42,7 @@ struct EquipmentShelfView: View {
 
 
 #Preview {
-    EquipmentShelfView()
-        .modelContainer(PreviewContainer.seeded(with: Equipment.Mock.all))
-
+    PreviewUseCaseEnvironment {
+        EquipmentShelfView()
+    }
 }

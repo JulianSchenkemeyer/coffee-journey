@@ -117,25 +117,9 @@ struct AddCoffeeFormView: View {
 }
 
 #Preview {
-    AddCoffeeFormView()
-        .environment(\.useCases, UseCases(createCoffee: { req in
-            Coffee(
-                name: req.name,
-                roaster: req.roaster,
-                roastCategory: req.roastCategory.rawValue,
-                amount: req.amount,
-                amountLeft: req.amount,
-                lastRefill: .now,
-                totalBrews: 0,
-                brewsSinceRefill: 0,
-                roastDate: req.roastDate,
-                rating: req.rating,
-                notes: req.notes
-            )
-            
-        },
-        brewDrink: { _ in fatalError("Not implemented")},
-        createEquipement: { _ in fatalError("Not implemented")}))
+    PreviewUseCaseEnvironment {
+        AddCoffeeFormView()
+    }
 }
 
 
