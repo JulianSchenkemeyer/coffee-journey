@@ -11,7 +11,10 @@ extension Coffee {
             roastCategory: "Light",
             amount: 250,
             amountLeft: 250,
-            roastDate: Calendar.current.date(byAdding: .day, value: -7, to: .now) ?? .now,
+            lastRefill: Calendar.current.date(byAdding: .day, value: -3, to: .now) ?? .now,
+            totalBrews: 5,
+            brewsSinceRefill: 1,
+            roastDate: Calendar.current.date(byAdding: .day, value: -17, to: .now) ?? .now,
             rating: 4.5,
             notes: "Floral, citrus, tea-like body"
         )
@@ -21,7 +24,10 @@ extension Coffee {
             roaster: "Square Mile",
             roastCategory: "Medium",
             amount: 250,
-            amountLeft: 75.5,
+            amountLeft: 0, //75.5,
+            lastRefill: Calendar.current.date(byAdding: .day, value: -3, to: .now) ?? .now,
+            totalBrews: 15,
+            brewsSinceRefill: 3,
             roastDate: Calendar.current.date(byAdding: .day, value: -14, to: .now) ?? .now,
             rating: 4.0,
             notes: "Caramel, red apple, balanced"
@@ -33,6 +39,9 @@ extension Coffee {
             roastCategory: "Dark",
             amount: 250,
             amountLeft: 0,
+            lastRefill: Calendar.current.date(byAdding: .day, value: -3, to: .now) ?? .now,
+            totalBrews: 54,
+            brewsSinceRefill: 0,
             roastDate: Calendar.current.date(byAdding: .day, value: -3, to: .now) ?? .now,
             rating: 3.5,
             notes: "Chocolate, spice, low acidity"

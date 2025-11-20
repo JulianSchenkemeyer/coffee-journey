@@ -125,6 +125,9 @@ struct AddCoffeeFormView: View {
                 roastCategory: req.roastCategory.rawValue,
                 amount: req.amount,
                 amountLeft: req.amount,
+                lastRefill: .now,
+                totalBrews: 0,
+                brewsSinceRefill: 0,
                 roastDate: req.roastDate,
                 rating: req.rating,
                 notes: req.notes

@@ -17,6 +17,9 @@ import Foundation
             roastCategory: creationRequest.roastCategory.rawValue,
             amount: creationRequest.amount,
             amountLeft: creationRequest.amount,
+            lastRefill: .now,
+            totalBrews: 0,
+            brewsSinceRefill: 0,
             roastDate: creationRequest.roastDate,
             rating: creationRequest.rating,
             notes: creationRequest.notes

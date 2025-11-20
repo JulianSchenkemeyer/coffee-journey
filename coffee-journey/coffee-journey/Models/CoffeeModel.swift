@@ -16,6 +16,10 @@ import SwiftData
     
     var amount: Double
     var amountLeft: Double
+    var lastRefill: Date
+    
+    var totalBrews: Int
+    var brewsSinceRefill: Int
     
     var roastDate: Date
     var rating: Double
@@ -27,6 +31,9 @@ import SwiftData
         roastCategory: String,
         amount: Double,
         amountLeft: Double,
+        lastRefill: Date,
+        totalBrews: Int,
+        brewsSinceRefill: Int,
         roastDate: Date,
         rating: Double,
         notes: String
@@ -36,6 +43,9 @@ import SwiftData
         self.roastCategory = roastCategory
         self.amount = amount
         self.amountLeft = amountLeft
+        self.lastRefill = lastRefill
+        self.totalBrews = totalBrews
+        self.brewsSinceRefill = brewsSinceRefill
         self.roastDate = roastDate
         self.rating = rating
         self.notes = notes
@@ -49,6 +59,9 @@ import SwiftData
         self.roastDate = Date()
         self.amount = 0.0
         self.amountLeft = 0.0
+        self.lastRefill = .now
+        self.totalBrews = 0
+        self.brewsSinceRefill = 0
         self.rating = 0.0
         self.notes = ""
     }
