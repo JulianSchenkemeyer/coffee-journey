@@ -14,6 +14,7 @@ import SwiftData
 
 struct UseCases {
     var createCoffee: @MainActor (CreateCoffeeRequest) throws -> Coffee
+    var brewDrink: @MainActor (Coffee) throws -> Coffee
     var createEquipement: @MainActor (CreateEquipmentRequest) throws -> Equipment
 }
 
@@ -25,9 +26,14 @@ enum UseCaseFactory {
         let equipmentRepository = SwiftDataEquipmentRepository(context: context)
         
         let createCoffee = CreateCoffee(repository: coffeeRepository).callAsFunction
+        let brewDrink = BrewDrink(repository: coffeeRepository).callAsFunction
         let createEquipment = CreateEquipment(repository: equipmentRepository).callAsFunction
         
-        return UseCases(createCoffee: createCoffee, createEquipement: createEquipment)
+        return UseCases(
+            createCoffee: createCoffee,
+            brewDrink: brewDrink,
+            createEquipement: createEquipment
+        )
     }
 }
 
@@ -35,6 +41,9 @@ enum UseCaseFactory {
 extension EnvironmentValues {
     @Entry var useCases: UseCases = UseCases(
         createCoffee: {
+            _ in fatalError("UseCases not injected")
+        },
+        brewDrink:  {
             _ in fatalError("UseCases not injected")
         },
         createEquipement: {

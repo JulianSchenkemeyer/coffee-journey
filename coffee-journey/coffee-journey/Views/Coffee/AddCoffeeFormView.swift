@@ -106,7 +106,7 @@ struct AddCoffeeFormView: View {
             rating: rating,
             notes: notes.trimmingCharacters(in: .whitespacesAndNewlines)
         )
-
+        
         do {
             _ = try useCases.createCoffee(request)
             dismiss()
@@ -132,7 +132,10 @@ struct AddCoffeeFormView: View {
                 rating: req.rating,
                 notes: req.notes
             )
-        }, createEquipement: { _ in fatalError("Not implemented")}))
+            
+        },
+        brewDrink: { _ in fatalError("Not implemented")},
+        createEquipement: { _ in fatalError("Not implemented")}))
 }
 
 

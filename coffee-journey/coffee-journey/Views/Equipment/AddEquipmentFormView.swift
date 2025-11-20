@@ -104,7 +104,7 @@ struct AddEquipmentFormView: View {
              UseCases(
                 createCoffee: { _ in
                     fatalError("Not implemented")
-                },
+                }, brewDrink: { _ in fatalError("Not implemented")},
                 createEquipement: { req in
                     Equipment(
                         name: req.name,

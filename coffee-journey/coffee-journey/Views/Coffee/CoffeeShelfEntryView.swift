@@ -34,7 +34,7 @@ struct CoffeeShelfEntryView: View {
                     Text(Measurement(value: coffee.amountLeft, unit: UnitMass.grams), format: .measurement(width: .abbreviated, usage: .asProvided))
                         .foregroundStyle(.primary)
                     
-                    
+                    Text("Brews: \(coffee.totalBrews)")
                 }
             }
             .font(.caption)

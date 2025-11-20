@@ -11,6 +11,8 @@ import SwiftData
 
 
 struct CoffeeShelfView: View {
+    @Environment(\.useCases) private var useCases: UseCases
+    
     @State private var showAddCoffee: Bool = false
     
     @Query(sort: [
@@ -25,7 +27,7 @@ struct CoffeeShelfView: View {
                 CoffeeShelfEntryView(coffee: coffee)
                     .swipeActions(edge: .leading) {
                         Button {
-                            print("Brew")
+                            _ = try! useCases.brewDrink(coffee)
                         } label: {
                             Label("Brew", systemImage: "cup.and.heat.waves.fill")
                         }
@@ -56,5 +58,6 @@ struct CoffeeShelfView: View {
 #Preview {
     CoffeeShelfView()
         .modelContainer(PreviewContainer.seeded(with: Coffee.Mock.coffees))
+       
 }
 
