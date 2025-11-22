@@ -13,6 +13,7 @@ import Foundation
     func callAsFunction(coffee: Coffee) throws -> Coffee {
         coffee.totalBrews += 1
         coffee.brewsSinceRefill += 1
+        coffee.amountLeft = max(0, coffee.amountLeft - 18)
         
         return try repository.update(coffee)
     }
