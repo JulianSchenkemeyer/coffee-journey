@@ -34,7 +34,7 @@ struct CoffeeShelfView: View {
                     }
                     .swipeActions(edge: .trailing) {
                         Button {
-                            print("Refill")
+                            _ = try! useCases.refillBeans(coffee, true)
                         } label: {
                             Label("Refill", systemImage: "arrow.trianglehead.clockwise")
                         }
