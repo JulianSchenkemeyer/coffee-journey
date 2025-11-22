@@ -13,6 +13,7 @@ import Foundation
     @discardableResult
     func callAsFunction(coffee: Coffee, dumpRest: Bool = false) throws -> Coffee {
         coffee.amount = 250
+        coffee.brewsSinceRefill = 0
         if dumpRest {
             coffee.amountLeft = 250
         } else {
