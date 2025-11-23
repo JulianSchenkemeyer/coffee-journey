@@ -34,7 +34,7 @@ struct BrewDrinkModalView: View {
                 .padding(.vertical, 8)
                 
                 Button {
-                    _ = try! useCases.brewDrink(coffee)
+                    _ = try! useCases.brewDrink(coffee, Recipe(amountCoffee: usedCoffee, amountWater: usedWater))
                     dismiss()
                 } label: {
                     Label("Brew Cup", systemImage: "cup.and.heat.waves.fill")

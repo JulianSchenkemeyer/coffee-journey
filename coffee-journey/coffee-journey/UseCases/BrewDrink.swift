@@ -10,10 +10,10 @@ import Foundation
     let repository: CoffeeRepository
     
     @discardableResult
-    func callAsFunction(coffee: Coffee) throws -> Coffee {
+    func callAsFunction(coffee: Coffee, recipe: Recipe) throws -> Coffee {
         coffee.totalBrews += 1
         coffee.brewsSinceRefill += 1
-        coffee.amountLeft = max(0, coffee.amountLeft - 18)
+        coffee.amountLeft = max(0, coffee.amountLeft - recipe.amountCoffee)
         
         return try repository.update(coffee)
     }
