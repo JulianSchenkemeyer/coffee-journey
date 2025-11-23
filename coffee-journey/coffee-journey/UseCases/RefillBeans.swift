@@ -11,13 +11,15 @@ import Foundation
     let repository: CoffeeRepository
     
     @discardableResult
-    func callAsFunction(coffee: Coffee, dumpRest: Bool = false) throws -> Coffee {
-        coffee.amount = 250
+    func callAsFunction(coffee: Coffee, refill: Refill, dumpRest: Bool = false) throws -> Coffee {
+        coffee.amount = refill.amount
+        coffee.roastDate = refill.roastDate
+        
         coffee.brewsSinceRefill = 0
         if dumpRest {
-            coffee.amountLeft = 250
+            coffee.amountLeft = refill.amount
         } else {
-            coffee.amountLeft += 250
+            coffee.amountLeft += refill.amount
         }
         
         return try repository.update(coffee)
