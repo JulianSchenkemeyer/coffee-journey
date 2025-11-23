@@ -19,19 +19,21 @@ struct BrewDrinkModalView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading, spacing: 16) {
-                VStack {
-                    Stepper("Coffee: \(usedCoffee, format: .number.precision(.fractionLength(1))) g",
-                            value: $usedCoffee,
-                            in: 0...50,
-                            step: 0.1)
-                    
-                    Stepper("Water: \(usedWater, format: .number.precision(.fractionLength(1))) g",
-                            value: $usedWater,
-                            in: 0...100,
-                            step: 0.1)
+            VStack {
+                Form {
+                    Section {
+                        Stepper("Coffee: \(usedCoffee, format: .number.precision(.fractionLength(1))) g",
+                                value: $usedCoffee,
+                                in: 0...50,
+                                step: 0.1)
+                        
+                        Stepper("Water: \(usedWater, format: .number.precision(.fractionLength(1))) g",
+                                value: $usedWater,
+                                in: 0...100,
+                                step: 0.1)
+                    }
+                    .padding(.vertical, 8)
                 }
-                .padding(.vertical, 8)
                 
                 Button {
                     _ = try! useCases.brewDrink(coffee, Recipe(amountCoffee: usedCoffee, amountWater: usedWater))
@@ -41,11 +43,8 @@ struct BrewDrinkModalView: View {
                         .fontWeight(.semibold)
                         .padding()
                 }
-                .buttonStyle(.glassProminent)
-                .frame(maxWidth: .infinity)
             }
-            .padding(24)
-            .frame(maxHeight: .infinity, alignment: .top)
+            .buttonStyle(.glassProminent)
             .navigationTitle(coffee.name)
             .navigationSubtitle("Fine-tune your brew")
             .navigationBarTitleDisplayMode(.inline)
