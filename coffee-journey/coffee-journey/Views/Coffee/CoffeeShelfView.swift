@@ -14,6 +14,7 @@ struct CoffeeShelfView: View {
     @Environment(\.useCases) private var useCases: UseCases
     
     @State private var showAddCoffee: Bool = false
+    @State private var showBrewModal: Bool = false
     
     @Query(sort: [
         SortDescriptor(\Coffee.roastDate, order: .reverse),
@@ -27,7 +28,7 @@ struct CoffeeShelfView: View {
                 CoffeeShelfEntryView(coffee: coffee)
                     .swipeActions(edge: .leading) {
                         Button {
-                            _ = try! useCases.brewDrink(coffee)
+                            showBrewModal = true
                         } label: {
                             Label("Brew", systemImage: "cup.and.heat.waves.fill")
                         }
@@ -39,8 +40,11 @@ struct CoffeeShelfView: View {
                             Label("Refill", systemImage: "arrow.trianglehead.clockwise")
                         }
                     }
+                    .sheet(isPresented: $showBrewModal) {
+                        BrewDrinkModalView(coffee: coffee)
+                            .presentationDetents([.medium])
+                    }
             }
-            
             .navigationTitle("Coffee Shelf")
             .toolbar {
                 Button("Add Coffee", systemImage: "plus") {
