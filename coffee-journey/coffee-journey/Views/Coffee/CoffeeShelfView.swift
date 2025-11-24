@@ -40,22 +40,24 @@ struct CoffeeShelfView: View {
     var body: some View {
         NavigationStack {
             List(coffees, selection: $selectedCoffee) { coffee in
-                CoffeeShelfEntryView(coffee: coffee)
-                    .swipeActions(edge: .leading) {
-                        Button {
-                            selectedCoffee = coffee
-                            activeModal = .brew
-                        } label: {
-                            Label("Brew", systemImage: "cup.and.heat.waves.fill")
-                        }                    }
-                    .swipeActions(edge: .trailing) {
-                        Button {
-                            selectedCoffee = coffee
-                            activeModal = .refill
-                        } label: {
-                            Label("Refill", systemImage: "arrow.trianglehead.clockwise")
+                NavigationLink(value: coffee) {
+                    CoffeeShelfEntryView(coffee: coffee)
+                        .swipeActions(edge: .leading) {
+                            Button {
+                                selectedCoffee = coffee
+                                activeModal = .brew
+                            } label: {
+                                Label("Brew", systemImage: "cup.and.heat.waves.fill")
+                            }                    }
+                        .swipeActions(edge: .trailing) {
+                            Button {
+                                selectedCoffee = coffee
+                                activeModal = .refill
+                            } label: {
+                                Label("Refill", systemImage: "arrow.trianglehead.clockwise")
+                            }
                         }
-                    }
+                }
             }
             .navigationTitle("Coffee Shelf")
             .toolbar {
@@ -63,6 +65,9 @@ struct CoffeeShelfView: View {
                     showAddCoffee = true
                 }
             }
+            .navigationDestination(item: $selectedCoffee, destination: { coffee in
+                CoffeeDetails(coffee:  coffee)
+            })
             .sheet(item: $activeModal, content: { modal in
                 switch modal {
                 case .brew:
