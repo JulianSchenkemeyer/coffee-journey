@@ -14,8 +14,8 @@ import SwiftData
 
 struct CoffeeShelfView: View {
     enum ModalSheet: Identifiable {
-        case brew
-        case refill
+        case brew(Coffee)
+        case refill(Coffee)
         
         var id: String {
             switch self {
@@ -44,15 +44,13 @@ struct CoffeeShelfView: View {
                     CoffeeShelfEntryView(coffee: coffee)
                         .swipeActions(edge: .leading) {
                             Button {
-                                selectedCoffee = coffee
-                                activeModal = .brew
+                                activeModal = .brew(coffee)
                             } label: {
                                 Label("Brew", systemImage: "cup.and.heat.waves.fill")
                             }                    }
                         .swipeActions(edge: .trailing) {
                             Button {
-                                selectedCoffee = coffee
-                                activeModal = .refill
+                                activeModal = .refill(coffee)
                             } label: {
                                 Label("Refill", systemImage: "arrow.trianglehead.clockwise")
                             }
@@ -70,11 +68,11 @@ struct CoffeeShelfView: View {
             })
             .sheet(item: $activeModal, content: { modal in
                 switch modal {
-                case .brew:
-                    BrewDrinkModalView(coffee: selectedCoffee!)
+                case .brew(let coffee):
+                    BrewDrinkModalView(coffee: coffee)
                         .presentationDetents([.medium])
-                case .refill:
-                    RefillBeansModalView(coffee: selectedCoffee!)
+                case .refill(let coffee):
+                    RefillBeansModalView(coffee: coffee)
                         .presentationDetents([.medium])
                 }
             })
