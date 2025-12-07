@@ -14,16 +14,24 @@ import SwiftData
     var roaster: String
     var roastCategory: String
     
-    var amount: Double
-    var amountLeft: Double
     var lastRefill: Date
+    var refills: [Refill]
+    var amountLeft: Double
     
     var totalBrews: Int
     var brewsSinceRefill: Int
     
-    var roastDate: Date
     var rating: Double
     var notes: String
+    
+    
+    var newestRefill: Refill? {
+        refills.max(by: { $0.date < $1.date })
+    }
+    var amount: Double {
+        newestRefill?.amount ?? 0
+    }
+    
     
     init(
         name: String,
@@ -41,12 +49,11 @@ import SwiftData
         self.name = name
         self.roaster = roaster
         self.roastCategory = roastCategory
-        self.amount = amount
-        self.amountLeft = amountLeft
         self.lastRefill = lastRefill
+        self.amountLeft = amountLeft
+        self.refills = [.init(amount: amount, roastDate: roastDate, date: .now)]
         self.totalBrews = totalBrews
         self.brewsSinceRefill = brewsSinceRefill
-        self.roastDate = roastDate
         self.rating = rating
         self.notes = notes
     }
@@ -56,10 +63,9 @@ import SwiftData
         self.name = ""
         self.roaster = ""
         self.roastCategory = ""
-        self.roastDate = Date()
-        self.amount = 0.0
-        self.amountLeft = 0.0
+        self.refills = []
         self.lastRefill = .now
+        self.amountLeft = 0
         self.totalBrews = 0
         self.brewsSinceRefill = 0
         self.rating = 0.0

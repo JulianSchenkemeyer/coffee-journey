@@ -12,8 +12,7 @@ import Foundation
     
     @discardableResult
     func callAsFunction(coffee: Coffee, refill: Refill, dumpRest: Bool = false) throws -> Coffee {
-        coffee.amount = refill.amount
-        coffee.roastDate = refill.roastDate
+        coffee.refills.append(refill)
         
         coffee.brewsSinceRefill = 0
         if dumpRest {
