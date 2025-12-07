@@ -20,12 +20,16 @@ struct CoffeeShelfEntryView: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(coffee.roaster)
-                    Text(
-                        coffee.roastDate,
-                        format: .dateTime
-                            .hour(.omitted)
-                            .minute(.omitted)
-                    )
+                    
+                    if let latestRefill = coffee.newestRefill {
+                        Text(
+                            latestRefill.roastDate,
+                            format: .dateTime
+                                .hour(.omitted)
+                                .minute(.omitted)
+                        )
+                    }
+
                 }
                 
                 Spacer()

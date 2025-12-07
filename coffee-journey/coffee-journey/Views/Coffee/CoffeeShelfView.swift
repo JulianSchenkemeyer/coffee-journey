@@ -10,9 +10,9 @@ import SwiftUI
 import SwiftData
 
 
-
-
 struct CoffeeShelfView: View {
+    static var oneYearAgo = Date.oneYearAgo
+
     enum ModalSheet: Identifiable {
         case brew(Coffee)
         case refill(Coffee)
@@ -31,30 +31,62 @@ struct CoffeeShelfView: View {
     @State private var activeModal: ModalSheet? = nil
     @State private var selectedCoffee: Coffee? = nil
     
-    @Query(sort: [
-        SortDescriptor(\Coffee.roastDate, order: .reverse),
-        SortDescriptor(\Coffee.amountLeft, order: .reverse)
-    ]) var coffees: [Coffee] = []
+    @Query(
+        filter: #Predicate<Coffee> { $0.amountLeft > 0 },
+        sort: [SortDescriptor(\Coffee.amountLeft, order: .reverse),
+               SortDescriptor(\Coffee.lastRefill, order: .reverse)]
+    ) private var inStockCoffees: [Coffee]
+
+    @Query(
+        filter: #Predicate<Coffee> {
+            $0.amountLeft == 0 && $0.lastRefill >= oneYearAgo
+        },
+        sort: [SortDescriptor(\Coffee.lastRefill, order: .reverse)]
+    ) private var emptyCoffees: [Coffee]
     
     
     var body: some View {
         NavigationStack {
-            List(coffees, selection: $selectedCoffee) { coffee in
-                NavigationLink(value: coffee) {
-                    CoffeeShelfEntryView(coffee: coffee)
-                        .swipeActions(edge: .leading) {
-                            Button {
-                                activeModal = .brew(coffee)
-                            } label: {
-                                Label("Brew", systemImage: "cup.and.heat.waves.fill")
-                            }                    }
-                        .swipeActions(edge: .trailing) {
-                            Button {
-                                activeModal = .refill(coffee)
-                            } label: {
-                                Label("Refill", systemImage: "arrow.trianglehead.clockwise")
+            List(selection: $selectedCoffee) {
+                ForEach(inStockCoffees) { coffee in
+                    NavigationLink(value: coffee) {
+                        CoffeeShelfEntryView(coffee: coffee)
+                            .swipeActions(edge: .leading) {
+                                Button {
+                                    activeModal = .brew(coffee)
+                                } label: {
+                                    Label("Brew", systemImage: "cup.and.heat.waves.fill")
+                                }                    }
+                            .swipeActions(edge: .trailing) {
+                                Button {
+                                    activeModal = .refill(coffee)
+                                } label: {
+                                    Label("Refill", systemImage: "arrow.trianglehead.clockwise")
+                                }
                             }
+                    }
+                }
+        
+                Section("Previous") {
+                    ForEach(emptyCoffees) { coffee in
+                        NavigationLink(value: coffee) {
+                            CoffeeShelfEntryView(coffee: coffee)
+                                .swipeActions(edge: .leading) {
+                                    Button {
+                                        activeModal = .brew(coffee)
+                                    } label: {
+                                        Label("Brew", systemImage: "cup.and.heat.waves.fill")
+                                    }                    }
+                                .swipeActions(edge: .trailing) {
+                                    Button {
+                                        activeModal = .refill(coffee)
+                                    } label: {
+                                        Label("Refill", systemImage: "arrow.trianglehead.clockwise")
+                                    }
+                                }
                         }
+                        .listRowBackground(Color.secondary.opacity(0.15))
+                    }
                 }
             }
             .navigationTitle("Coffee Shelf")
