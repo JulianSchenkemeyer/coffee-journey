@@ -102,7 +102,7 @@ struct CoffeeShelfView: View {
                 switch modal {
                 case .brew(let coffee):
                     BrewDrinkModalView(coffee: coffee)
-                        .presentationDetents([.medium])
+                        .presentationDetents([.fraction(0.9)])
                 case .refill(let coffee):
                     RefillBeansModalView(coffee: coffee)
                         .presentationDetents([.medium])
