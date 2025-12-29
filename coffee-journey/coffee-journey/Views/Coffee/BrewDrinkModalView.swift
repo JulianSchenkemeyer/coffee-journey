@@ -16,16 +16,16 @@ struct BrewDrinkModalView: View {
     
     @State private var usedCoffee = 18.0
     @State private var grindSetting = 8.0
-    @State private var usedWater = 58.0
-    @State private var waterTemperature: Double = 96.0
+    @State private var waterTemperature = 96.0
+    @State private var extractionTime = 30
     @State private var output: Double = 36.0
     
     var body: some View {
         NavigationStack {
             VStack {
                 Form {
-                    Section("Beans") {
-                        Stepper("Coffee: \(usedCoffee, format: .number.precision(.fractionLength(1))) g",
+                    Section("Preperation") {
+                        Stepper("Beans: \(usedCoffee, format: .number.precision(.fractionLength(1))) g",
                                 value: $usedCoffee,
                                 in: 0...50,
                                 step: 0.1)
@@ -35,19 +35,18 @@ struct BrewDrinkModalView: View {
                                 in: 0...50,
                                 step: 1.0)
                     }
-//                    .padding(.vertical, 8)
                     
-                    Section("Water") {
-                        // Optional?
-                        Stepper("Used: \(usedWater, format: .number.precision(.fractionLength(1))) g",
-                                value: $usedWater,
-                                in: 0...100,
-                                step: 0.1)
+                    Section("Process") {
                         
                         Stepper("Temperature: \(waterTemperature, format: .number) °C",
                                 value: $waterTemperature,
                                 in: 80...100,
                                 step: 1.0)
+                        
+                        Stepper("Extraction Time: \(extractionTime, format: .number) s",
+                                value: $extractionTime,
+                                in: 0...180,
+                                step: 1)
                     }
                     
                     Section() {
@@ -64,8 +63,8 @@ struct BrewDrinkModalView: View {
 //                        brewer: <#T##Equipment#>,
                         amountCoffee: usedCoffee,
                         grindSetting: grindSetting,
-                        amountWater: usedWater,
                         waterTemperature: waterTemperature,
+                        extractionTime: extractionTime,
                         output: output
                     )
                     _ = try! useCases.brewDrink(coffee, recipe)

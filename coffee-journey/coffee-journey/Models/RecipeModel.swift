@@ -11,8 +11,8 @@ import Foundation
 struct Recipe {
     var amountCoffee: Double
     var grindSetting: Double
-    var amountWater: Double
     var waterTemperature: Double
+    var extractionTime: Int
     
     var output: Double
 }
