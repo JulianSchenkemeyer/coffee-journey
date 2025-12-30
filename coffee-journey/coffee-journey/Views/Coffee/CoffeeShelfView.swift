@@ -25,7 +25,6 @@ struct CoffeeShelfView: View {
         }
     }
     
-    @Environment(\.useCases) private var useCases: UseCases
     
     @State private var showAddCoffee: Bool = false
     @State private var activeModal: ModalSheet? = nil

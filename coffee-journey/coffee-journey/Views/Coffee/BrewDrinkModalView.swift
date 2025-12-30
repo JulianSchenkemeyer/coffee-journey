@@ -59,8 +59,6 @@ struct BrewDrinkModalView: View {
                 
                 Button {
                     let recipe = Recipe(
-//                        grinder: ,
-//                        brewer: <#T##Equipment#>,
                         amountCoffee: usedCoffee,
                         grindSetting: grindSetting,
                         waterTemperature: waterTemperature,
