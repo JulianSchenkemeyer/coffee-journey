@@ -19,6 +19,7 @@ struct BrewDrinkModalView: View {
     @State private var waterTemperature = 96.0
     @State private var extractionTime = 30
     @State private var output: Double = 36.0
+    @State private var taste = 3.0
     
     var body: some View {
         NavigationStack {
@@ -54,6 +55,14 @@ struct BrewDrinkModalView: View {
                                 value: $output,
                                 in: 0...100,
                                 step: 0.1)
+                        
+                        Slider(value: $taste, in: 1...5, step: 1.0) {
+                            Text("Taste")
+                        } minimumValueLabel: {
+                            Text("Sour")
+                        } maximumValueLabel: {
+                            Text("Bitter")
+                        }
                     }
                 }
                 
@@ -92,3 +101,4 @@ struct BrewDrinkModalView: View {
 #Preview {
     BrewDrinkModalView(coffee: Coffee.Mock.espresso)
 }
+
