@@ -66,23 +66,37 @@ struct BrewDrinkModalView: View {
                     }
                 }
                 
-                Button {
-                    let recipe = Recipe(
-                        amountCoffee: usedCoffee,
-                        grindSetting: grindSetting,
-                        waterTemperature: waterTemperature,
-                        extractionTime: extractionTime,
-                        output: output
-                    )
-                    _ = try! useCases.brewDrink(coffee, recipe)
-                    dismiss()
-                } label: {
-                    Label("Brew Cup", systemImage: "cup.and.heat.waves.fill")
-                        .fontWeight(.semibold)
-                        .padding()
+                HStack {
+                    Button {
+                        saveBrew(with: .thumbsDown)
+                        dismiss()
+                    } label: {
+                        Label("Thumbs down", systemImage: "hand.thumbsdown.fill")
+                            .labelStyle(.iconOnly)
+                            .fontWeight(.semibold)
+                            .padding()
+                            
+                    }
+                    .tint(.red)
+                    
+                    Spacer()
+                    
+                    Button {
+                        saveBrew(with: .thumbsUp)
+                        dismiss()
+                    } label: {
+                        Label("Thumbs Up", systemImage: "hand.thumbsup.fill")
+                            .labelStyle(.iconOnly)
+                            .fontWeight(.semibold)
+                            .padding()
+                    }
+                    
+                    
                 }
+                .padding(.horizontal, 20)
+                .buttonStyle(.glassProminent)
+                .frame(maxWidth: .infinity)
             }
-            .buttonStyle(.glassProminent)
             .navigationTitle(coffee.name)
             .navigationSubtitle("Fine-tune your brew")
             .navigationBarTitleDisplayMode(.inline)
@@ -94,6 +108,19 @@ struct BrewDrinkModalView: View {
                 }
             }
         }
+    }
+    
+    func saveBrew(with rating: ShotRating) {
+        let recipe = Recipe(
+            amountCoffee: usedCoffee,
+            grindSetting: grindSetting,
+            waterTemperature: waterTemperature,
+            extractionTime: extractionTime,
+            taste: taste,
+            output: output,
+            rating: rating
+        )
+        _ = try! useCases.brewDrink(coffee, recipe)
     }
 }
 
