@@ -18,6 +18,7 @@ import Foundation
             amount: creationRequest.amount,
             amountLeft: creationRequest.amount,
             lastRefill: .now,
+            brews: [],
             totalBrews: 0,
             brewsSinceRefill: 0,
             roastDate: creationRequest.roastDate,

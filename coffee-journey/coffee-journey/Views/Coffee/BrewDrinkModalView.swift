@@ -110,8 +110,8 @@ struct BrewDrinkModalView: View {
         }
     }
     
-    func saveBrew(with rating: ShotRating) {
-        let recipe = Recipe(
+    func saveBrew(with rating: BrewRating) {
+        let brew = Brew(
             amountCoffee: usedCoffee,
             grindSetting: grindSetting,
             waterTemperature: waterTemperature,
@@ -120,7 +120,7 @@ struct BrewDrinkModalView: View {
             output: output,
             rating: rating
         )
-        _ = try! useCases.brewDrink(coffee, recipe)
+        _ = try! useCases.brewDrink(coffee, brew)
     }
 }
 

@@ -6,17 +6,20 @@
 //
 
 import Foundation
+import SwiftData
 
-enum ShotRating: Int, Codable {
-    case thumbsUp = 1
-    case thumbsDown = 0
+enum BrewRating: String, Codable, CustomStringConvertible {
+    case thumbsUp = "GOOD"
+    case thumbsDown = "BAD"
+    
+    var description: String { self.rawValue }
 }
 
-struct Recipe {
+@Model final class Brew {
 //    var grinder: Equipment
 //    var brewer: Equipment
     
-    
+    var coffee: Coffee?
     var amountCoffee: Double
     var grindSetting: Double
     var waterTemperature: Double
@@ -24,5 +27,15 @@ struct Recipe {
     var taste: Double
     
     var output: Double
-    var rating: ShotRating
+    var rating: BrewRating
+    
+    init(amountCoffee: Double, grindSetting: Double, waterTemperature: Double, extractionTime: Int, taste: Double, output: Double, rating: BrewRating) {
+        self.amountCoffee = amountCoffee
+        self.grindSetting = grindSetting
+        self.waterTemperature = waterTemperature
+        self.extractionTime = extractionTime
+        self.taste = taste
+        self.output = output
+        self.rating = rating
+    }
 }

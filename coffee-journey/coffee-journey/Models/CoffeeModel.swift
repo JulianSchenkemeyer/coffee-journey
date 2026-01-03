@@ -16,6 +16,7 @@ import SwiftData
     
     var lastRefill: Date
     var refills: [Refill]
+    var brews: [Brew]
     var amountLeft: Double
     
     var totalBrews: Int
@@ -40,6 +41,7 @@ import SwiftData
         amount: Double,
         amountLeft: Double,
         lastRefill: Date,
+        brews: [Brew],
         totalBrews: Int,
         brewsSinceRefill: Int,
         roastDate: Date,
@@ -52,6 +54,7 @@ import SwiftData
         self.lastRefill = lastRefill
         self.amountLeft = amountLeft
         self.refills = [.init(amount: amount, roastDate: roastDate, date: .now)]
+        self.brews = []
         self.totalBrews = totalBrews
         self.brewsSinceRefill = brewsSinceRefill
         self.rating = rating
@@ -65,6 +68,7 @@ import SwiftData
         self.roastCategory = ""
         self.refills = []
         self.lastRefill = .now
+        self.brews = []
         self.amountLeft = 0
         self.totalBrews = 0
         self.brewsSinceRefill = 0

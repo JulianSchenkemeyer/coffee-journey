@@ -14,7 +14,7 @@ import SwiftData
 
 struct UseCases {
     var createCoffee: @MainActor (CreateCoffeeRequest) throws -> Coffee
-    var brewDrink: @MainActor (Coffee, Recipe) throws -> Coffee
+    var brewDrink: @MainActor (Coffee, Brew) throws -> Coffee
     var refillBeans: @MainActor (Coffee, Refill, Bool) throws -> Coffee
     var createEquipement: @MainActor (CreateEquipmentRequest) throws -> Equipment
 }
