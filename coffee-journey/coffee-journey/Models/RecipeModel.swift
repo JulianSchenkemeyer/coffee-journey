@@ -9,8 +9,8 @@ import Foundation
 import SwiftData
 
 enum BrewRating: String, Codable, CustomStringConvertible {
-    case thumbsUp = "GOOD"
-    case thumbsDown = "BAD"
+    case thumbsUp = "Good"
+    case thumbsDown = "Bad"
     
     var description: String { self.rawValue }
 }
@@ -27,7 +27,7 @@ enum BrewRating: String, Codable, CustomStringConvertible {
     var taste: Double
     
     var output: Double
-    var rating: BrewRating
+    var rating: String
     
     init(amountCoffee: Double, grindSetting: Double, waterTemperature: Double, extractionTime: Int, taste: Double, output: Double, rating: BrewRating) {
         self.amountCoffee = amountCoffee
@@ -36,6 +36,6 @@ enum BrewRating: String, Codable, CustomStringConvertible {
         self.extractionTime = extractionTime
         self.taste = taste
         self.output = output
-        self.rating = rating
+        self.rating = rating.rawValue
     }
 }
