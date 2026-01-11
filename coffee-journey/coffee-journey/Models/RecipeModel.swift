@@ -20,6 +20,7 @@ enum BrewRating: String, Codable, CustomStringConvertible {
 //    var brewer: Equipment
     
     var coffee: Coffee?
+    var date: Date
     var amountCoffee: Double
     var grindSetting: Double
     var waterTemperature: Double
@@ -27,15 +28,19 @@ enum BrewRating: String, Codable, CustomStringConvertible {
     var taste: Double
     
     var output: Double
-    var rating: String
+    var ratingString: String
+    var rating: BrewRating {
+        BrewRating(rawValue: ratingString) ?? .thumbsUp
+    }
     
-    init(amountCoffee: Double, grindSetting: Double, waterTemperature: Double, extractionTime: Int, taste: Double, output: Double, rating: BrewRating) {
+    init(date: Date, amountCoffee: Double, grindSetting: Double, waterTemperature: Double, extractionTime: Int, taste: Double, output: Double, rating: BrewRating) {
+        self.date = date
         self.amountCoffee = amountCoffee
         self.grindSetting = grindSetting
         self.waterTemperature = waterTemperature
         self.extractionTime = extractionTime
         self.taste = taste
         self.output = output
-        self.rating = rating.rawValue
+        self.ratingString = rating.rawValue
     }
 }

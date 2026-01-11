@@ -112,6 +112,7 @@ struct BrewDrinkModalView: View {
     
     func saveBrew(with rating: BrewRating) {
         let brew = Brew(
+            date: .now,
             amountCoffee: usedCoffee,
             grindSetting: grindSetting,
             waterTemperature: waterTemperature,
