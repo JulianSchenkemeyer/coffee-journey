@@ -15,6 +15,25 @@ enum BrewRating: String, Codable, CustomStringConvertible {
     var description: String { self.rawValue }
 }
 
+enum BrewTaste: Int, CaseIterable, CustomStringConvertible {
+    case Sour = 1
+    case Bright = 2
+    case Balanced = 3
+    case Dry = 4
+    case Bitter = 5
+    
+    var description: String {
+        switch self.rawValue {
+        case 1: "Sour"
+        case 2: "Bright"
+        case 3: "Balanced"
+        case 4:  "Dry"
+        case 5:  "Bitter"
+        default: "Unknown"
+        }
+    }
+}
+
 @Model final class Brew {
 //    var grinder: Equipment
 //    var brewer: Equipment
@@ -26,6 +45,9 @@ enum BrewRating: String, Codable, CustomStringConvertible {
     var waterTemperature: Double
     var extractionTime: Int
     var taste: Int
+    var tasteDescription: BrewTaste {
+        BrewTaste(rawValue: taste) ?? .Balanced
+    }
     
     var output: Double
     var ratingString: String
