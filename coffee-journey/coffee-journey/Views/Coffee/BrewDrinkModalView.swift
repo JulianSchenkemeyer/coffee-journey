@@ -117,7 +117,7 @@ struct BrewDrinkModalView: View {
             grindSetting: grindSetting,
             waterTemperature: waterTemperature,
             extractionTime: extractionTime,
-            taste: taste,
+            taste: Int(taste),
             output: output,
             rating: rating
         )
