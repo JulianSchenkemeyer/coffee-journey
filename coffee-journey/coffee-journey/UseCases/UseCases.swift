@@ -14,7 +14,7 @@ import SwiftData
 
 struct UseCases {
     var createCoffee: @MainActor (CreateCoffeeRequest) throws -> Coffee
-    var brewDrink: @MainActor (Coffee, Brew) throws -> Coffee
+    var brewDrink: @MainActor (Coffee, Brew, Recipe) throws -> Coffee
     var refillBeans: @MainActor (Coffee, Refill, Bool) throws -> Coffee
     var createEquipement: @MainActor (CreateEquipmentRequest) throws -> Equipment
 }
@@ -46,7 +46,7 @@ extension EnvironmentValues {
         createCoffee: { _ in
             fatalError("UseCases not injected")
         },
-        brewDrink:  { _, _ in
+        brewDrink:  { _, _, _ in
             fatalError("UseCases not injected")
         },
         refillBeans: { _, _, _

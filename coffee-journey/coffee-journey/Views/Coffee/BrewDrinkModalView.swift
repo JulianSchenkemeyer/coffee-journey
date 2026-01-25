@@ -14,6 +14,7 @@ struct BrewDrinkModalView: View {
     
     let coffee: Coffee
     
+    @State private var selectedRecipe: Recipe?
     @State private var usedCoffee = 18.0
     @State private var grindSetting = 8.0
     @State private var waterTemperature = 96.0
@@ -21,10 +22,27 @@ struct BrewDrinkModalView: View {
     @State private var output: Double = 36.0
     @State private var taste = 3.0
     
+    
+    
+    
     var body: some View {
         NavigationStack {
             VStack {
                 Form {
+                    Picker("Recipe", selection: $selectedRecipe) {
+                        ForEach(coffee.recipes) { recipe in
+                            Text(recipe.name).tag(recipe)
+                        }
+                    }
+                    .onChange(of: selectedRecipe) {
+                        guard let selectedRecipe else { return }
+                        usedCoffee = selectedRecipe.amountBeans
+                        grindSetting = selectedRecipe.grindSize
+                        waterTemperature = selectedRecipe.temperature
+                        extractionTime = selectedRecipe.extractionTime
+                        output = selectedRecipe.output
+                    }
+                    
                     Section("Preperation") {
                         Stepper("Beans: \(usedCoffee, format: .number.precision(.fractionLength(1))) g",
                                 value: $usedCoffee,
@@ -90,9 +108,8 @@ struct BrewDrinkModalView: View {
                             .fontWeight(.semibold)
                             .padding()
                     }
-                    
-                    
                 }
+                .disabled(selectedRecipe == nil)
                 .padding(.horizontal, 20)
                 .buttonStyle(.glassProminent)
                 .frame(maxWidth: .infinity)
@@ -111,6 +128,8 @@ struct BrewDrinkModalView: View {
     }
     
     func saveBrew(with rating: BrewRating) {
+        guard let selectedRecipe else { return }
+        
         let brew = Brew(
             date: .now,
             amountCoffee: usedCoffee,
@@ -121,7 +140,7 @@ struct BrewDrinkModalView: View {
             output: output,
             rating: rating
         )
-        _ = try! useCases.brewDrink(coffee, brew)
+        _ = try! useCases.brewDrink(coffee, brew, selectedRecipe)
     }
 }
 

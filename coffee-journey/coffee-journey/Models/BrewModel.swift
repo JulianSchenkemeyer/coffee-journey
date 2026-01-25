@@ -35,10 +35,9 @@ enum BrewTaste: Int, CaseIterable, CustomStringConvertible {
 }
 
 @Model final class Brew {
-//    var grinder: Equipment
-//    var brewer: Equipment
-    
     var coffee: Coffee?
+    var recipe: Recipe?
+    
     var date: Date
     var amountCoffee: Double
     var grindSetting: Double
@@ -56,6 +55,18 @@ enum BrewTaste: Int, CaseIterable, CustomStringConvertible {
     }
     
     init(date: Date, amountCoffee: Double, grindSetting: Double, waterTemperature: Double, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
+        self.date = date
+        self.amountCoffee = amountCoffee
+        self.grindSetting = grindSetting
+        self.waterTemperature = waterTemperature
+        self.extractionTime = extractionTime
+        self.taste = taste
+        self.output = output
+        self.ratingString = rating.rawValue
+    }
+    
+    init(recipe: Recipe, date: Date, amountCoffee: Double, grindSetting: Double, waterTemperature: Double, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
+        self.recipe = recipe
         self.date = date
         self.amountCoffee = amountCoffee
         self.grindSetting = grindSetting
