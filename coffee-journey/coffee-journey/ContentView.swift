@@ -8,14 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.useCases) private var useCases
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView {
+            CoffeeShelfView()
+                .tabItem {
+                    Label("Coffee", systemImage: "cup.and.heat.waves")
+                }
+            EquipmentShelfView()
+                .tabItem {
+                    Label("Equipment", systemImage: "wrench.and.screwdriver")
+                }
         }
-        .padding()
     }
 }
 
