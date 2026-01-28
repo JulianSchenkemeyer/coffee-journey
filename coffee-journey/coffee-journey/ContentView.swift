@@ -12,14 +12,13 @@ struct ContentView: View {
     
     var body: some View {
         TabView {
-            CoffeeShelfView()
-                .tabItem {
-                    Label("Coffee", systemImage: "cup.and.heat.waves")
-                }
-            EquipmentShelfView()
-                .tabItem {
-                    Label("Equipment", systemImage: "wrench.and.screwdriver")
-                }
+            Tab("Coffee", systemImage: "cup.and.heat.waves") {
+                CoffeeShelfView()
+            }
+            Tab("Equipment", systemImage: "wrench.and.screwdriver") {
+                EquipmentShelfView()
+            }
+            
         }
     }
 }
