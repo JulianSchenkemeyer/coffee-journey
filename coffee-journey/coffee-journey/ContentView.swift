@@ -19,6 +19,8 @@ struct ContentView: View {
                 EquipmentShelfView()
             }
             
+            Tab(role: .search) {
+            }
         }
     }
 }
