@@ -95,7 +95,7 @@ struct CoffeeShelfView: View {
                 }
             }
             .navigationDestination(item: $selectedCoffee, destination: { coffee in
-                CoffeeDetails(coffee:  coffee)
+                CoffeeDetailsView(coffee:  coffee)
             })
             .sheet(item: $activeModal, content: { modal in
                 switch modal {
