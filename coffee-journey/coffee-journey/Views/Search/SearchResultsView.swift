@@ -29,6 +29,7 @@ struct SearchResultsView<T: SearchableModel, R: ResultRowRenderer>: View where R
         List(items) { item in
             renderer.row(for: item)
         }
+        .listStyle(.plain)
     }
 }
 
