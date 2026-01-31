@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.useCases) private var useCases
-    
+        
     var body: some View {
         TabView {
             Tab("Coffee", systemImage: "cup.and.heat.waves") {
@@ -20,6 +20,7 @@ struct ContentView: View {
             }
             
             Tab(role: .search) {
+                SearchView()
             }
         }
     }
