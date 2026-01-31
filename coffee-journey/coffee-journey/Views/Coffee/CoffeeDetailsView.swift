@@ -23,38 +23,63 @@ struct CoffeeDetailsView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                Image(systemName: "cup.and.saucer.fill")
-                    .resizable()
-                    .frame(width: 140, height: 140)
-                    .padding(36)
-                    .background {
-                        Color.gray.opacity(0.3)
-                            .clipShape(.circle)
-                    }
-                
-                
-                VStack(spacing: 12) {
-                    Text("\(amountLeft) / \(amount) g")
-                        .monospaced()
-                        .fontWeight(.semibold)
+                HStack(alignment: .center, spacing: 14) {
+                    Image(systemName: "cup.and.saucer.fill")
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                        .padding(36)
+                        .background {
+                            Color.gray.opacity(0.3)
+                                .clipShape(.circle)
+                        }
                     
                     
-                    HStack {
-                        Text("Last Refill: ")
-                            .fontWeight(.semibold)
-                        Spacer()
-                        Text(coffee.lastRefill, format: .dateTime.day().month().year())
-                    }
-                    
-                    HStack {
-                        Text("Rating: ")
-                            .fontWeight(.semibold)
-                        Spacer()
-                        Text(coffee.rating, format: .number.precision(.fractionLength(0...1)))
+                    VStack(spacing: 12) {
+                        Text("\(amountLeft) / \(amount) g")
                             .monospaced()
+                            .fontWeight(.semibold)
+                        
+                        HStack {
+                            Text("Roasted: ")
+                                .fontWeight(.semibold)
+                            Spacer()
+                            if let roastDate = coffee.newestRefill?.roastDate {
+                                Text(roastDate, format: .dateTime.day().month().year())
+                            } else {
+                                Text(" - ")
+                            }
+                            
+                        }
+                        .font(.callout)
+                        
+                        HStack {
+                            Text("Refilled: ")
+                                .fontWeight(.semibold)
+                            Spacer()
+                            Text(coffee.lastRefill, format: .dateTime.day().month().year())
+                        }
+                        .font(.callout)
+                        
+                        HStack {
+                            Text("Brews: ")
+                                .fontWeight(.semibold)
+                            Spacer()
+                            Text(coffee.totalBrews, format: .number)
+                                .monospaced()
+                        }
+                        .font(.callout)
+                        
+                        HStack {
+                            Text("Rating: ")
+                                .fontWeight(.semibold)
+                            Spacer()
+                            Text(coffee.rating, format: .number.precision(.fractionLength(0...1)))
+                                .monospaced()
+                        }
+                        .font(.callout)
                     }
                 }
-                .padding(24)
+                .padding(12)
                 .glassEffect(in: .rect(cornerRadius: 24.0))
                 
                 VStack(alignment: .leading, spacing: 12) {
@@ -69,11 +94,31 @@ struct CoffeeDetailsView: View {
                 .glassEffect(in: .rect(cornerRadius: 24.0))
                 
                 BrewTasteDistributionChartView(brews: coffee.brews)
+                    .padding(24)
+                    .glassEffect(in: .rect(cornerRadius: 24.0))
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(24)
             .navigationTitle(coffee.name)
             .navigationSubtitle(coffee.roaster)
+            .toolbar {
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    Button("Refill", systemImage: "arrow.trianglehead.clockwise") {
+                        print("refill")
+                    }
+                    Button("Brew", systemImage: "cup.and.heat.waves.fill") {
+                        print("brew")
+                    }
+                }
+                
+                ToolbarSpacer(.flexible, placement: .topBarTrailing)
+                
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Edit", systemImage: "pencil") {
+                        print("edit")
+                    }
+                }
+            }
         }
     }
 }
