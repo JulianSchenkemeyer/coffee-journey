@@ -80,3 +80,19 @@ import SwiftData
         self.notes = ""
     }
 }
+
+
+extension Coffee: SearchableModel {
+    static func search(for term: String) -> Predicate<Coffee>? {
+        let t = term.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !t.isEmpty else { return nil }
+        
+        return #Predicate<Coffee> { item in
+            if term.isEmpty {
+                return true
+            } else {
+                return item.name.contains(t) || item.roaster.contains(t)
+            }
+        }
+    }
+}

@@ -30,3 +30,19 @@ import SwiftData
         self.notes = ""
     }
 }
+
+
+extension Equipment: SearchableModel {
+    static func search(for term: String) -> Predicate<Equipment>? {
+        let t = term.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !t.isEmpty else { return nil }
+        
+        return #Predicate<Equipment> { item in
+            if term.isEmpty {
+                return true
+            } else {
+                return item.name.contains(t) || item.brand.contains(t) || item.type.contains(t)
+            }
+        }
+    }
+}
