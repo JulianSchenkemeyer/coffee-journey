@@ -70,12 +70,6 @@ struct CoffeeShelfView: View {
                     ForEach(emptyCoffees) { coffee in
                         NavigationLink(value: coffee) {
                             CoffeeShelfEntryView(coffee: coffee)
-                                .swipeActions(edge: .leading) {
-                                    Button {
-                                        activeModal = .brew(coffee)
-                                    } label: {
-                                        Label("Brew", systemImage: "cup.and.heat.waves.fill")
-                                    }                    }
                                 .swipeActions(edge: .trailing) {
                                     Button {
                                         activeModal = .refill(coffee)
