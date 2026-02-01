@@ -27,6 +27,10 @@ import SwiftData
     var notes: String
     
     
+    var lastUsedRecipe: Recipe? {
+        recipes.max(by: { $0.lastUsed ?? .distantPast < $1.lastUsed ?? .distantPast })
+    }
+    
     var newestRefill: Refill? {
         refills.max(by: { $0.date < $1.date })
     }
