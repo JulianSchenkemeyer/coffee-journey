@@ -23,7 +23,18 @@ struct BrewDrinkModalView: View {
     @State private var taste = 3.0
     
     
-    
+    init(coffee: Coffee) {
+        self.coffee = coffee
+        let last = coffee.lastUsedRecipe
+        _selectedRecipe = State(initialValue: last)
+        if let last {
+            _usedCoffee = State(initialValue: last.amountBeans)
+            _grindSetting = State(initialValue: last.grindSize)
+            _waterTemperature = State(initialValue: last.temperature)
+            _extractionTime = State(initialValue: last.extractionTime)
+            _output = State(initialValue: last.output)
+        }
+    }
     
     var body: some View {
         NavigationStack {
