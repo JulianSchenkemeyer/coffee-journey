@@ -19,6 +19,7 @@ final class Recipe: Identifiable {
 //    var grinder: Equipment
     
     var name: String
+    var lastUsed: Date?
     
     var minTemperature: Double
     var maxTemperature: Double

@@ -25,6 +25,7 @@ import Foundation
             return recipe
         }
         
+        recipe.lastUsed = .now
         recipe.minAmountBeans = min(recipe.minAmountBeans, brew.amountCoffee)
         recipe.maxAmountBeans = max(recipe.maxAmountBeans, brew.amountCoffee)
         recipe.minGrindSize = min(recipe.minGrindSize, brew.grindSetting)
