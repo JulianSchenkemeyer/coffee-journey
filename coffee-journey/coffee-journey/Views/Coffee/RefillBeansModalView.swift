@@ -16,6 +16,7 @@ struct RefillBeansModalView: View {
     
     @State private var newBeans = 250.0
     @State private var roastDate = Date.now
+    @State private var keepOld: Bool = true
     
     var body: some View {
         NavigationStack {
@@ -27,12 +28,16 @@ struct RefillBeansModalView: View {
                                 in: 0...2000,
                                 step: 50)
                         DatePicker("Roast Date", selection: $roastDate, displayedComponents: .date)
+                        
+                        Toggle(isOn: $keepOld) {
+                            Text("Keep Old Beans")
+                        }
                     }
                     .padding(.vertical, 8)
                 }
                 
                 Button {
-                    _ = try! useCases.refillBeans(coffee, Refill(amount: newBeans, roastDate: roastDate, date: .now), true)
+                    _ = try! useCases.refillBeans(coffee, Refill(amount: newBeans, roastDate: roastDate, date: .now), !keepOld)
                     dismiss()
                 } label: {
                     Label("Refill Beans", systemImage: "arrow.trianglehead.clockwise")
