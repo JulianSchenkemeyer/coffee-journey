@@ -22,83 +22,103 @@ struct CoffeeDetailsView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 24) {
-                HStack(alignment: .center, spacing: 14) {
-                    Image(systemName: "cup.and.saucer.fill")
-                        .resizable()
-                        .frame(width: 60, height: 60)
-                        .padding(36)
-                        .background {
-                            Color.gray.opacity(0.3)
-                                .clipShape(.circle)
-                        }
-                    
-                    
-                    VStack(spacing: 12) {
+                VStack(spacing: 20) {
+                    // Coffee status card with icon and stats
+                    VStack(spacing: 16) {
+                        Image(systemName: "cup.and.saucer.fill")
+                            .font(.system(size: 60))
+                            .foregroundStyle(.secondary)
+                        
                         Text("\(amountLeft) / \(amount) g")
+                            .font(.title2)
                             .monospaced()
                             .fontWeight(.semibold)
                         
-                        HStack {
-                            Text("Roasted: ")
-                                .fontWeight(.semibold)
-                            Spacer()
-                            if let roastDate = coffee.newestRefill?.roastDate {
-                                Text(roastDate, format: .dateTime.day().month().year())
-                            } else {
-                                Text(" - ")
+                        Divider()
+                            .padding(.horizontal)
+                        
+                        Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 12) {
+                            GridRow {
+                                Text("Roasted")
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                if let roastDate = coffee.newestRefill?.roastDate {
+                                    Text(roastDate, format: .dateTime.day().month().year())
+                                } else {
+                                    Text("—")
+                                }
                             }
                             
-                        }
-                        .font(.callout)
-                        
-                        HStack {
-                            Text("Refilled: ")
-                                .fontWeight(.semibold)
-                            Spacer()
-                            Text(coffee.lastRefill, format: .dateTime.day().month().year())
-                        }
-                        .font(.callout)
-                        
-                        HStack {
-                            Text("Brews: ")
-                                .fontWeight(.semibold)
-                            Spacer()
-                            Text(coffee.totalBrews, format: .number)
-                                .monospaced()
-                        }
-                        .font(.callout)
-                        
-                        HStack {
-                            Text("Rating: ")
-                                .fontWeight(.semibold)
-                            Spacer()
-                            Text(coffee.rating, format: .number.precision(.fractionLength(0...1)))
-                                .monospaced()
+                            GridRow {
+                                Text("Refilled")
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                Text(coffee.lastRefill, format: .dateTime.day().month().year())
+                            }
+                            
+                            GridRow {
+                                Text("Brews")
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                Text(coffee.totalBrews, format: .number)
+                                    .monospaced()
+                            }
+                            
+                            GridRow {
+                                Text("Rating")
+                                    .foregroundStyle(.secondary)
+                                Spacer()
+                                Text(coffee.rating, format: .number.precision(.fractionLength(0...1)))
+                                    .monospaced()
+                            }
                         }
                         .font(.callout)
                     }
-                }
-                .padding(12)
-                .glassEffect(in: .rect(cornerRadius: 24.0))
-                
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("Notes")
-                        .fontWeight(.semibold)
-                    
-                    Text(coffee.notes)
-                    
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(24)
-                .glassEffect(in: .rect(cornerRadius: 24.0))
-                
-                BrewTasteDistributionChartView(brews: coffee.brews)
+                    .frame(maxWidth: .infinity)
                     .padding(24)
-                    .glassEffect(in: .rect(cornerRadius: 24.0))
+                    
+                    // Notes section
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Notes")
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                        
+                        Text(coffee.notes)
+                            .font(.body)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(24)
+                    
+                    // Recipes section
+                    if !coffee.recipes.isEmpty {
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text("Recipes")
+                                .font(.headline)
+                                .foregroundStyle(.secondary)
+                                .padding(.horizontal, 24)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 12) {
+                                    ForEach(coffee.recipes) { recipe in
+                                        RecipeCardView(recipe: recipe)
+                                            .frame(width: 300)
+                                    }
+                                }
+                                .scrollTargetLayout()
+                                .padding(.horizontal, 20)
+                            }
+                            .scrollTargetBehavior(.viewAligned)
+                        }
+                        .padding(.vertical, 12)
+                    }
+                    
+                    // Brew taste distribution chart
+                    BrewTasteDistributionChartView(brews: coffee.brews)
+                        .padding(24)
+                }
+                .frame(maxWidth: .infinity, alignment: .top)
+                .padding(20)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .padding(24)
             .navigationTitle(coffee.name)
             .navigationSubtitle(coffee.roaster)
             .toolbar {
@@ -111,8 +131,6 @@ struct CoffeeDetailsView: View {
                     }
                 }
                 
-                ToolbarSpacer(.flexible, placement: .topBarTrailing)
-                
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Edit", systemImage: "pencil") {
                         print("edit")
@@ -120,7 +138,6 @@ struct CoffeeDetailsView: View {
                 }
             }
         }
-    }
 }
 
 

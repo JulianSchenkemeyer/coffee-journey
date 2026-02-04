@@ -46,7 +46,9 @@ struct RecipeCardView: View {
     private func rangeRow(label: LocalizedStringKey, min: Double, max: Double, unit: String? = nil) -> some View {
         GridRow {
             Text(label)
+                .foregroundStyle(.secondary)
             Text("\(formatValue(min, unit: unit)) ... \(formatValue(max, unit: unit))")
+                .monospaced()
         }
     }
     
@@ -61,29 +63,32 @@ struct RecipeCardView: View {
     private func rangeRow(label: LocalizedStringKey, min: Int, max: Int, unit: String? = nil) -> some View {
         GridRow {
             Text(label)
+                .foregroundStyle(.secondary)
             Text("\(formatValue(min, unit: unit)) ... \(formatValue(max, unit: unit))")
+                .monospaced()
         }
     }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(recipe.name)
-                .font(.headline)
+                .font(.title3)
+                .fontWeight(.semibold)
             
             Divider()
             
-            Grid(alignment: .leading, horizontalSpacing: 48, verticalSpacing: 8) {
+            Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 8) {
                 rangeRow(label: "Beans", min: recipe.minAmountBeans, max: recipe.maxAmountBeans, unit: "g")
-                rangeRow(label: "Grind Settings", min: recipe.minGrindSize, max: recipe.maxGrindSize)
-                rangeRow(label: "Temperature", min: recipe.minTemperature, max: recipe.maxTemperature, unit: "°C")
-                rangeRow(label: "Extraction", min: recipe.minExtractionTime, max: recipe.maxExtractionTime, unit: "s")
+                rangeRow(label: "Grind", min: recipe.minGrindSize, max: recipe.maxGrindSize)
+                rangeRow(label: "Temp", min: recipe.minTemperature, max: recipe.maxTemperature, unit: "°C")
+                rangeRow(label: "Time", min: recipe.minExtractionTime, max: recipe.maxExtractionTime, unit: "s")
                 rangeRow(label: "Output", min: recipe.minOutput, max: recipe.maxOutput, unit: "g")
             }
+            .font(.subheadline)
         }
-        .padding(.vertical)
-        .padding(.horizontal, 28)
-        .background(.background.secondary, in: RoundedRectangle(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
     }
 }
 
