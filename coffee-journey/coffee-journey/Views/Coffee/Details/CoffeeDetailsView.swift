@@ -90,27 +90,30 @@ struct CoffeeDetailsView: View {
                     .padding(24)
                     
                     // Recipes section
-                    if !coffee.recipes.isEmpty {
-                        VStack(alignment: .leading, spacing: 16) {
-                            Text("Recipes")
-                                .font(.headline)
-                                .foregroundStyle(.secondary)
-                                .padding(.horizontal, 24)
-                            
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 12) {
-                                    ForEach(coffee.recipes) { recipe in
-                                        RecipeCardView(recipe: recipe)
-                                            .frame(width: 300)
-                                    }
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Recipes")
+                            .font(.headline)
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal, 24)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                ForEach(coffee.recipes) { recipe in
+                                    RecipeCardView(recipe: recipe)
+                                        .frame(width: 300)
                                 }
-                                .scrollTargetLayout()
-                                .padding(.horizontal, 20)
+                                
+                                AddRecipeCardButtonView {
+                                    print("Add recipe")
+                                }
+                                .frame(width: 300)
                             }
-                            .scrollTargetBehavior(.viewAligned)
+                            .scrollTargetLayout()
+                            .padding(.horizontal, 20)
                         }
-                        .padding(.vertical, 12)
+                        .scrollTargetBehavior(.viewAligned)
                     }
+                    .padding(.vertical, 12)
                     
                     // Brew taste distribution chart
                     BrewTasteDistributionChartView(brews: coffee.brews)
