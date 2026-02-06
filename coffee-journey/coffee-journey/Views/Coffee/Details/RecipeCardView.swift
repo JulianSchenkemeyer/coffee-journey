@@ -47,8 +47,13 @@ struct RecipeCardView: View {
         GridRow {
             Text(label)
                 .foregroundStyle(.secondary)
-            Text("\(formatValue(min, unit: unit)) ... \(formatValue(max, unit: unit))")
-                .monospaced()
+            if min == max {
+                Text(formatValue(min, unit: unit))
+                    .monospaced()
+            } else {
+                Text("\(formatValue(min, unit: unit)) ... \(formatValue(max, unit: unit))")
+                    .monospaced()
+            }
         }
     }
     
@@ -64,8 +69,13 @@ struct RecipeCardView: View {
         GridRow {
             Text(label)
                 .foregroundStyle(.secondary)
-            Text("\(formatValue(min, unit: unit)) ... \(formatValue(max, unit: unit))")
-                .monospaced()
+            if min == max {
+                Text(formatValue(min, unit: unit))
+                    .monospaced()
+            } else {
+                Text("\(formatValue(min, unit: unit)) ... \(formatValue(max, unit: unit))")
+                    .monospaced()
+            }
         }
     }
     
