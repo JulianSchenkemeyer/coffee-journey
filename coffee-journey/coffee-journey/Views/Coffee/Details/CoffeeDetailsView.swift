@@ -42,42 +42,18 @@ struct CoffeeDetailsView: View {
                 }
                 .padding(.bottom, 12)
             }
-                // Content sections on white background
-                VStack(spacing: 20) {
-                    // Recipes section
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Recipes")
-                            .font(.headline)
-                            .foregroundStyle(.secondary)
-                            .padding(.horizontal, 24)
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 12) {
-                                ForEach(coffee.recipes) { recipe in
-                                    RecipeCardView(recipe: recipe)
-                                        .frame(width: 300)
-                                }
-                                
-                                AddRecipeCardButtonView {
-                                    print("Add recipe")
-                                }
-                                .frame(width: 300)
-                            }
-                            .scrollTargetLayout()
-                            .padding(.horizontal, 20)
-                        }
-                        .scrollTargetBehavior(.viewAligned)
-                    }
+            // Content sections on white background
+            VStack(spacing: 20) {
+                RecipeCardGalleryView(recipes: coffee.recipes)
                     .padding(.vertical, 12)
-                    
-                    // Brew taste distribution chart
-                    BrewTasteDistributionChartView(brews: coffee.brews)
-                        .padding(24)
-                }
-                .background {
-                    Color(UIColor.systemBackground)
-                        .ignoresSafeArea()
-                }
+                
+                // Brew taste distribution chart
+                BrewTasteDistributionChartView(brews: coffee.brews)
+                    .padding(24)
+            }
+            .background {
+                Color(UIColor.systemBackground)
+            }
         }
         .navigationTitle(coffee.name)
         .navigationSubtitle(coffee.roaster)
