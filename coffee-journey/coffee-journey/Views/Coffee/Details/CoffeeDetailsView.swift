@@ -24,67 +24,15 @@ struct CoffeeDetailsView: View {
         ScrollView {
             VStack {
                 // Hero header section with background
-                VStack(spacing: 16) {
-                    Image(systemName: "cup.and.saucer.fill")
-                        .font(.system(size: 60))
-                        .foregroundStyle(.secondary)
-                    
-                    Text("\(amountLeft) / \(amount) g")
-                        .font(.title2)
-                        .monospaced()
-                        .fontWeight(.semibold)
-                    
-                    Divider()
-                        .padding(.horizontal)
-                    
-                    Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 12) {
-                        GridRow {
-                            Text("Roasted")
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                            if let roastDate = coffee.newestRefill?.roastDate {
-                                Text(roastDate, format: .dateTime.day().month().year())
-                            } else {
-                                Text("—")
-                            }
-                        }
-                        
-                        GridRow {
-                            Text("Refilled")
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                            Text(coffee.lastRefill, format: .dateTime.day().month().year())
-                        }
-                        
-                        GridRow {
-                            Text("Brews")
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                            Text(coffee.totalBrews, format: .number)
-                                .monospaced()
-                        }
-                        
-                        GridRow {
-                            Text("Rating")
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                            Text(coffee.rating, format: .number.precision(.fractionLength(0...1)))
-                                .monospaced()
-                        }
-                    }
-                    .font(.callout)
-                    
-                    Divider()
-                        .padding(.horizontal)
-                    
-                    // Notes section
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text(coffee.notes)
-                            .font(.body)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 12)
-                }
+                CoffeeDetailsHeaderView(
+                    amount: amount,
+                    amountLeft: amountLeft,
+                    roastDate: coffee.newestRefill?.roastDate,
+                    lastRefill: coffee.lastRefill,
+                    totalBrews: coffee.totalBrews,
+                    rating: coffee.rating,
+                    notes: coffee.notes
+                )
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, 24)
                 .padding(.top, 24)
@@ -131,7 +79,6 @@ struct CoffeeDetailsView: View {
                         .ignoresSafeArea()
                 }
         }
-        .background(Color(UIColor.systemGray6))
         .navigationTitle(coffee.name)
         .navigationSubtitle(coffee.roaster)
         .toolbarBackground(.hidden, for: .navigationBar)
