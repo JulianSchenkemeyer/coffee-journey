@@ -43,7 +43,9 @@ struct CoffeeDetailsView: View {
                 }
                 .padding(.bottom, 12)
                 
-                RecipeCardGalleryView(recipes: coffee.recipes)  { recipe in
+                RecipeCardGalleryView(recipes: coffee.recipes) {
+                    print("add new recipe")
+                } onRecalibrateRecipe: { recipe in
                     print("recalibrate \(recipe.name)")
                 } onEditRecipe: { recipe in
                     print("edit \(recipe.name)")

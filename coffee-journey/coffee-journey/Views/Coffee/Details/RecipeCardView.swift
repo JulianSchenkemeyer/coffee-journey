@@ -92,13 +92,8 @@ struct RecipeCardView: View {
              
                 Spacer()
                 
-//                Menu {
-//                    
-//                } label: {
-                    Label("Recipe Actions", systemImage: "ellipsis")
-                        .labelStyle(.iconOnly)
-//                }
-//                .menuStyle(.borderlessButton)
+                Label("Recipe Actions", systemImage: "ellipsis")
+                    .labelStyle(.iconOnly)
             }
             
             Divider()

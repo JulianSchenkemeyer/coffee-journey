@@ -11,6 +11,7 @@ import SwiftUI
 struct RecipeCardGalleryView: View {
     let recipes: [Recipe]
     
+    let onAddRecipe: () -> Void
     let onRecalibrateRecipe: (Recipe) -> Void
     let onEditRecipe: (Recipe) -> Void
     let onDeleteRecipe: (Recipe) -> Void
@@ -29,13 +30,13 @@ struct RecipeCardGalleryView: View {
                             recipe: recipe,
                             onRecalibrate: onRecalibrateRecipe,
                             onEdit: onEditRecipe,
-                            onDelete: onEditRecipe
-                        ) 
+                            onDelete: onDeleteRecipe
+                        )
                             .frame(width: 300)
                     }
                     
                     AddRecipeCardButtonView {
-                        print("Add recipe")
+                        onAddRecipe()
                     }
                     .frame(width: 300)
                 }
@@ -48,7 +49,9 @@ struct RecipeCardGalleryView: View {
 }
 
 #Preview {
-    RecipeCardGalleryView(recipes: Recipe.Mock.all) { recipe in
+    RecipeCardGalleryView(recipes: Recipe.Mock.all) {
+        print("add new recipe")
+    } onRecalibrateRecipe: { recipe in
         print("recalibrate \(recipe.name)")
     } onEditRecipe: { recipe in
         print("edit \(recipe.name)")
