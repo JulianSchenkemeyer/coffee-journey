@@ -16,6 +16,8 @@ struct RecipeCardGalleryView: View {
     let onEditRecipe: (Recipe) -> Void
     let onDeleteRecipe: (Recipe) -> Void
     
+    @State private var isAddButtonInFocus = false
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Recipes")
@@ -35,10 +37,13 @@ struct RecipeCardGalleryView: View {
                             .frame(width: 300)
                     }
                     
-                    AddRecipeCardButtonView {
+                    AddRecipeCardButtonView(isInteractive: isAddButtonInFocus) {
                         onAddRecipe()
                     }
                     .frame(width: 300)
+                    .onScrollVisibilityChange(threshold: 0.9) { isVisible in
+                        isAddButtonInFocus = isVisible
+                    }
                 }
                 .scrollTargetLayout()
                 .padding(.horizontal, 20)

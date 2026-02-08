@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct AddRecipeCardButtonView: View {
+    let isInteractive: Bool
     let action: () -> Void
     
     var body: some View {
@@ -26,12 +27,13 @@ struct AddRecipeCardButtonView: View {
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
         }
         .buttonStyle(.plain)
+        .allowsHitTesting(isInteractive)
     }
 }
 
 
 #Preview {
-    AddRecipeCardButtonView {
+    AddRecipeCardButtonView(isInteractive: true) {
         print("Add recipe tapped")
     }
 }
