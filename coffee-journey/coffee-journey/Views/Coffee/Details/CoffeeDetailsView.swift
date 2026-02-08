@@ -22,7 +22,7 @@ struct CoffeeDetailsView: View {
     
     var body: some View {
         ScrollView {
-            VStack {
+            LazyVStack {
                 // Hero header section with background
                 CoffeeDetailsHeaderView(
                     amount: amount,
@@ -39,11 +39,10 @@ struct CoffeeDetailsView: View {
                 .padding(.bottom, 32)
                 .background {
                     Color(UIColor.systemGray6)
+                        .stretchy()
                 }
                 .padding(.bottom, 12)
-            }
-            // Content sections on white background
-            VStack(spacing: 20) {
+                
                 RecipeCardGalleryView(recipes: coffee.recipes)
                     .padding(.vertical, 12)
                 
@@ -55,6 +54,7 @@ struct CoffeeDetailsView: View {
                 Color(UIColor.systemBackground)
             }
         }
+        .ignoresSafeArea(edges: .top)
         .navigationTitle(coffee.name)
         .navigationSubtitle(coffee.roaster)
         .toolbarBackground(.hidden, for: .navigationBar)
