@@ -21,6 +21,10 @@ struct CoffeeDetailsHeaderView: View {
     
     var body: some View {
         VStack(spacing: 16) {
+            Color.clear
+                .frame(height: 140)
+                
+            
             Image(systemName: "cup.and.saucer.fill")
                 .font(.system(size: 60))
                 .foregroundStyle(.secondary)
