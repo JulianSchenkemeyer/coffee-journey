@@ -9,8 +9,12 @@ import SwiftUI
 
 
 struct RecipeCardView: View {
+    @Environment(\.useCases) private var useCases
+    
     let recipe: Recipe
     
+    @State private var isEditing: Bool = false
+
     
     // MARK: - Helper Methods
     
@@ -107,16 +111,22 @@ struct RecipeCardView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .sheet(isPresented: $isEditing, content: {
+            Text("Test")
+        })
         .contextMenu {
             Button("Recalibrate", systemImage: "gearshape.arrow.trianglehead.2.clockwise.rotate.90") {
+                _ = try! useCases.recalibrateRecipe(recipe)
             }
             
             Button("Edit", systemImage: "pencil") {
+                isEditing = true
             }
             
             Divider()
             
             Button("Delete", systemImage: "trash", role: .destructive) {
+                print("delete")
             }
         }
     }

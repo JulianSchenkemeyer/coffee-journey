@@ -16,7 +16,7 @@ protocol RecipeRepository {
 }
 
 @MainActor
-final class SwiftDataRefillRepository: RecipeRepository {
+final class SwiftDataRecipeRepository: RecipeRepository {
     private let context: ModelContext
     init(context: ModelContext) { self.context = context }
     
