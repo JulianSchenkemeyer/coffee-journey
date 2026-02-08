@@ -11,6 +11,10 @@ import SwiftUI
 struct RecipeCardView: View {
     let recipe: Recipe
     
+    let onRecalibrate: (Recipe) -> Void
+    let onEdit: (Recipe) -> Void
+    let onDelete: (Recipe) -> Void
+    
     // MARK: - Helper Methods
     
     /// Formats a Double value with one decimal place precision and an optional unit suffix
@@ -81,9 +85,21 @@ struct RecipeCardView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(recipe.name)
-                .font(.title3)
-                .fontWeight(.semibold)
+            HStack {
+                Text(recipe.name)
+                    .font(.title3)
+                    .fontWeight(.semibold)
+             
+                Spacer()
+                
+//                Menu {
+//                    
+//                } label: {
+                    Label("Recipe Actions", systemImage: "ellipsis")
+                        .labelStyle(.iconOnly)
+//                }
+//                .menuStyle(.borderlessButton)
+            }
             
             Divider()
             
@@ -99,11 +115,32 @@ struct RecipeCardView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .contextMenu {
+            Button("Recalibrate", systemImage: "gearshape.arrow.trianglehead.2.clockwise.rotate.90") {
+                onRecalibrate(recipe)
+            }
+            
+            Button("Edit", systemImage: "pencil") {
+                onEdit(recipe)
+            }
+            
+            Divider()
+            
+            Button("Delete", systemImage: "trash", role: .destructive) {
+                onDelete(recipe)
+            }
+        }
     }
 }
 
 
 #Preview {
-    RecipeCardView(recipe: .Mock.espressoUsed)
+    RecipeCardView(recipe: .Mock.espressoUsed) { _ in
+        print("recalibrate")
+    } onEdit: { _ in
+        print("edit")
+    } onDelete: { _ in
+        print("delete")
+    }
 }
 

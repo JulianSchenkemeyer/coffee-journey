@@ -11,6 +11,10 @@ import SwiftUI
 struct RecipeCardGalleryView: View {
     let recipes: [Recipe]
     
+    let onRecalibrateRecipe: (Recipe) -> Void
+    let onEditRecipe: (Recipe) -> Void
+    let onDeleteRecipe: (Recipe) -> Void
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Recipes")
@@ -21,7 +25,12 @@ struct RecipeCardGalleryView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach(recipes) { recipe in
-                        RecipeCardView(recipe: recipe)
+                        RecipeCardView(
+                            recipe: recipe,
+                            onRecalibrate: onRecalibrateRecipe,
+                            onEdit: onEditRecipe,
+                            onDelete: onEditRecipe
+                        ) 
                             .frame(width: 300)
                     }
                     
@@ -39,6 +48,12 @@ struct RecipeCardGalleryView: View {
 }
 
 #Preview {
-    RecipeCardGalleryView(recipes: Recipe.Mock.all)
+    RecipeCardGalleryView(recipes: Recipe.Mock.all) { recipe in
+        print("recalibrate \(recipe.name)")
+    } onEditRecipe: { recipe in
+        print("edit \(recipe.name)")
+    } onDeleteRecipe: { recipe in
+        print("delete \(recipe.name)")
+    }
         .frame(height: 300)
 }
