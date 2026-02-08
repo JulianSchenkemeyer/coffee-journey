@@ -11,9 +11,6 @@ import SwiftUI
 struct RecipeCardView: View {
     let recipe: Recipe
     
-    let onRecalibrate: (Recipe) -> Void
-    let onEdit: (Recipe) -> Void
-    let onDelete: (Recipe) -> Void
     
     // MARK: - Helper Methods
     
@@ -112,17 +109,14 @@ struct RecipeCardView: View {
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
         .contextMenu {
             Button("Recalibrate", systemImage: "gearshape.arrow.trianglehead.2.clockwise.rotate.90") {
-                onRecalibrate(recipe)
             }
             
             Button("Edit", systemImage: "pencil") {
-                onEdit(recipe)
             }
             
             Divider()
             
             Button("Delete", systemImage: "trash", role: .destructive) {
-                onDelete(recipe)
             }
         }
     }
@@ -130,12 +124,8 @@ struct RecipeCardView: View {
 
 
 #Preview {
-    RecipeCardView(recipe: .Mock.espressoUsed) { _ in
-        print("recalibrate")
-    } onEdit: { _ in
-        print("edit")
-    } onDelete: { _ in
-        print("delete")
+    PreviewUseCaseEnvironment {
+        RecipeCardView(recipe: .Mock.espressoUsed)
     }
 }
 

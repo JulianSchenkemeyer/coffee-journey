@@ -11,11 +11,6 @@ import SwiftUI
 struct RecipeCardGalleryView: View {
     let recipes: [Recipe]
     
-    let onAddRecipe: () -> Void
-    let onRecalibrateRecipe: (Recipe) -> Void
-    let onEditRecipe: (Recipe) -> Void
-    let onDeleteRecipe: (Recipe) -> Void
-    
     @State private var isAddButtonInFocus = false
     
     var body: some View {
@@ -28,17 +23,12 @@ struct RecipeCardGalleryView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach(recipes) { recipe in
-                        RecipeCardView(
-                            recipe: recipe,
-                            onRecalibrate: onRecalibrateRecipe,
-                            onEdit: onEditRecipe,
-                            onDelete: onDeleteRecipe
-                        )
+                        RecipeCardView(recipe: recipe)
                             .frame(width: 300)
                     }
                     
                     AddRecipeCardButtonView(isInteractive: isAddButtonInFocus) {
-                        onAddRecipe()
+                        print("add new recipe modal")
                     }
                     .frame(width: 300)
                     .onScrollVisibilityChange(threshold: 0.9) { isVisible in
@@ -54,14 +44,6 @@ struct RecipeCardGalleryView: View {
 }
 
 #Preview {
-    RecipeCardGalleryView(recipes: Recipe.Mock.all) {
-        print("add new recipe")
-    } onRecalibrateRecipe: { recipe in
-        print("recalibrate \(recipe.name)")
-    } onEditRecipe: { recipe in
-        print("edit \(recipe.name)")
-    } onDeleteRecipe: { recipe in
-        print("delete \(recipe.name)")
-    }
+    RecipeCardGalleryView(recipes: Recipe.Mock.all)
         .frame(height: 300)
 }
