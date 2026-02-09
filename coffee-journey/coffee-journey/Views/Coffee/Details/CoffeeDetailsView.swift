@@ -10,6 +10,8 @@ import SwiftData
 
 
 struct CoffeeDetailsView: View {
+    @Environment(\.sheetCoordinator) private var sheetCoordinator
+    
     let coffee: Coffee
     
     var amountLeft: String {
@@ -61,10 +63,10 @@ struct CoffeeDetailsView: View {
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button("Refill", systemImage: "arrow.trianglehead.clockwise") {
-                    print("refill")
+                    sheetCoordinator.present(.refill(coffee))
                 }
                 Button("Brew", systemImage: "cup.and.heat.waves.fill") {
-                    print("brew")
+                    sheetCoordinator.present(.brew(coffee))
                 }
             }
             

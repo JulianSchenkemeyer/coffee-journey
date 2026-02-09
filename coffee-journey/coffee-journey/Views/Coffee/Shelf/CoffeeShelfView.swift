@@ -12,22 +12,8 @@ import SwiftData
 
 struct CoffeeShelfView: View {
     static var oneYearAgo = Date.oneYearAgo
-
-    enum ModalSheet: Identifiable {
-        case brew(Coffee)
-        case refill(Coffee)
-        
-        var id: String {
-            switch self {
-            case .brew: "brew"
-            case .refill: "refill"
-            }
-        }
-    }
     
-    
-    @State private var showAddCoffee: Bool = false
-    @State private var activeModal: ModalSheet? = nil
+    @Environment(\.sheetCoordinator) private var sheetCoordinator
     @State private var selectedCoffee: Coffee? = nil
     
     @Query(
@@ -52,13 +38,13 @@ struct CoffeeShelfView: View {
                         CoffeeShelfEntryView(coffee: coffee)
                             .swipeActions(edge: .leading) {
                                 Button {
-                                    activeModal = .brew(coffee)
+                                    sheetCoordinator.present(.brew(coffee))
                                 } label: {
                                     Label("Brew", systemImage: "cup.and.heat.waves.fill")
                                 }                    }
                             .swipeActions(edge: .trailing) {
                                 Button {
-                                    activeModal = .refill(coffee)
+                                    sheetCoordinator.present(.refill(coffee))
                                 } label: {
                                     Label("Refill", systemImage: "arrow.trianglehead.clockwise")
                                 }
@@ -72,7 +58,7 @@ struct CoffeeShelfView: View {
                             CoffeeShelfEntryView(coffee: coffee)
                                 .swipeActions(edge: .trailing) {
                                     Button {
-                                        activeModal = .refill(coffee)
+                                        sheetCoordinator.present(.refill(coffee))
                                     } label: {
                                         Label("Refill", systemImage: "arrow.trianglehead.clockwise")
                                     }
@@ -85,25 +71,12 @@ struct CoffeeShelfView: View {
             .navigationTitle("Coffee Shelf")
             .toolbar {
                 Button("Add Coffee", systemImage: "plus") {
-                    showAddCoffee = true
+                    sheetCoordinator.present(.addCoffee)
                 }
             }
             .navigationDestination(item: $selectedCoffee, destination: { coffee in
                 CoffeeDetailsView(coffee:  coffee)
             })
-            .sheet(item: $activeModal, content: { modal in
-                switch modal {
-                case .brew(let coffee):
-                    BrewDrinkModalView(coffee: coffee)
-                        .presentationDetents([.fraction(0.9)])
-                case .refill(let coffee):
-                    RefillBeansModalView(coffee: coffee)
-                        .presentationDetents([.medium])
-                }
-            })
-            .sheet(isPresented: $showAddCoffee) {
-                AddCoffeeFormView()
-            }
         }
     }
 }
