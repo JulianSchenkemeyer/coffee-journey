@@ -12,6 +12,7 @@ import SwiftData
 struct coffee_journeyApp: App {
     let container: ModelContainer = ContainerFactory.createDefault()
     let context: ModelContext
+    let sheetManager = SheetCoordinator()
     
     init() {
         self.context = ModelContext(container)
@@ -24,5 +25,6 @@ struct coffee_journeyApp: App {
         }
         .environment(\.modelContext, context)
         .environment(\.useCases, UseCaseFactory.make(context: context))
+        .environment(\.sheetCoordinator, sheetManager)
     }
 }
