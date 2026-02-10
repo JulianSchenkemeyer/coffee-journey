@@ -18,23 +18,32 @@ import SwiftData
 
 
 struct EquipmentShelfView: View {
-    @State private var showAddEquipment: Bool = false
+    @Environment(\.router) private var router
     
     @Query var equipment: [Equipment] = []
     
     var body: some View {
-        NavigationStack {
+        @Bindable var router = router
+        
+        NavigationStack(path: $router.path) {
             List(equipment) { item in
-                Text(item.name)
+                NavigationLink(value: Router.Route.equipmentDetails(item)) {
+                    Text(item.name)
+                }
             }
             .navigationTitle("Equipment Shelf")
             .toolbar {
                 Button("Add Equipment", systemImage: "plus") {
-                    showAddEquipment = true
+                    // TODO: Add sheet coordinator for add equipment
                 }
             }
-            .sheet(isPresented: $showAddEquipment) {
-                AddEquipmentFormView()
+            .navigationDestination(for: Router.Route.self) { route in
+                switch route {
+                case .coffeeDetails(let coffee):
+                    CoffeeDetailsView(coffee: coffee)
+                case .equipmentDetails(let equipment):
+                    Text("Equipment Details: \(equipment.name)")
+                }
             }
         }
     }

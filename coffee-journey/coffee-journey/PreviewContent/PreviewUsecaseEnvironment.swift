@@ -18,6 +18,7 @@ struct PreviewUseCaseEnvironment<Content: View>: View  {
             .modelContainer(container)
             .environment(\.useCases, UseCaseFactory.make(context: ModelContext(container)))
             .environment(\.sheetCoordinator, SheetCoordinator())
+            .environment(\.router, Router())
     }
 }
 #endif

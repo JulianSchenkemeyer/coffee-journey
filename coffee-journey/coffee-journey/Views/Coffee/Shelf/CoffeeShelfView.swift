@@ -14,7 +14,7 @@ struct CoffeeShelfView: View {
     static var oneYearAgo = Date.oneYearAgo
     
     @Environment(\.sheetCoordinator) private var sheetCoordinator
-    @State private var selectedCoffee: Coffee? = nil
+    @Environment(\.router) private var router
     
     @Query(
         filter: #Predicate<Coffee> { $0.amountLeft > 0 },
@@ -31,38 +31,41 @@ struct CoffeeShelfView: View {
     
     
     var body: some View {
-        NavigationStack {
-            List(selection: $selectedCoffee) {
+        @Bindable var router = router
+        
+        NavigationStack(path: $router.path) {
+            List {
                 ForEach(inStockCoffees) { coffee in
-                    NavigationLink(value: coffee) {
+                    NavigationLink(value: Router.Route.coffeeDetails(coffee)) {
                         CoffeeShelfEntryView(coffee: coffee)
-                            .swipeActions(edge: .leading) {
-                                Button {
-                                    sheetCoordinator.present(.brew(coffee))
-                                } label: {
-                                    Label("Brew", systemImage: "cup.and.heat.waves.fill")
-                                }                    }
-                            .swipeActions(edge: .trailing) {
-                                Button {
-                                    sheetCoordinator.present(.refill(coffee))
-                                } label: {
-                                    Label("Refill", systemImage: "arrow.trianglehead.clockwise")
-                                }
-                            }
+                    }
+                    .swipeActions(edge: .leading) {
+                        Button {
+                            sheetCoordinator.present(.brew(coffee))
+                        } label: {
+                            Label("Brew", systemImage: "cup.and.heat.waves.fill")
+                        }
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button {
+                            sheetCoordinator.present(.refill(coffee))
+                        } label: {
+                            Label("Refill", systemImage: "arrow.trianglehead.clockwise")
+                        }
                     }
                 }
         
                 Section("Previous") {
                     ForEach(emptyCoffees) { coffee in
-                        NavigationLink(value: coffee) {
+                        NavigationLink(value: Router.Route.coffeeDetails(coffee)) {
                             CoffeeShelfEntryView(coffee: coffee)
-                                .swipeActions(edge: .trailing) {
-                                    Button {
-                                        sheetCoordinator.present(.refill(coffee))
-                                    } label: {
-                                        Label("Refill", systemImage: "arrow.trianglehead.clockwise")
-                                    }
-                                }
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button {
+                                sheetCoordinator.present(.refill(coffee))
+                            } label: {
+                                Label("Refill", systemImage: "arrow.trianglehead.clockwise")
+                            }
                         }
                         .listRowBackground(Color.secondary.opacity(0.15))
                     }
@@ -74,9 +77,14 @@ struct CoffeeShelfView: View {
                     sheetCoordinator.present(.addCoffee)
                 }
             }
-            .navigationDestination(item: $selectedCoffee, destination: { coffee in
-                CoffeeDetailsView(coffee:  coffee)
-            })
+            .navigationDestination(for: Router.Route.self) { route in
+                switch route {
+                case .coffeeDetails(let coffee):
+                    CoffeeDetailsView(coffee: coffee)
+                case .equipmentDetails(let equipment):
+                    Text("Equipment Details: \(equipment.name)")
+                }
+            }
         }
     }
 }
