@@ -39,9 +39,11 @@ struct CoffeeDetailsHeaderView: View {
             
             Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 12) {
                 GridRow {
-                    Text("Roasted")
+                    Label("Roasted", systemImage: "flame.fill")
                         .foregroundStyle(.secondary)
+
                     Spacer()
+                    
                     if let roastDate {
                         Text(roastDate, format: .dateTime.day().month().year())
                     } else {
@@ -50,24 +52,30 @@ struct CoffeeDetailsHeaderView: View {
                 }
                 
                 GridRow {
-                    Text("Refilled")
+                    Label("Refilled", systemImage: "arrow.trianglehead.clockwise")
                         .foregroundStyle(.secondary)
+                    
                     Spacer()
+                    
                     Text(lastRefill, format: .dateTime.day().month().year())
                 }
                 
                 GridRow {
-                    Text("Brews")
+                    Label("Brew", systemImage: "cup.and.heat.waves.fill")
                         .foregroundStyle(.secondary)
+                    
                     Spacer()
+                    
                     Text(totalBrews, format: .number)
                         .monospaced()
                 }
                 
                 GridRow {
-                    Text("Rating")
+                    Label("Rating", systemImage: "star.fill")
                         .foregroundStyle(.secondary)
+                    
                     Spacer()
+                    
                     Text(rating, format: .number.precision(.fractionLength(0...1)))
                         .monospaced()
                 }
