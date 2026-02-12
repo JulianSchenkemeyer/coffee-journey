@@ -42,16 +42,24 @@ struct RecipeCardView: View {
     
     /// Creates a grid row displaying a label and a min-max range with formatted values
     /// - Parameters:
+    ///   - icon: Optional SF Symbol icon name
     ///   - label: The label text (e.g., "Beans", "Temperature")
     ///   - min: The minimum Double value
     ///   - max: The maximum Double value
     ///   - unit: Optional unit suffix (e.g., "g", "°C", "s")
     /// - Returns: A GridRow view with the label and formatted range
     @ViewBuilder
-    private func rangeRow(label: LocalizedStringKey, min: Double, max: Double, unit: String? = nil) -> some View {
+    private func rangeRow(icon: String? = nil, label: LocalizedStringKey, min: Double, max: Double, unit: String? = nil) -> some View {
         GridRow {
-            Text(label)
-                .foregroundStyle(.secondary)
+            HStack(spacing: 6) {
+                if let icon {
+                    Image(systemName: icon)
+                        .foregroundStyle(.secondary)
+                        .frame(width: 20)
+                }
+                Text(label)
+                    .foregroundStyle(.secondary)
+            }
             if min == max {
                 Text(formatValue(min, unit: unit))
                     .monospaced()
@@ -64,16 +72,24 @@ struct RecipeCardView: View {
     
     /// Creates a grid row displaying a label and a min-max range with formatted integer values
     /// - Parameters:
+    ///   - icon: Optional SF Symbol icon name
     ///   - label: The label text (e.g., "Extraction")
     ///   - min: The minimum Int value
     ///   - max: The maximum Int value
     ///   - unit: Optional unit suffix (e.g., "s")
     /// - Returns: A GridRow view with the label and formatted range
     @ViewBuilder
-    private func rangeRow(label: LocalizedStringKey, min: Int, max: Int, unit: String? = nil) -> some View {
+    private func rangeRow(icon: String? = nil, label: LocalizedStringKey, min: Int, max: Int, unit: String? = nil) -> some View {
         GridRow {
-            Text(label)
-                .foregroundStyle(.secondary)
+            HStack(spacing: 6) {
+                if let icon {
+                    Image(systemName: icon)
+                        .foregroundStyle(.primary)
+                        .frame(width: 20)
+                }
+                Text(label)
+                    .foregroundStyle(.secondary)
+            }
             if min == max {
                 Text(formatValue(min, unit: unit))
                     .monospaced()
@@ -100,11 +116,11 @@ struct RecipeCardView: View {
             Divider()
             
             Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 8) {
-                rangeRow(label: "Beans", min: recipe.minAmountBeans, max: recipe.maxAmountBeans, unit: "g")
-                rangeRow(label: "Grind", min: recipe.minGrindSize, max: recipe.maxGrindSize)
-                rangeRow(label: "Temp", min: recipe.minTemperature, max: recipe.maxTemperature, unit: "°C")
-                rangeRow(label: "Time", min: recipe.minExtractionTime, max: recipe.maxExtractionTime, unit: "s")
-                rangeRow(label: "Output", min: recipe.minOutput, max: recipe.maxOutput, unit: "g")
+                rangeRow(icon: "scalemass.fill", label: "Beans", min: recipe.minAmountBeans, max: recipe.maxAmountBeans, unit: "g")
+                rangeRow(icon: "dial.high.fill", label: "Grind", min: recipe.minGrindSize, max: recipe.maxGrindSize)
+                rangeRow(icon: "thermometer.medium", label: "Temp", min: recipe.minTemperature, max: recipe.maxTemperature, unit: "°C")
+                rangeRow(icon: "timer", label: "Time", min: recipe.minExtractionTime, max: recipe.maxExtractionTime, unit: "s")
+                rangeRow(icon: "drop.fill", label: "Output", min: recipe.minOutput, max: recipe.maxOutput, unit: "g")
             }
             .font(.subheadline)
         }
