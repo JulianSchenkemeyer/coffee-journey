@@ -11,6 +11,7 @@ import SwiftData
 
 struct CoffeeDetailsView: View {
     @Environment(\.sheetCoordinator) private var sheetCoordinator
+    @Environment(\.router) private var router
     
     let coffee: Coffee
     
@@ -47,6 +48,10 @@ struct CoffeeDetailsView: View {
                 
                 RecipeCardGalleryView(recipes: coffee.recipes)
                     .padding(.vertical, 12)
+                
+                Button("Brews") {
+                    router.navigate(to: .brewHistory(coffee.name, coffee.brews))
+                }
                 
                 // Brew taste distribution chart
                 BrewTasteDistributionChartView(brews: coffee.brews)
