@@ -43,6 +43,8 @@ struct EquipmentShelfView: View {
                     CoffeeDetailsView(coffee: coffee)
                 case .equipmentDetails(let equipment):
                     Text("Equipment Details: \(equipment.name)")
+                case .brewHistory(_, _):
+                    Text("test")
                 }
             }
         }

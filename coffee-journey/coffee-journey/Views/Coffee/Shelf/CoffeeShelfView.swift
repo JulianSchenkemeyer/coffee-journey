@@ -81,6 +81,8 @@ struct CoffeeShelfView: View {
                 switch route {
                 case .coffeeDetails(let coffee):
                     CoffeeDetailsView(coffee: coffee)
+                case .brewHistory(let coffeeName, let brews):
+                    BrewHistoryView(coffeeName: coffeeName, brews: brews)
                 case .equipmentDetails(let equipment):
                     Text("Equipment Details: \(equipment.name)")
                 }
