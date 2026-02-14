@@ -38,7 +38,7 @@ struct CoffeeDetailsView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.top, 24)
                 
-                NavigationLink(value: Router.Route.brewHistory(coffee.name, coffee.brews)) {
+                NavigationLink(value: Router.Route.brewHistory(coffee)) {
                     Label("Brew History", systemImage: "square.stack.fill")
                 }
                 

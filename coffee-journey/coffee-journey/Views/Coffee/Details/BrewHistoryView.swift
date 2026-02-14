@@ -6,11 +6,65 @@
 //
 import Foundation
 import SwiftUI
+import SwiftData
 
 
 struct BrewHistoryView: View {
-    let coffeeName: String
-    let brews: [Brew]
+    let coffee: Coffee
+    @State private var selectedRecipe: Recipe?
+    
+    var body: some View {
+        BrewHistoryList(
+            coffee: coffee,
+            selectedRecipe: selectedRecipe
+        )
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Picker("Recipe", selection: $selectedRecipe) {
+                        Text("All Recipes")
+                            .tag(nil as Recipe?)
+                        
+                        ForEach(coffee.recipes) { recipe in
+                            Text(recipe.name)
+                                .tag(recipe as Recipe?)
+                        }
+                    }
+                    .pickerStyle(.inline)
+                } label: {
+                    Label("Filter", systemImage: "line.3.horizontal.decrease.circle")
+                }
+            }
+        }
+    }
+}
+
+struct BrewHistoryList: View {
+    let coffee: Coffee
+    let selectedRecipe: Recipe?
+    
+    @Query private var brews: [Brew]
+    
+    init(coffee: Coffee, selectedRecipe: Recipe?) {
+        self.coffee = coffee
+        self.selectedRecipe = selectedRecipe
+        
+        let coffeeID = coffee.persistentModelID
+        let recipeID = selectedRecipe?.persistentModelID
+        
+        let predicate: Predicate<Brew>
+        if let recipeID {
+            predicate = #Predicate<Brew> { brew in
+                brew.coffee?.persistentModelID == coffeeID && brew.recipe?.persistentModelID == recipeID
+            }
+        } else {
+            predicate = #Predicate<Brew> { brew in
+                brew.coffee?.persistentModelID == coffeeID
+            }
+        }
+        
+        _brews = Query(filter: predicate, sort: \Brew.date, order: .reverse)
+    }
     
     var body: some View {
         List(brews) { brew in
@@ -115,7 +169,7 @@ struct BrewHistoryView: View {
             }
             .padding(.vertical, 4)
         }
-        .navigationTitle(coffeeName)
+        .navigationTitle(coffee.name)
     }
 }
 
@@ -123,7 +177,7 @@ struct BrewHistoryView: View {
 #Preview {
     PreviewUseCaseEnvironment {
         NavigationStack {
-            BrewHistoryView(coffeeName: Coffee.Mock.espresso.name, brews: Brew.Mock.brews)
+            BrewHistoryView(coffee: Coffee.Mock.espresso)
         }
     }
 }
