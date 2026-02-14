@@ -45,21 +45,6 @@ struct BrewHistoryView: View {
                     }
                     
                     Divider()
-                    
-//                    // Scale labels
-//                    HStack {
-//                        Text("Sour")
-//                            .font(.caption2)
-//                            .foregroundStyle(.secondary)
-//                        Spacer()
-//                        Text("Balanced")
-//                            .font(.caption2)
-//                            .foregroundStyle(.secondary)
-//                        Spacer()
-//                        Text("Bitter")
-//                            .font(.caption2)
-//                            .foregroundStyle(.secondary)
-//                    }
                 }
                 
                 // Brew parameters
