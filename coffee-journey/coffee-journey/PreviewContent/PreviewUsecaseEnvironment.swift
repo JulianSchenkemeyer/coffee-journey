@@ -9,7 +9,7 @@ import SwiftData
 
 #if DEBUG
 struct PreviewUseCaseEnvironment<Content: View>: View  {
-    let container = PreviewContainer.seeded(with: Coffee.Mock.coffees + Equipment.Mock.all)
+    let container = PreviewContainer.seeded(with: Coffee.Mock.coffees + Equipment.Mock.all + Brew.Mock.brews)
     
     @ViewBuilder var content: () -> Content
     
