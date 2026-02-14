@@ -18,7 +18,6 @@ struct RecipeCardGalleryView: View {
             Text("Recipes")
                 .font(.headline)
                 .foregroundStyle(.secondary)
-                .padding(.horizontal, 24)
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
@@ -36,7 +35,6 @@ struct RecipeCardGalleryView: View {
                     }
                 }
                 .scrollTargetLayout()
-                .padding(.horizontal, 20)
             }
             .scrollTargetBehavior(.viewAligned)
         }

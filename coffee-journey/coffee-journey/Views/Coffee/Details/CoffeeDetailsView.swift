@@ -25,8 +25,7 @@ struct CoffeeDetailsView: View {
     
     var body: some View {
         ScrollView {
-            LazyVStack {
-                // Hero header section with background
+            LazyVStack(alignment: .leading, spacing: 24) {
                 CoffeeDetailsHeaderView(
                     amount: amount,
                     amountLeft: amountLeft,
@@ -37,31 +36,18 @@ struct CoffeeDetailsView: View {
                     notes: coffee.notes
                 )
                 .frame(maxWidth: .infinity)
-                .padding(.horizontal, 24)
                 .padding(.top, 24)
-                .padding(.bottom, 32)
-                .background {
-                    Color(UIColor.systemGray6)
-                        .stretchy()
+                
+                NavigationLink(value: Router.Route.brewHistory(coffee.name, coffee.brews)) {
+                    Label("Brew History", systemImage: "square.stack.fill")
                 }
-                .padding(.bottom, 12)
                 
                 RecipeCardGalleryView(recipes: coffee.recipes)
-                    .padding(.vertical, 12)
                 
-                Button("Brews") {
-                    router.navigate(to: .brewHistory(coffee.name, coffee.brews))
-                }
-                
-                // Brew taste distribution chart
                 BrewTasteDistributionChartView(brews: coffee.brews)
-                    .padding(24)
             }
-            .background {
-                Color(UIColor.systemBackground)
-            }
+            .padding(.horizontal, 24)
         }
-        .ignoresSafeArea(edges: .top)
         .navigationTitle(coffee.name)
         .navigationSubtitle(coffee.roaster)
         .toolbarBackground(.hidden, for: .navigationBar)

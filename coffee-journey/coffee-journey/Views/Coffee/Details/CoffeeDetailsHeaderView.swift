@@ -20,15 +20,7 @@ struct CoffeeDetailsHeaderView: View {
     
     
     var body: some View {
-        VStack(spacing: 16) {
-            Color.clear
-                .frame(height: 140)
-                
-            
-            Image(systemName: "cup.and.saucer.fill")
-                .font(.system(size: 60))
-                .foregroundStyle(.secondary)
-            
+        VStack {
             Text("\(amountLeft) / \(amount) g")
                 .font(.title2)
                 .monospaced()
@@ -37,17 +29,20 @@ struct CoffeeDetailsHeaderView: View {
             Divider()
                 .padding(.horizontal)
             
-            Grid(alignment: .leading, horizontalSpacing: 20, verticalSpacing: 12) {
+            Grid(alignment: .leading, horizontalSpacing: 0, verticalSpacing: 12) {
                 GridRow {
                     Label("Roasted", systemImage: "flame.fill")
                         .foregroundStyle(.secondary)
-
+                    
                     Spacer()
+                        .gridCellUnsizedAxes(.vertical)
                     
                     if let roastDate {
                         Text(roastDate, format: .dateTime.day().month().year())
+                            .gridColumnAlignment(.trailing)
                     } else {
                         Text("—")
+                            .gridColumnAlignment(.trailing)
                     }
                 }
                 
@@ -56,6 +51,7 @@ struct CoffeeDetailsHeaderView: View {
                         .foregroundStyle(.secondary)
                     
                     Spacer()
+                        .gridCellUnsizedAxes(.vertical)
                     
                     Text(lastRefill, format: .dateTime.day().month().year())
                 }
@@ -65,6 +61,7 @@ struct CoffeeDetailsHeaderView: View {
                         .foregroundStyle(.secondary)
                     
                     Spacer()
+                        .gridCellUnsizedAxes(.vertical)
                     
                     Text(totalBrews, format: .number)
                         .monospaced()
@@ -75,12 +72,14 @@ struct CoffeeDetailsHeaderView: View {
                         .foregroundStyle(.secondary)
                     
                     Spacer()
+                        .gridCellUnsizedAxes(.vertical)
                     
                     Text(rating, format: .number.precision(.fractionLength(0...1)))
                         .monospaced()
                 }
             }
             .font(.callout)
+            .frame(maxWidth: .infinity)
             
             if let notes {
                 Divider()
@@ -100,21 +99,13 @@ struct CoffeeDetailsHeaderView: View {
 
 
 #Preview {
-    VStack {
-        CoffeeDetailsHeaderView(
-            amount: "125",
-            amountLeft: "250",
-            roastDate: .twoWeekAgo,
-            lastRefill: .oneWeekAgo,
-            totalBrews: 7,
-            rating: 4,
-            notes: "chocolate, red fruits"
-        )
-        
-        Spacer()
-            .background { Color.blue }
-        
-        Text("Content goes here.")
-    }
-    .padding()
+    CoffeeDetailsHeaderView(
+        amount: "125",
+        amountLeft: "250",
+        roastDate: .twoWeekAgo,
+        lastRefill: .oneWeekAgo,
+        totalBrews: 7,
+        rating: 4,
+        notes: "chocolate, red fruits"
+    )
 }
