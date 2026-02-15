@@ -12,16 +12,17 @@ import SwiftData
     let repository: RecipeRepository
     
     @discardableResult
-    func callAsFunction(newRecipe: CreateRecipeRequest) throws -> Recipe {
+    func callAsFunction(request: CreateRecipeRequest) throws -> Recipe {
         let recipe = Recipe(
-            name: newRecipe.name,
-            temperature: newRecipe.temperature,
-            grindsize: newRecipe.grindSize,
-            extractionTime: newRecipe.extractionTime,
-            input: newRecipe.amountBeans,
-            output: newRecipe.output
+            name: request.name,
+            temperature: request.temperature,
+            grindsize: request.grindSize,
+            extractionTime: request.extractionTime,
+            input: request.amountBeans,
+            output: request.output
         )
         
+        recipe.coffee = request.coffee
         return try repository.create(recipe)
     }
 }

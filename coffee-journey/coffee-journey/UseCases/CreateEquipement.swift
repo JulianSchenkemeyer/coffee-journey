@@ -11,12 +11,12 @@ import Foundation
     let repository: EquipmentRepository
     
     @discardableResult
-    func callAsFunction(creationRequest: CreateEquipmentRequest) throws -> Equipment {
+    func callAsFunction(request: CreateEquipmentRequest) throws -> Equipment {
         let newEquipment = Equipment(
-            name: creationRequest.name,
-            brand: creationRequest.brand,
-            type: creationRequest.type.rawValue,
-            notes: creationRequest.notes
+            name: request.name,
+            brand: request.brand,
+            type: request.type.rawValue,
+            notes: request.notes
         )
         return try repository.create(newEquipment)
     }

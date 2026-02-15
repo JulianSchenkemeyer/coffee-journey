@@ -17,6 +17,8 @@ struct UseCases {
     var brewDrink: @MainActor (Coffee, Brew, Recipe) throws -> Coffee
     var refillBeans: @MainActor (Coffee, Refill, Bool) throws -> Coffee
     var createEquipement: @MainActor (CreateEquipmentRequest) throws -> Equipment
+    var createRecipe: @MainActor (CreateRecipeRequest) throws -> Recipe
+    var updateRecipe: @MainActor (Recipe) throws -> Recipe
     var recalibrateRecipe: @MainActor (Recipe) throws -> Recipe
 }
 
@@ -32,6 +34,8 @@ enum UseCaseFactory {
         let brewDrink = BrewDrink(repository: coffeeRepository).callAsFunction
         let refillBeans = RefillBeans(repository: coffeeRepository).callAsFunction
         let createEquipment = CreateEquipment(repository: equipmentRepository).callAsFunction
+        let createRecipe = CreateRecipe(repository: recipeRepository).callAsFunction
+        let updateRecipe = UpdateRecipe(repository: recipeRepository).callAsFunction
         let recalibrateRecipe = RecalibrateRecipe(repository: recipeRepository).callAsFunction
         
         return UseCases(
@@ -39,6 +43,8 @@ enum UseCaseFactory {
             brewDrink: brewDrink,
             refillBeans: refillBeans,
             createEquipement: createEquipment,
+            createRecipe: createRecipe,
+            updateRecipe: updateRecipe,
             recalibrateRecipe: recalibrateRecipe
         )
     }
@@ -46,21 +52,29 @@ enum UseCaseFactory {
 
 
 extension EnvironmentValues {
-    @Entry var useCases: UseCases = UseCases(
-        createCoffee: { _ in
-            fatalError("UseCases not injected")
-        },
-        brewDrink:  { _, _, _ in
-            fatalError("UseCases not injected")
-        },
-        refillBeans: { _, _, _
-            in fatalError("UseCases not injected")
-        },
-        createEquipement: { _ in
-            fatalError("UseCases not injected")
-        },
-        recalibrateRecipe: { _ in
-            fatalError("UseCases not injected")
-        }
-    )
+    @Entry var useCases: UseCases = {
+        return UseCases(
+            createCoffee: { _ in
+                fatalError("UseCases not injected")
+            },
+            brewDrink:  { _, _, _ in
+                fatalError("UseCases not injected")
+            },
+            refillBeans: { _, _, _
+                in fatalError("UseCases not injected")
+            },
+            createEquipement: { _ in
+                fatalError("UseCases not injected")
+            },
+            createRecipe: { _ in
+                fatalError("UseCases not injected")
+            },
+            updateRecipe: { _ in
+                fatalError("UseCases not injected")
+            },
+            recalibrateRecipe: { _ in
+                fatalError("UseCases not injected")
+            }
+        )
+    }()
 }
