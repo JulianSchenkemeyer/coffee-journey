@@ -22,6 +22,7 @@ struct UseCases {
     var createRecipe: @MainActor (CreateRecipeRequest) throws -> Recipe
     var updateRecipe: @MainActor (Recipe) throws -> Recipe
     var recalibrateRecipe: @MainActor (Recipe) throws -> Recipe
+    var calibrateRecipe: @MainActor (CalibrateRecipeRequest) throws -> Recipe
 }
 
 enum UseCaseFactory {
@@ -41,6 +42,7 @@ enum UseCaseFactory {
         let createRecipe = CreateRecipe(repository: recipeRepository).callAsFunction
         let updateRecipe = UpdateRecipe(repository: recipeRepository).callAsFunction
         let recalibrateRecipe = RecalibrateRecipe(repository: recipeRepository).callAsFunction
+        let calibrateRecipe = CalibrateRecipe(repository: recipeRepository).callAsFunction
         
         return UseCases(
             createCoffee: createCoffee,
@@ -51,7 +53,8 @@ enum UseCaseFactory {
             createEquipement: createEquipment,
             createRecipe: createRecipe,
             updateRecipe: updateRecipe,
-            recalibrateRecipe: recalibrateRecipe
+            recalibrateRecipe: recalibrateRecipe,
+            calibrateRecipe: calibrateRecipe
         )
     }
 }
@@ -86,6 +89,9 @@ extension EnvironmentValues {
             },
             recalibrateRecipe: { _ in
                 fatalError("UseCases not injected")
+            },
+            calibrateRecipe: { _ in
+                fatalError("UsesCases not injected")
             }
         )
     }()
