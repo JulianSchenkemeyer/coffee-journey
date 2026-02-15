@@ -81,6 +81,9 @@ struct CoffeeFormView: View {
                         .disabled(!isFormValid)
                 }
             }
+            .onAppear {
+                loadCoffeeData()
+            }
         }
     }
     
@@ -93,6 +96,17 @@ struct CoffeeFormView: View {
     private var isFormValid: Bool {
         guard isNameValid else { return false }
         return true
+    }
+    
+    private func loadCoffeeData() {
+        guard let coffee else { return }
+        
+        self.name = coffee.name
+        self.roaster = coffee.roaster
+        self.roastCategory = .init(rawValue: coffee.roastCategory) ?? .medium
+        self.roastDate = coffee.newestRefill?.roastDate ?? .now
+        self.rating = coffee.rating
+        self.notes = coffee.notes
     }
 
     private func submit() {
