@@ -8,9 +8,11 @@
 import Foundation
 import SwiftUI
 
-struct AddCoffeeFormView: View {
+struct CoffeeFormView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.useCases) private var useCases
+    
+    var coffee: Coffee?
 
     @State private var name: String = ""
     @State private var roaster: String = ""
@@ -18,9 +20,7 @@ struct AddCoffeeFormView: View {
     @State private var roastDate: Date = .now
     @State private var rating: Double = 3.0
     @State private var notes: String = ""
-
     @State private var submitErrorMessage: String? = nil
-
 
     var body: some View {
         NavigationStack {
@@ -69,7 +69,7 @@ struct AddCoffeeFormView: View {
                     }
                 }
             }
-            .navigationTitle("Add Coffee")
+            .navigationTitle(isEditMode ? "Edit Coffee" : "Add Coffee")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .close) {
@@ -83,6 +83,8 @@ struct AddCoffeeFormView: View {
             }
         }
     }
+    
+    private var isEditMode: Bool { coffee != nil }
 
     private var isNameValid: Bool {
         !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -118,7 +120,7 @@ struct AddCoffeeFormView: View {
 
 #Preview {
     PreviewUseCaseEnvironment {
-        AddCoffeeFormView()
+        CoffeeFormView()
     }
 }
 

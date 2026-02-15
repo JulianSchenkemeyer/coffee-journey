@@ -13,8 +13,8 @@ struct RecipeFormView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.useCases) private var useCases
     
-    let coffee: Coffee
-    let recipe: Recipe?
+    var coffee: Coffee
+    var recipe: Recipe?
     
     @State private var name: String = ""
     @State private var temperature: Double = 90.0
@@ -24,15 +24,7 @@ struct RecipeFormView: View {
     @State private var output: Double = 36.0
     
     @State private var submitErrorMessage: String? = nil
-    
-    private var isEditMode: Bool {
-        recipe != nil
-    }
-    
-    init(coffee: Coffee, recipe: Recipe? = nil) {
-        self.coffee = coffee
-        self.recipe = recipe
-    }
+        
     
     var body: some View {
         NavigationStack {
@@ -112,6 +104,8 @@ struct RecipeFormView: View {
             }
         }
     }
+    
+    private var isEditMode: Bool { recipe != nil }
     
     private var isNameValid: Bool {
         !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty

@@ -12,7 +12,7 @@ import SwiftUI
     enum ActiveSheet: Identifiable {
         case brew(Coffee)
         case refill(Coffee)
-        case addCoffee
+        case addCoffee(Coffee?)
         case editRecipe(Coffee, Recipe?)
         
         var id: String {

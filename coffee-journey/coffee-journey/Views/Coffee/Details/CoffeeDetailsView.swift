@@ -60,7 +60,7 @@ struct CoffeeDetailsView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu("Actions", systemImage: "ellipsis") {
                     Button("Edit", systemImage: "pencil") {
-//                        sheetCoordinator.present()
+                        sheetCoordinator.present(.addCoffee(coffee))
                     }
                     
                     Button("Brew History", systemImage: "square.stack.fill") {

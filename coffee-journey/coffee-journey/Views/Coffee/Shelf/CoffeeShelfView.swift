@@ -74,7 +74,7 @@ struct CoffeeShelfView: View {
             .navigationTitle("Coffee Shelf")
             .toolbar {
                 Button("Add Coffee", systemImage: "plus") {
-                    sheetCoordinator.present(.addCoffee)
+                    sheetCoordinator.present(.addCoffee(nil))
                 }
             }
             .navigationDestination(for: Router.Route.self) { route in

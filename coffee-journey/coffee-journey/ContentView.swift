@@ -34,10 +34,10 @@ struct ContentView: View {
             case .refill(let coffee):
                 RefillBeansModalView(coffee: coffee)
                     .presentationDetents([.medium])
-            case .addCoffee:
-                AddCoffeeFormView()
-            case .editRecipe(let recipe):
-                Text("Edit Recipe: \(recipe.name)")
+            case .addCoffee(let coffee):
+                CoffeeFormView(coffee: coffee)
+            case .editRecipe(let coffee, let recipe):
+                RecipeFormView(coffee: coffee, recipe: recipe)
             }
         }
     }
