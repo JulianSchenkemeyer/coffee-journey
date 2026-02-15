@@ -26,13 +26,18 @@ struct CoffeeFormView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Details") {
+                Section {
                     TextField("Name", text: $name)
                         .textInputAutocapitalization(.words)
                         .autocorrectionDisabled()
 
                     TextField("Roaster", text: $roaster)
                         .textInputAutocapitalization(.words)
+                    
+                    if isDuplicate {
+                        Text("A coffee with this name and roaster already exists")
+                            .foregroundStyle(.red)
+                    }
                 }
 
                 Section("Roast") {
@@ -67,13 +72,6 @@ struct CoffeeFormView: View {
                         .multilineTextAlignment(.leading)
                         .frame(minHeight: 120, alignment: .topLeading)
                         .lineLimit(5, reservesSpace: true)
-                }
-
-                if isDuplicate {
-                    Section {
-                        Text("A coffee with this name and roaster already exists")
-                            .foregroundStyle(.red)
-                    }
                 }
                 
                 if let submitErrorMessage {
