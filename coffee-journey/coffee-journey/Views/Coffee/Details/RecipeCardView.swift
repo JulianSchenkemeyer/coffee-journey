@@ -11,11 +11,11 @@ import SwiftUI
 struct RecipeCardView: View {
     @Environment(\.useCases) private var useCases
     @Environment(\.router) private var router
+    @Environment(\.sheetCoordinator) private var sheetCoordinator
     
+    let coffee: Coffee
     let recipe: Recipe
     
-    @State private var isEditing: Bool = false
-
     
     // MARK: - Helper Methods
     
@@ -128,26 +128,17 @@ struct RecipeCardView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
-        .sheet(isPresented: $isEditing, content: {
-            Text("Test")
-        })
         .contextMenu {
             Button("Recalibrate", systemImage: "gearshape.arrow.trianglehead.2.clockwise.rotate.90") {
                 _ = try! useCases.recalibrateRecipe(recipe)
             }
             
             Button("Edit", systemImage: "pencil") {
-                isEditing = true
+                sheetCoordinator.present(.editRecipe(coffee, recipe))
             }
             
             Button("Show Brews", systemImage: "square.stack.fill") {
-                print(recipe.coffee ?? "no coffee")
-        
-                if let coffee = recipe.coffee {
-                    router.navigate(to: .brewHistory(coffee, recipe))
-                }
-                
-                //TODO: error handling
+                router.navigate(to: .brewHistory(coffee, recipe))
             }
             
             Divider()
@@ -162,7 +153,7 @@ struct RecipeCardView: View {
 
 #Preview {
     PreviewUseCaseEnvironment {
-        RecipeCardView(recipe: .Mock.espressoUsed)
+        RecipeCardView(coffee: .Mock.espresso, recipe: .Mock.espressoUsed)
     }
 }
 

@@ -9,6 +9,7 @@ import SwiftUI
 
 
 struct RecipeCardGalleryView: View {
+    let coffee: Coffee
     let recipes: [Recipe]
     
     @State private var isAddButtonInFocus = false
@@ -22,17 +23,15 @@ struct RecipeCardGalleryView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     ForEach(recipes) { recipe in
-                        RecipeCardView(recipe: recipe)
+                        RecipeCardView(coffee: coffee, recipe: recipe)
                             .frame(width: 300)
                     }
                     
-                    AddRecipeCardButtonView(isInteractive: isAddButtonInFocus) {
-                        print("add new recipe modal")
-                    }
-                    .frame(width: 300)
-                    .onScrollVisibilityChange(threshold: 0.9) { isVisible in
-                        isAddButtonInFocus = isVisible
-                    }
+                    AddRecipeCardButtonView(coffee: coffee, isInteractive: isAddButtonInFocus)
+                        .frame(width: 300)
+                        .onScrollVisibilityChange(threshold: 0.9) { isVisible in
+                            isAddButtonInFocus = isVisible
+                        }
                 }
                 .scrollTargetLayout()
             }
@@ -42,6 +41,6 @@ struct RecipeCardGalleryView: View {
 }
 
 #Preview {
-    RecipeCardGalleryView(recipes: Recipe.Mock.all)
+    RecipeCardGalleryView(coffee: .Mock.filter, recipes: Recipe.Mock.all)
         .frame(height: 300)
 }

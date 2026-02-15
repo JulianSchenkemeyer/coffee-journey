@@ -38,7 +38,7 @@ struct CoffeeDetailsView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.top, 24)
                 
-                RecipeCardGalleryView(recipes: coffee.recipes)
+                RecipeCardGalleryView(coffee: coffee, recipes: coffee.recipes)
                 
                 BrewTasteDistributionChartView(brews: coffee.brews)
             }
@@ -60,7 +60,7 @@ struct CoffeeDetailsView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu("Actions", systemImage: "ellipsis") {
                     Button("Edit", systemImage: "pencil") {
-                    
+//                        sheetCoordinator.present()
                     }
                     
                     Button("Brew History", systemImage: "square.stack.fill") {

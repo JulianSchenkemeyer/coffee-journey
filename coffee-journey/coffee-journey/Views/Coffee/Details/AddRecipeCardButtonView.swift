@@ -9,11 +9,15 @@ import SwiftUI
 
 
 struct AddRecipeCardButtonView: View {
+    @Environment(\.sheetCoordinator) private var sheetCoordinator
+
+    let coffee: Coffee
     let isInteractive: Bool
-    let action: () -> Void
     
     var body: some View {
-        Button(action: action) {
+        Button {
+            sheetCoordinator.present(.editRecipe(coffee, nil))
+        } label: {
             VStack(spacing: 12) {
                 Image(systemName: "plus.circle.fill")
                     .font(.system(size: 48))
@@ -33,7 +37,5 @@ struct AddRecipeCardButtonView: View {
 
 
 #Preview {
-    AddRecipeCardButtonView(isInteractive: true) {
-        print("Add recipe tapped")
-    }
+    AddRecipeCardButtonView(coffee: .Mock.darkRoast, isInteractive: true)
 }

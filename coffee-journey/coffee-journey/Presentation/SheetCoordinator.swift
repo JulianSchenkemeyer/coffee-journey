@@ -13,7 +13,7 @@ import SwiftUI
         case brew(Coffee)
         case refill(Coffee)
         case addCoffee
-        case editRecipe(Recipe)
+        case editRecipe(Coffee, Recipe?)
         
         var id: String {
             switch self {
