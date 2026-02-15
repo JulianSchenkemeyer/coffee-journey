@@ -13,11 +13,18 @@ struct BrewHistoryView: View {
     let coffee: Coffee
     @State private var selectedRecipe: Recipe?
     
+    init(coffee: Coffee, recipe: Recipe? = nil) {
+        self.coffee = coffee
+        _selectedRecipe = State(initialValue: recipe)
+    }
+    
     var body: some View {
         BrewHistoryList(
             coffee: coffee,
             selectedRecipe: selectedRecipe
         )
+        .navigationTitle(coffee.name)
+        .navigationSubtitle(selectedRecipe.map { "Recipe: \($0.name)" } ?? "All Recipes")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
@@ -169,7 +176,6 @@ struct BrewHistoryList: View {
             }
             .padding(.vertical, 4)
         }
-        .navigationTitle(coffee.name)
     }
 }
 

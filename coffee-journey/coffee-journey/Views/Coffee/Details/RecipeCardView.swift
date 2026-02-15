@@ -10,6 +10,7 @@ import SwiftUI
 
 struct RecipeCardView: View {
     @Environment(\.useCases) private var useCases
+    @Environment(\.router) private var router
     
     let recipe: Recipe
     
@@ -137,6 +138,16 @@ struct RecipeCardView: View {
             
             Button("Edit", systemImage: "pencil") {
                 isEditing = true
+            }
+            
+            Button("Show Brews", systemImage: "square.stack.fill") {
+                print(recipe.coffee ?? "no coffee")
+        
+                if let coffee = recipe.coffee {
+                    router.navigate(to: .brewHistory(coffee, recipe))
+                }
+                
+                //TODO: error handling
             }
             
             Divider()
