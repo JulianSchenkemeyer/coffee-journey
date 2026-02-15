@@ -26,7 +26,7 @@ struct RefillBeansModalView: View {
                         Stepper("Coffee: \(newBeans, format: .number.precision(.fractionLength(0...1))) g",
                                 value: $newBeans,
                                 in: 0...2000,
-                                step: 50)
+                                step: 5)
                         DatePicker("Roast Date", selection: $roastDate, displayedComponents: .date)
                         
                         Toggle(isOn: $keepOld) {

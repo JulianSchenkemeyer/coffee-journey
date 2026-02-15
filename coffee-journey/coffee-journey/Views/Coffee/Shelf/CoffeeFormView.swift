@@ -16,6 +16,7 @@ struct CoffeeFormView: View {
 
     @State private var name: String = ""
     @State private var roaster: String = ""
+    @State private var initialAmount: Double = 250
     @State private var roastCategory: RoastCategory = .medium
     @State private var roastDate: Date = .now
     @State private var rating: Double = 3.0
@@ -40,7 +41,13 @@ struct CoffeeFormView: View {
                             Text(category.rawValue.capitalized).tag(category)
                         }
                     }
-                    DatePicker("Roast Date", selection: $roastDate, displayedComponents: .date)
+                    if !isEditMode {
+                        Stepper("Amount: \(initialAmount, format: .number.precision(.fractionLength(0...1))) g", value: $initialAmount,
+                                in: 0...2000,
+                                step: 5)
+                        
+                        DatePicker("Roast Date", selection: $roastDate, displayedComponents: .date)
+                    }
                 }
 
                 Section("Rating") {
@@ -113,11 +120,34 @@ struct CoffeeFormView: View {
         submitErrorMessage = nil
         guard isFormValid else { return }
 
+        if let coffee {
+            update(coffee: coffee)
+        } else {
+            create()
+        }
+    }
+    
+    private func update(coffee: Coffee) {
+        coffee.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        coffee.roaster = roaster.trimmingCharacters(in: .whitespacesAndNewlines)
+        coffee.roastCategory = roastCategory.rawValue
+        coffee.rating = rating
+        coffee.notes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        do {
+            _ = try useCases.updateCoffee(coffee)
+            dismiss()
+        } catch {
+            submitErrorMessage = error.localizedDescription
+        }
+    }
+    
+    private func create() {
         let request = CreateCoffeeRequest(
             name: name.trimmingCharacters(in: .whitespacesAndNewlines),
             roaster: roaster.trimmingCharacters(in: .whitespacesAndNewlines),
             roastCategory: roastCategory,
-            amount: 250,
+            amount: initialAmount,
             roastDate: roastDate,
             rating: rating,
             notes: notes.trimmingCharacters(in: .whitespacesAndNewlines)
