@@ -6,12 +6,13 @@
 //
 
 struct CreateRecipeRequest {
-    let brewer: Equipment
-    let grinder: Equipment
+//    let grinder: Equipment
+//    let brewer: Equipment
     
+    let coffee: Coffee
     let name: String
-    let grindSize: Double
     let temperature: Double
+    let grindSize: Double
     let extractionTime: Int
     let amountBeans: Double
     let output: Double
