@@ -69,6 +69,13 @@ struct CoffeeFormView: View {
                         .lineLimit(5, reservesSpace: true)
                 }
 
+                if isDuplicate {
+                    Section {
+                        Text("A coffee with this name and roaster already exists")
+                            .foregroundStyle(.red)
+                    }
+                }
+                
                 if let submitErrorMessage {
                     Section {
                         Text(submitErrorMessage)
@@ -100,8 +107,24 @@ struct CoffeeFormView: View {
         !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
+    private var isRoasterValid: Bool {
+        !roaster.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+    
+    private var isDuplicate: Bool {
+        // Check if a coffee with this name and roaster already exists
+        do {
+            return try useCases.checkCoffeeExists(name, roaster, coffee)
+        } catch {
+            // If the check fails, allow the form to proceed (fail open)
+            return false
+        }
+    }
+    
     private var isFormValid: Bool {
         guard isNameValid else { return false }
+        guard isRoasterValid else { return false }
+        guard !isDuplicate else { return false }
         return true
     }
     
