@@ -24,7 +24,7 @@ final class Recipe: Identifiable {
     var minTemperature: Double
     var maxTemperature: Double
     var temperature: Double {
-        ((minTemperature + maxTemperature) / 2).roundTo(places: 1)
+        ((minTemperature + maxTemperature) / 2).rounded()
     }
     
     var minGrindSize: Double
