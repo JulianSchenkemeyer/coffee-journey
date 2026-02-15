@@ -38,10 +38,6 @@ struct CoffeeDetailsView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.top, 24)
                 
-                NavigationLink(value: Router.Route.brewHistory(coffee)) {
-                    Label("Brew History", systemImage: "square.stack.fill")
-                }
-                
                 RecipeCardGalleryView(recipes: coffee.recipes)
                 
                 BrewTasteDistributionChartView(brews: coffee.brews)
@@ -62,8 +58,20 @@ struct CoffeeDetailsView: View {
             }
             
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Edit", systemImage: "pencil") {
-                    print("edit")
+                Menu("Actions", systemImage: "ellipsis") {
+                    Button("Edit", systemImage: "pencil") {
+                    
+                    }
+                    
+                    Button("Brew History", systemImage: "square.stack.fill") {
+                        router.navigate(to: .brewHistory(coffee, nil))
+                    }
+                    
+                    Divider()
+                    
+                    Button("Delete", systemImage: "trash", role: .destructive) {
+                        
+                    }
                 }
             }
         }
