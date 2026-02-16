@@ -11,7 +11,7 @@ import SwiftUI
 
 struct AddEquipmentFormView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.useCases) private var useCases
+    @Environment(\.equipmentUseCases) private var equipmentUseCases
 
     @State private var name: String = ""
     @State private var brand: String = ""
@@ -89,7 +89,7 @@ struct AddEquipmentFormView: View {
         )
         
         do {
-            _ = try useCases.createEquipement(request)
+            _ = try equipmentUseCases.create(request)
             dismiss()
         } catch {
             submitErrorMessage = error.localizedDescription

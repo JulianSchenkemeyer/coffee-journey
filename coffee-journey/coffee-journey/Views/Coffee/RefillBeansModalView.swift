@@ -10,7 +10,7 @@ import SwiftUI
 
 struct RefillBeansModalView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.useCases) private var useCases: UseCases
+    @Environment(\.coffeeUseCases) private var coffeeUseCases
     
     let coffee: Coffee
     
@@ -37,7 +37,7 @@ struct RefillBeansModalView: View {
                 }
                 
                 Button {
-                    _ = try! useCases.refillBeans(coffee, Refill(amount: newBeans, roastDate: roastDate, date: .now), !keepOld)
+                    _ = try! coffeeUseCases.refill(coffee, Refill(amount: newBeans, roastDate: roastDate, date: .now), !keepOld)
                     dismiss()
                 } label: {
                     Label("Refill Beans", systemImage: "arrow.trianglehead.clockwise")

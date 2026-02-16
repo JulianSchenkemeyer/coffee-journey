@@ -10,7 +10,7 @@ import SwiftUI
 
 struct CoffeeFormView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.useCases) private var useCases
+    @Environment(\.coffeeUseCases) private var coffeeUseCases
     
     var coffee: Coffee?
 
@@ -112,7 +112,7 @@ struct CoffeeFormView: View {
     private var isDuplicate: Bool {
         // Check if a coffee with this name and roaster already exists
         do {
-            return try useCases.checkCoffeeExists(name, roaster, coffee)
+            return try coffeeUseCases.checkExists(name, roaster, coffee)
         } catch {
             // If the check fails, allow the form to proceed (fail open)
             return false
@@ -156,7 +156,7 @@ struct CoffeeFormView: View {
         coffee.notes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
         
         do {
-            _ = try useCases.updateCoffee(coffee)
+            _ = try coffeeUseCases.update(coffee)
             dismiss()
         } catch {
             submitErrorMessage = error.localizedDescription
@@ -175,7 +175,7 @@ struct CoffeeFormView: View {
         )
         
         do {
-            _ = try useCases.createCoffee(request)
+            _ = try coffeeUseCases.create(request)
             dismiss()
         } catch {
             submitErrorMessage = error.localizedDescription

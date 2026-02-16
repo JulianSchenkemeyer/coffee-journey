@@ -10,7 +10,7 @@ import SwiftUI
 
 struct BrewDrinkModalView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.useCases) private var useCases: UseCases
+    @Environment(\.coffeeUseCases) private var coffeeUseCases
     
     let coffee: Coffee
     
@@ -151,7 +151,7 @@ struct BrewDrinkModalView: View {
             output: output,
             rating: rating
         )
-        _ = try! useCases.brewDrink(coffee, brew, selectedRecipe)
+        _ = try! coffeeUseCases.brew(coffee, brew, selectedRecipe)
     }
 }
 

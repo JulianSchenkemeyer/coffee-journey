@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.useCases) private var useCases
     @Environment(\.sheetCoordinator) private var sheetCoordinator
         
     var body: some View {

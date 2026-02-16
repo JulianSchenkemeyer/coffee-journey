@@ -14,9 +14,14 @@ struct PreviewUseCaseEnvironment<Content: View>: View  {
     @ViewBuilder var content: () -> Content
     
     var body: some View {
+        let context = ModelContext(container)
+        let useCases = UseCaseFactory.makeAll(context: context)
+        
         content()
             .modelContainer(container)
-            .environment(\.useCases, UseCaseFactory.make(context: ModelContext(container)))
+            .environment(\.coffeeUseCases, useCases.coffee)
+            .environment(\.recipeUseCases, useCases.recipe)
+            .environment(\.equipmentUseCases, useCases.equipment)
             .environment(\.sheetCoordinator, SheetCoordinator())
             .environment(\.router, Router())
     }

@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct RecipeCardView: View {
-    @Environment(\.useCases) private var useCases
+    @Environment(\.recipeUseCases) private var recipeUseCases
     @Environment(\.router) private var router
     @Environment(\.sheetCoordinator) private var sheetCoordinator
     
@@ -130,7 +130,7 @@ struct RecipeCardView: View {
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
         .contextMenu {
             Button("Recalibrate", systemImage: "gearshape.arrow.trianglehead.2.clockwise.rotate.90") {
-                _ = try! useCases.recalibrateRecipe(recipe)
+                _ = try! recipeUseCases.recalibrate(recipe)
             }
             
             Button("Edit", systemImage: "pencil") {

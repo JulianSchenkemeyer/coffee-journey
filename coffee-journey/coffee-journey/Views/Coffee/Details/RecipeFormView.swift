@@ -11,7 +11,7 @@ import SwiftData
 
 struct RecipeFormView: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.useCases) private var useCases
+    @Environment(\.recipeUseCases) private var recipeUseCases
     
     var coffee: Coffee
     var recipe: Recipe?
@@ -159,7 +159,7 @@ struct RecipeFormView: View {
         recipe.minOutput = output
         recipe.maxOutput = output
         
-        _ = try useCases.updateRecipe(recipe)
+        _ = try recipeUseCases.update(recipe)
     }
     
     @discardableResult
@@ -174,7 +174,7 @@ struct RecipeFormView: View {
             output: output
         )
         
-        return try useCases.createRecipe(request)
+        return try recipeUseCases.create(request)
     }
 }
 
