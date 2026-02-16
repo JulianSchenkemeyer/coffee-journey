@@ -31,9 +31,7 @@ struct CoffeeShelfView: View {
     
     
     var body: some View {
-        @Bindable var router = router
-        
-        NavigationStack(path: $router.path) {
+        RouterView {
             List {
                 ForEach(inStockCoffees) { coffee in
                     NavigationLink(value: Router.Route.coffeeDetails(coffee)) {
@@ -75,16 +73,6 @@ struct CoffeeShelfView: View {
             .toolbar {
                 Button("Add Coffee", systemImage: "plus") {
                     sheetCoordinator.present(.addCoffee(nil))
-                }
-            }
-            .navigationDestination(for: Router.Route.self) { route in
-                switch route {
-                case .coffeeDetails(let coffee):
-                    CoffeeDetailsView(coffee: coffee)
-                case .brewHistory(let coffee, let recipe):
-                    BrewHistoryView(coffee: coffee, recipe: recipe)
-                case .equipmentDetails(let equipment):
-                    Text("Equipment Details: \(equipment.name)")
                 }
             }
         }

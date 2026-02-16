@@ -23,9 +23,7 @@ struct EquipmentShelfView: View {
     @Query var equipment: [Equipment] = []
     
     var body: some View {
-        @Bindable var router = router
-        
-        NavigationStack(path: $router.path) {
+        RouterView {
             List(equipment) { item in
                 NavigationLink(value: Router.Route.equipmentDetails(item)) {
                     Text(item.name)
@@ -35,16 +33,6 @@ struct EquipmentShelfView: View {
             .toolbar {
                 Button("Add Equipment", systemImage: "plus") {
                     // TODO: Add sheet coordinator for add equipment
-                }
-            }
-            .navigationDestination(for: Router.Route.self) { route in
-                switch route {
-                case .coffeeDetails(let coffee):
-                    CoffeeDetailsView(coffee: coffee)
-                case .equipmentDetails(let equipment):
-                    Text("Equipment Details: \(equipment.name)")
-                case .brewHistory(let coffee, let recipe):
-                    BrewHistoryView(coffee: coffee, recipe: recipe)
                 }
             }
         }
