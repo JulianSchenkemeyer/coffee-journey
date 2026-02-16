@@ -12,7 +12,7 @@ import Foundation
     
     @discardableResult
     func callAsFunction(brew: CalibrateRecipeRequest) throws -> Recipe {
-        var recipe = brew.recipe
+        let recipe = brew.recipe
         
         recipe.maxTemperature = brew.temperature
         recipe.minTemperature = brew.temperature
