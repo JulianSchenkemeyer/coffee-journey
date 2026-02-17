@@ -47,6 +47,9 @@ struct BrewHistoryView: View {
 }
 
 struct BrewHistoryList: View {
+    @Environment(\.sheetCoordinator) private var sheetCoordinator
+
+    
     let coffee: Coffee
     let selectedRecipe: Recipe?
     
@@ -174,6 +177,20 @@ struct BrewHistoryList: View {
                 }
                 .font(.subheadline)
             }
+            .swipeActions(edge: .leading) {
+                Button {
+                    if let recipe = brew.recipe {
+                        sheetCoordinator.present(.confirmRecipeCalibration(recipe, brew))
+                    }
+                } label: {
+                    Label("Calibrate Recipe", systemImage: "target")
+                }
+            }
+            .swipeActions(edge: .trailing) {
+                Button(role: .destructive) {
+                    
+                }
+            }
             .padding(.vertical, 4)
         }
     }
@@ -181,9 +198,12 @@ struct BrewHistoryList: View {
 
 
 #Preview {
-    PreviewUseCaseEnvironment {
+    let mockData = Coffee.Mock.espresso
+    mockData.brews = Brew.Mock.brews
+    
+    return PreviewUseCaseEnvironment {
         NavigationStack {
-            BrewHistoryView(coffee: Coffee.Mock.espresso)
+            BrewHistoryView(coffee: mockData)
         }
     }
 }

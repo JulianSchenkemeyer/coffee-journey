@@ -14,6 +14,7 @@ import SwiftUI
         case refill(Coffee)
         case addCoffee(Coffee?)
         case editRecipe(Coffee, Recipe?)
+        case confirmRecipeCalibration(Recipe, Brew)
         
         var id: String {
             switch self {
@@ -21,6 +22,7 @@ import SwiftUI
             case .refill: "refill"
             case .addCoffee: "addCoffee"
             case .editRecipe: "editRecipe"
+            case .confirmRecipeCalibration: "confirmRecipeCalibration"
             }
         }
     }

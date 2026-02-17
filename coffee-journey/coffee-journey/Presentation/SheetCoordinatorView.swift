@@ -39,6 +39,9 @@ struct SheetCoordinatorView<Content: View>: View {
             CoffeeFormView(coffee: coffee)
         case .editRecipe(let coffee, let recipe):
             RecipeFormView(coffee: coffee, recipe: recipe)
+        case .confirmRecipeCalibration(let recipe, let brew):
+            ConfirmCalibrationModalView(recipe: recipe, brew: brew)
+                .presentationDetents([.fraction(0.45)])
         }
     }
 }
