@@ -11,7 +11,7 @@ import SwiftData
 
 @Model
 final class Recipe: Identifiable {
-    var brews: [Brew] = []
+    @Relationship(deleteRule: .nullify, inverse: \Brew.recipe) var brews: [Brew] = []
     var coffee: Coffee?
     
     //TODO: Equipement creation

@@ -15,9 +15,9 @@ import SwiftData
     var roastCategory: String
     
     var lastRefill: Date
-    var refills: [Refill]
-    var brews: [Brew]
-    var recipes: [Recipe]
+    @Relationship(deleteRule: .cascade, inverse: \Refill.coffee) var refills: [Refill]
+    @Relationship(deleteRule: .cascade, inverse: \Brew.coffee) var brews: [Brew]
+    @Relationship(deleteRule: .cascade, inverse: \Recipe.coffee) var recipes: [Recipe]
     var amountLeft: Double
     
     var totalBrews: Int
