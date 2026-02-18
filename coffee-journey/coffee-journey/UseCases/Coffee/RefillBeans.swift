@@ -4,11 +4,12 @@
 //
 //  Created by Julian Schenkemeyer on 20.11.25.
 //
-
 import Foundation
+
 
 @MainActor struct RefillBeans {
     let repository: CoffeeRepository
+    
     
     @discardableResult
     func callAsFunction(coffee: Coffee, refill: Refill, dumpRest: Bool = false) throws -> Coffee {

@@ -5,8 +5,6 @@
 //  Created by Julian Schenkemeyer on 15.02.26.
 //
 
-import Foundation
-
 struct CheckCoffeeExists {
     let repository: CoffeeRepository
     
