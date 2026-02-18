@@ -13,6 +13,7 @@ import SwiftData
 struct RecipeUseCases {
     var create: @MainActor (CreateRecipeRequest) throws -> Recipe
     var update: @MainActor (Recipe) throws -> Recipe
+    var delete: @MainActor (Recipe) throws -> Void
     var recalibrate: @MainActor (Recipe) throws -> Recipe
     var calibrate: @MainActor (CalibrateRecipeRequest) throws -> Recipe
 }
@@ -23,12 +24,14 @@ enum RecipeUseCaseFactory {
     static func make(repository: SwiftDataRecipeRepository) -> RecipeUseCases {
         let create = CreateRecipe(repository: repository).callAsFunction
         let update = UpdateRecipe(repository: repository).callAsFunction
+        let delete = DeleteRecipe(repository: repository).callAsFunction
         let recalibrate = RecalibrateRecipe(repository: repository).callAsFunction
         let calibrate = CalibrateRecipe(repository: repository).callAsFunction
         
         return RecipeUseCases(
             create: create,
             update: update,
+            delete: delete,
             recalibrate: recalibrate,
             calibrate: calibrate
         )
@@ -42,6 +45,9 @@ extension EnvironmentValues {
                 fatalError("RecipeUseCases not injected")
             },
             update: { _ in
+                fatalError("RecipeUseCases not injected")
+            },
+            delete: { _ in
                 fatalError("RecipeUseCases not injected")
             },
             recalibrate: { _ in
