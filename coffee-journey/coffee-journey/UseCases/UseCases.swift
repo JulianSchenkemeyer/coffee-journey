@@ -17,20 +17,24 @@ enum UseCaseFactory {
     static func makeAll(context: ModelContext) -> (
         coffee: CoffeeUseCases,
         recipe: RecipeUseCases,
-        equipment: EquipmentUseCases
+        equipment: EquipmentUseCases,
+        brew: BrewUseCases
     ) {
         let coffeeRepository = SwiftDataCoffeeRepository(context: context)
         let equipmentRepository = SwiftDataEquipmentRepository(context: context)
         let recipeRepository = SwiftDataRecipeRepository(context: context)
+        let brewRepository = SwiftDataBrewRepository(context: context)
         
         let coffeeUseCases = CoffeeUseCaseFactory.make(repository: coffeeRepository)
         let recipeUseCases = RecipeUseCaseFactory.make(repository: recipeRepository)
         let equipmentUseCases = EquipmentUseCaseFactory.make(repository: equipmentRepository)
+        let brewUseCases = BrewUseCaseFactory.make(repository: brewRepository)
         
         return (
             coffee: coffeeUseCases,
             recipe: recipeUseCases,
-            equipment: equipmentUseCases
+            equipment: equipmentUseCases,
+            brew: brewUseCases
         )
     }
 }

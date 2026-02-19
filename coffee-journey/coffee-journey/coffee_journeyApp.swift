@@ -18,6 +18,7 @@ struct coffee_journeyApp: App {
     let coffeeUseCases: CoffeeUseCases
     let recipeUseCases: RecipeUseCases
     let equipmentUseCases: EquipmentUseCases
+    let brewUseCases: BrewUseCases
     
     init() {
         self.context = ModelContext(container)
@@ -27,6 +28,7 @@ struct coffee_journeyApp: App {
         self.coffeeUseCases = useCases.coffee
         self.recipeUseCases = useCases.recipe
         self.equipmentUseCases = useCases.equipment
+        self.brewUseCases = useCases.brew
     }
     
     
@@ -38,6 +40,7 @@ struct coffee_journeyApp: App {
         .environment(\.coffeeUseCases, coffeeUseCases)
         .environment(\.recipeUseCases, recipeUseCases)
         .environment(\.equipmentUseCases, equipmentUseCases)
+        .environment(\.brewUseCases, brewUseCases)
         .environment(\.sheetCoordinator, sheetManager)
         .environment(\.router, router)
     }
