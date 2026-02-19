@@ -9,9 +9,11 @@
 import Foundation
 import SwiftUI
 
-struct AddEquipmentFormView: View {
+struct EquipmentFormView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.equipmentUseCases) private var equipmentUseCases
+    
+    var equipment: Equipment?
 
     @State private var name: String = ""
     @State private var brand: String = ""
@@ -99,7 +101,7 @@ struct AddEquipmentFormView: View {
 
 #Preview {
     PreviewUseCaseEnvironment {
-        AddEquipmentFormView()
+        EquipmentFormView()
     }
 }
 

@@ -42,6 +42,8 @@ struct SheetCoordinatorView<Content: View>: View {
         case .confirmRecipeCalibration(let recipe, let brew):
             ConfirmCalibrationModalView(recipe: recipe, brew: brew)
                 .presentationDetents([.fraction(0.45)])
+        case .addEquipment(let equipment):
+            EquipmentFormView(equipment: equipment)
         }
     }
 }

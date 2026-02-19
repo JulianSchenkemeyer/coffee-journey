@@ -19,6 +19,7 @@ import SwiftData
 
 struct EquipmentShelfView: View {
     @Environment(\.router) private var router
+    @Environment(\.sheetCoordinator) private var sheetCoordinator
     
     @Query var equipment: [Equipment] = []
     
@@ -32,7 +33,7 @@ struct EquipmentShelfView: View {
             .navigationTitle("Equipment Shelf")
             .toolbar {
                 Button("Add Equipment", systemImage: "plus") {
-                    // TODO: Add sheet coordinator for add equipment
+                    sheetCoordinator.present(.addEquipment(nil))
                 }
             }
         }
