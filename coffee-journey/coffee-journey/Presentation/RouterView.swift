@@ -36,7 +36,7 @@ struct RouterView<Content: View>: View {
         case .brewHistory(let coffee, let recipe):
             BrewHistoryView(coffee: coffee, recipe: recipe)
         case .equipmentDetails(let equipment):
-            Text("Equipment Details: \(equipment.name)")
+            EquipmentDetailsView(equipment: equipment)
         }
     }
 }
