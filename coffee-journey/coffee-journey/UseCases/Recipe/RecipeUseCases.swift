@@ -21,7 +21,7 @@ struct RecipeUseCases {
 enum RecipeUseCaseFactory {
     
     @MainActor
-    static func make(repository: SwiftDataRecipeRepository) -> RecipeUseCases {
+    static func make(repository: any RecipeRepository) -> RecipeUseCases {
         let create = CreateRecipe(repository: repository).callAsFunction
         let update = UpdateRecipe(repository: repository).callAsFunction
         let delete = DeleteRecipe(repository: repository).callAsFunction

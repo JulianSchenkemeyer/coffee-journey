@@ -25,7 +25,7 @@ struct BrewUseCases {
 enum BrewUseCaseFactory {
     
     @MainActor
-    static func make(repository: SwiftDataBrewRepository) -> BrewUseCases {
+    static func make(repository: any BrewRepository) -> BrewUseCases {
         let update = UpdateBrew(repository: repository).callAsFunction
         let delete = DeleteBrew(repository: repository).callAsFunction
         

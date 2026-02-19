@@ -17,7 +17,7 @@ struct EquipmentUseCases {
 enum EquipmentUseCaseFactory {
     
     @MainActor
-    static func make(repository: SwiftDataEquipmentRepository) -> EquipmentUseCases {
+    static func make(repository: any EquipmentRepository) -> EquipmentUseCases {
         let create = CreateEquipment(repository: repository).callAsFunction
         
         return EquipmentUseCases(

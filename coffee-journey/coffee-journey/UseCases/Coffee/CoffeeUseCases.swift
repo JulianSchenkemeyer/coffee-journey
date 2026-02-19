@@ -22,7 +22,7 @@ struct CoffeeUseCases {
 enum CoffeeUseCaseFactory {
     
     @MainActor
-    static func make(repository: SwiftDataCoffeeRepository) -> CoffeeUseCases {
+    static func make(repository: any CoffeeRepository) -> CoffeeUseCases {
         let create = CreateCoffee(repository: repository).callAsFunction
         let update = UpdateCoffee(repository: repository).callAsFunction
         let delete = DeleteCoffee(repository: repository).callAsFunction
