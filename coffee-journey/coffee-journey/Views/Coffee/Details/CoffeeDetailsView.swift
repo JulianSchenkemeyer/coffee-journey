@@ -12,6 +12,7 @@ import SwiftData
 struct CoffeeDetailsView: View {
     @Environment(\.sheetCoordinator) private var sheetCoordinator
     @Environment(\.router) private var router
+    @Environment(\.coffeeUseCases) private var coffeeUseCases
     
     let coffee: Coffee
     
@@ -70,7 +71,8 @@ struct CoffeeDetailsView: View {
                     Divider()
                     
                     Button("Delete", systemImage: "trash", role: .destructive) {
-                        
+                        try! coffeeUseCases.delete(coffee)
+                        router.navigateBack()
                     }
                 }
             }
