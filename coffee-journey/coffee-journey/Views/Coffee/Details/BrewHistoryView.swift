@@ -48,6 +48,7 @@ struct BrewHistoryView: View {
 
 struct BrewHistoryList: View {
     @Environment(\.sheetCoordinator) private var sheetCoordinator
+    @Environment(\.brewUseCases) private var brewUseCases
 
     
     let coffee: Coffee
@@ -188,7 +189,7 @@ struct BrewHistoryList: View {
             }
             .swipeActions(edge: .trailing) {
                 Button(role: .destructive) {
-                    
+                    try! brewUseCases.delete(brew)
                 }
             }
             .padding(.vertical, 4)
