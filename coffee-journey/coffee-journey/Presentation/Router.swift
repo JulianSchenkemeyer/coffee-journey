@@ -10,27 +10,27 @@ import SwiftUI
 @Observable
 class Router {
     var path: [Route] = []
-    
+
     enum Route: Hashable {
         case coffeeDetails(Coffee)
         case brewHistory(Coffee, Recipe?)
         case equipmentDetails(Equipment)
     }
-    
+
     // Navigation methods
     func navigate(to route: Route) {
         path.append(route)
     }
-    
+
     func navigateBack() {
         guard !path.isEmpty else { return }
         path.removeLast()
     }
-    
+
     func navigateToRoot() {
         path.removeAll()
     }
-    
+
     func pop(count: Int = 1) {
         guard path.count >= count else {
             path.removeAll()

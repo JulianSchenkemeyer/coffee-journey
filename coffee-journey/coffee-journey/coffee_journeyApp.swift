@@ -13,7 +13,6 @@ struct coffee_journeyApp: App {
     let container: ModelContainer = ContainerFactory.createDefault()
     let context: ModelContext
     let sheetManager = SheetCoordinator()
-    let router = Router()
     
     let coffeeUseCases: CoffeeUseCases
     let recipeUseCases: RecipeUseCases
@@ -42,6 +41,5 @@ struct coffee_journeyApp: App {
         .environment(\.equipmentUseCases, equipmentUseCases)
         .environment(\.brewUseCases, brewUseCases)
         .environment(\.sheetCoordinator, sheetManager)
-        .environment(\.router, router)
     }
 }

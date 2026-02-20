@@ -11,12 +11,12 @@ import SwiftUI
 /// Wraps content in a NavigationStack bound to the Router's path and handles all route destinations.
 struct RouterView<Content: View>: View {
     @Environment(\.router) private var router
-    
+
     @ViewBuilder var content: () -> Content
-    
+
     var body: some View {
         @Bindable var router = router
-        
+
         NavigationStack(path: $router.path) {
             content()
                 .navigationDestination(for: Router.Route.self) { route in
@@ -24,9 +24,9 @@ struct RouterView<Content: View>: View {
                 }
         }
     }
-    
+
     // MARK: - Navigation Destinations
-    
+
     /// Maps route cases to their corresponding destination views
     @ViewBuilder
     private func destinationView(for route: Router.Route) -> some View {
