@@ -27,7 +27,14 @@ struct EquipmentShelfView: View {
         RouterView {
             List(equipment) { item in
                 NavigationLink(value: Router.Route.equipmentDetails(item)) {
-                    Text(item.name)
+                    VStack(alignment: .leading, spacing: 14) {
+                        Text(item.name)
+                            .font(.headline)
+                        
+                        Text(item.brand)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
                 }
             }
             .navigationTitle("Equipment Shelf")
