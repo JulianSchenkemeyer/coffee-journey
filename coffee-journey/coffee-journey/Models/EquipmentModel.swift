@@ -9,6 +9,9 @@ import Foundation
 import SwiftData
 
 @Model final class Equipment: Identifiable {
+    var brewerRecipes: [Recipe]
+    var grinderRecipes: [Recipe]
+    
     var name: String
     var brand: String
     var type: String
@@ -20,6 +23,8 @@ import SwiftData
         self.brand = brand
         self.type = type
         self.notes = notes
+        self.brewerRecipes = []
+        self.grinderRecipes = []
     }
     
     // Convenience initializer with sensible defaults for SwiftData
@@ -28,6 +33,8 @@ import SwiftData
         self.brand = ""
         self.type = ""
         self.notes = ""
+        self.brewerRecipes = []
+        self.grinderRecipes = []
     }
 }
 

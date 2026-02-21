@@ -14,9 +14,8 @@ final class Recipe: Identifiable {
     @Relationship(deleteRule: .nullify, inverse: \Brew.recipe) var brews: [Brew] = []
     var coffee: Coffee?
     
-    //TODO: Equipement creation
-//    var brewer: Equipment
-//    var grinder: Equipment
+    @Relationship(deleteRule: .nullify, inverse: \Equipment.brewerRecipes) var brewer: Equipment?
+    @Relationship(deleteRule: .nullify, inverse: \Equipment.grinderRecipes) var grinder: Equipment?
     
     var name: String
     var lastUsed: Date?
