@@ -41,8 +41,6 @@ struct EquipmentShelfView: View {
 }
 
 
-#Preview {
-    PreviewUseCaseEnvironment {
-        EquipmentShelfView()
-    }
+#Preview(traits: .modifier(SampleDataModifier())) {
+    EquipmentShelfView()
 }

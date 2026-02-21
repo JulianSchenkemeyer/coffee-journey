@@ -198,13 +198,13 @@ struct BrewHistoryList: View {
 }
 
 
-#Preview {
-    let mockData = Coffee.Mock.espresso
-    mockData.brews = Brew.Mock.brews
+#Preview(traits: .modifier(SampleDataModifier())) {
+    @Previewable @Query(filter: #Predicate<Coffee> { coffee in
+        coffee.recipes.count > 0
+    }) var coffees: [Coffee]
+
     
-    return PreviewUseCaseEnvironment {
-        NavigationStack {
-            BrewHistoryView(coffee: mockData)
-        }
+    NavigationStack {
+        BrewHistoryView(coffee: coffees.first!)
     }
 }

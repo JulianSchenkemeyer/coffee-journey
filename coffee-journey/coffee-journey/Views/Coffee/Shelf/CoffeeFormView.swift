@@ -183,10 +183,8 @@ struct CoffeeFormView: View {
     }
 }
 
-#Preview {
-    PreviewUseCaseEnvironment {
-        CoffeeFormView()
-    }
+#Preview(traits: .modifier(SampleDataModifier())) {
+    CoffeeFormView()
 }
 
 

@@ -80,9 +80,7 @@ struct CoffeeShelfView: View {
 }
 
 
-#Preview {
-    PreviewUseCaseEnvironment {
-        CoffeeShelfView()
-    }
+#Preview(traits: .modifier(SampleDataModifier())) {
+    CoffeeShelfView()
 }
 

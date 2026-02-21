@@ -35,8 +35,6 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    PreviewUseCaseEnvironment {
-        ContentView()
-    }
+#Preview(traits: .modifier(SampleDataModifier())) {
+    ContentView()
 }

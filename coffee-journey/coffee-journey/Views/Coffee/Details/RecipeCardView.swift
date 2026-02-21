@@ -6,6 +6,7 @@
 //
 import Foundation
 import SwiftUI
+import SwiftData
 
 
 struct RecipeCardView: View {
@@ -151,9 +152,9 @@ struct RecipeCardView: View {
 }
 
 
-#Preview {
-    PreviewUseCaseEnvironment {
-        RecipeCardView(coffee: .Mock.espresso, recipe: .Mock.espressoUsed)
-    }
+#Preview(traits: .modifier(SampleDataModifier())) {
+    @Previewable @Query var coffees: [Coffee]
+    let coffee = coffees.first!
+    return RecipeCardView(coffee: coffee, recipe: coffee.recipes.first!)
 }
 

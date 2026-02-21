@@ -6,6 +6,7 @@
 //
 import Foundation
 import SwiftUI
+import SwiftData
 
 
 struct EquipmentDetailsView: View {
@@ -59,8 +60,9 @@ struct EquipmentDetailsView: View {
 }
 
 
-#Preview {
-    NavigationStack {
-        EquipmentDetailsView(equipment: .Mock.leverMachine)
+#Preview(traits: .modifier(SampleDataModifier())) {
+    @Previewable @Query var equipment: [Equipment]
+    return NavigationStack {
+        EquipmentDetailsView(equipment: equipment.first!)
     }
 }

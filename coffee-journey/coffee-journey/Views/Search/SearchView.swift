@@ -51,9 +51,7 @@ struct SearchView: View {
 }
 
 
-#Preview {
-    PreviewUseCaseEnvironment {
-        SearchView()
-    }
+#Preview(traits: .modifier(SampleDataModifier())) {
+    SearchView()
 }
 

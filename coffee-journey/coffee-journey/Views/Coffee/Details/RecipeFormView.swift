@@ -179,15 +179,14 @@ struct RecipeFormView: View {
 }
 
 
-#Preview("Create New Recipe") {
-    PreviewUseCaseEnvironment {
-        RecipeFormView(coffee: .Mock.espresso)
-    }
+#Preview("Create New Recipe", traits: .modifier(SampleDataModifier())) {
+    @Previewable @Query var coffees: [Coffee]
+    return RecipeFormView(coffee: coffees.first!)
 }
 
-#Preview("Edit Existing Recipe") {
-    PreviewUseCaseEnvironment {
-        RecipeFormView(coffee: .Mock.espresso, recipe: .Mock.espresso)
-    }
+#Preview("Edit Existing Recipe", traits: .modifier(SampleDataModifier())) {
+    @Previewable @Query var coffees: [Coffee]
+    let coffee = coffees.first!
+    return RecipeFormView(coffee: coffee, recipe: coffee.recipes.first!)
 }
 

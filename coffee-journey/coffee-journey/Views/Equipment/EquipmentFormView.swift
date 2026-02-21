@@ -99,10 +99,8 @@ struct EquipmentFormView: View {
     }
 }
 
-#Preview {
-    PreviewUseCaseEnvironment {
-        EquipmentFormView()
-    }
+#Preview(traits: .modifier(SampleDataModifier())) {
+    EquipmentFormView()
 }
 
 
