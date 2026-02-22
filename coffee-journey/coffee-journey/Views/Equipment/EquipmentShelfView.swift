@@ -25,15 +25,23 @@ struct EquipmentShelfView: View {
     
     var body: some View {
         RouterView {
-            List(equipment) { item in
-                NavigationLink(value: Router.Route.equipmentDetails(item)) {
-                    VStack(alignment: .leading, spacing: 14) {
-                        Text(item.name)
-                            .font(.headline)
-                        
-                        Text(item.brand)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+            let groupedEquipment = Dictionary(grouping: equipment, by: \.type)
+            
+            List(EquipmentType.allCases, id: \.self) { type in
+                if let items = groupedEquipment[type] {
+                    Section(type.description.capitalized) {
+                        ForEach(items) { item in
+                            NavigationLink(value: Router.Route.equipmentDetails(item)) {
+                                VStack(alignment: .leading, spacing: 14) {
+                                    Text(item.name)
+                                        .font(.headline)
+                                    
+                                    Text(item.brand)
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
                     }
                 }
             }

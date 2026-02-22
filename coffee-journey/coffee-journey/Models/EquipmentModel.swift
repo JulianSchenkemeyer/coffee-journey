@@ -10,10 +10,10 @@ import SwiftData
 
 
 enum EquipmentType: String, Codable, CaseIterable, CustomStringConvertible {
-    case kettle
-    case grinder
-    case milkFrother = "Milk Frother"
     case machine = "Espresso Maschine"
+    case grinder
+    case kettle
+    case milkFrother = "Milk Frother"
     
     
     var description: String {
