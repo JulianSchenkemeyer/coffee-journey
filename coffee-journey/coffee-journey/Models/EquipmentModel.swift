@@ -55,6 +55,20 @@ enum EquipmentType: String, Codable, CaseIterable, CustomStringConvertible {
 }
 
 
+extension Equipment {
+    // Predicates for use with @Query — #Predicate only supports local variable captures
+    // on the right-hand side, so these are defined here rather than inline at the call site.
+    static var isBrewer: Predicate<Equipment> {
+        let type = EquipmentType.machine.rawValue
+        return #Predicate<Equipment> { $0.typeDescription == type }
+    }
+
+    static var isGrinder: Predicate<Equipment> {
+        let type = EquipmentType.grinder.rawValue
+        return #Predicate<Equipment> { $0.typeDescription == type }
+    }
+}
+
 extension Equipment: SearchableModel {
     static func search(for term: String) -> Predicate<Equipment>? {
         let t = term.trimmingCharacters(in: .whitespacesAndNewlines)
