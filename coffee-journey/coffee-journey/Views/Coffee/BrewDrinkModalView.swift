@@ -67,7 +67,6 @@ struct BrewDrinkModalView: View {
                     }
                     
                     Section("Process") {
-                        
                         Stepper("Temperature: \(waterTemperature, format: .number) °C",
                                 value: $waterTemperature,
                                 in: 80...100,

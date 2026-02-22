@@ -54,49 +54,35 @@ struct RecipeFormView: View {
                     }
                 }
                 
-                Section("Temperature") {
-                    HStack {
-                        Text("Temperature")
-                        Spacer()
-                        Stepper("\(Int(temperature))°C", value: $temperature, in: 70...100)
-                            .monospacedDigit()
-                    }
+                Section("Preperation") {
+                    Stepper("Beans: \(amountBeans, format: .number.precision(.fractionLength(1))) g",
+                            value: $amountBeans,
+                            in: 0...50,
+                            step: 0.1)
+                    
+                    Stepper("Grind Setting: \(grindSize, format: .number)",
+                            value: $grindSize,
+                            in: 0...50,
+                            step: 1.0)
                 }
                 
-                Section("Grind Size") {
-                    HStack {
-                        Text("Grind Size")
-                        Spacer()
-                        Stepper(String(format: "%.1f", grindSize), value: $grindSize, in: 1...40, step: 0.5)
-                            .monospacedDigit()
-                    }
-                }
-                
-                Section("Extraction Time") {
-                    HStack {
-                        Text("Extraction Time")
-                        Spacer()
-                        Stepper("\(extractionTime)s", value: $extractionTime, in: 10...180)
-                            .monospacedDigit()
-                    }
-                }
-                
-                Section("Coffee Beans") {
-                    HStack {
-                        Text("Amount")
-                        Spacer()
-                        Stepper(String(format: "%.1f g", amountBeans), value: $amountBeans, in: 5...50, step: 0.5)
-                            .monospacedDigit()
-                    }
+                Section("Process") {
+                    Stepper("Temperature: \(temperature, format: .number) °C",
+                            value: $temperature,
+                            in: 80...100,
+                            step: 1.0)
+                    
+                    Stepper("Extraction Time: \(extractionTime, format: .number) s",
+                            value: $extractionTime,
+                            in: 0...180,
+                            step: 1)
                 }
                 
                 Section("Output") {
-                    HStack {
-                        Text("Output")
-                        Spacer()
-                        Stepper(String(format: "%.1f ml", output), value: $output, in: 10...500, step: 5)
-                            .monospacedDigit()
-                    }
+                    Stepper("Output: \(output, format: .number.precision(.fractionLength(1))) g",
+                            value: $output,
+                            in: 0...100,
+                            step: 0.1)
                 }
                 
                 if let submitErrorMessage {
@@ -188,6 +174,7 @@ struct RecipeFormView: View {
     
     @discardableResult
     private func createNewRecipe(name: String) throws -> Recipe? {
+        //TODO: Error Handling
         guard let selectedBrewer, let selectedGrinder else { return nil }
         
         let request = CreateRecipeRequest(
