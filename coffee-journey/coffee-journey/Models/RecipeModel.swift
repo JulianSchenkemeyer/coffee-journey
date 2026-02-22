@@ -57,9 +57,23 @@ final class Recipe: Identifiable {
     }
     
     
-    init(name: String, minTemperature: Double, maxTemperature: Double, minGrindSize: Double, maxGrindSize: Double, minExtractionTime: Int, maxExtractionTime: Int, minBeans: Double, maxBeans: Double, minOutput: Double, maxOutput: Double) {
-//        self.brewer = brewer
-//        self.grinder = grinder
+    init(
+        name: String,
+        minTemperature: Double,
+        maxTemperature: Double,
+        minGrindSize: Double,
+        maxGrindSize: Double,
+        minExtractionTime: Int,
+        maxExtractionTime: Int,
+        minBeans: Double,
+        maxBeans: Double,
+        minOutput: Double,
+        maxOutput: Double,
+        brewer: Equipment? = nil,
+        grinder: Equipment? = nil
+    ) {
+        self.brewer = brewer
+        self.grinder = grinder
         self.name = name
         self.minTemperature = minTemperature
         self.maxTemperature = maxTemperature
@@ -73,9 +87,18 @@ final class Recipe: Identifiable {
         self.maxOutput = maxOutput
     }
     
-    init(name: String, temperature: Double, grindsize: Double, extractionTime: Int, input: Double, output: Double) {
-//        self.brewer = brewer
-//        self.grinder = grinder
+    init(
+        name: String,
+        temperature: Double,
+        grindsize: Double,
+        extractionTime: Int,
+        input: Double,
+        output: Double,
+        brewer: Equipment? = nil,
+        grinder: Equipment? = nil
+    ) {
+        self.brewer = brewer
+        self.grinder = grinder
         self.name = name
         self.minTemperature = temperature
         self.maxTemperature = temperature

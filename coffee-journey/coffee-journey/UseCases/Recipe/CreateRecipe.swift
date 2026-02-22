@@ -19,7 +19,9 @@ import SwiftData
             grindsize: request.grindSize,
             extractionTime: request.extractionTime,
             input: request.amountBeans,
-            output: request.output
+            output: request.output,
+            brewer: request.brewer,
+            grinder: request.grinder
         )
         
         recipe.coffee = request.coffee
