@@ -13,10 +13,15 @@ struct RecipeFormView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.recipeUseCases) private var recipeUseCases
     
+    @Query(filter: Equipment.isBrewer) private var brewers: [Equipment]
+    @Query(filter: Equipment.isGrinder) private var grinders: [Equipment]
+    
     var coffee: Coffee
     var recipe: Recipe?
     
     @State private var name: String = ""
+    @State private var selectedBrewer: Equipment?
+    @State private var selectedGrinder: Equipment?
     @State private var temperature: Double = 90.0
     @State private var grindSize: Double = 18.0
     @State private var extractionTime: Int = 25
@@ -25,6 +30,7 @@ struct RecipeFormView: View {
     
     @State private var submitErrorMessage: String? = nil
         
+
     
     var body: some View {
         NavigationStack {
@@ -32,6 +38,20 @@ struct RecipeFormView: View {
                 Section {
                     TextField("Recipe Name", text: $name)
                         .textInputAutocapitalization(.words)
+                    
+                    Picker("Brewer", selection: $selectedBrewer) {
+                        ForEach(brewers) { brewer in
+                            Text(brewer.name)
+                                .tag(brewer)
+                        }
+                    }
+                    
+                    Picker("Grinder", selection: $selectedGrinder) {
+                        ForEach(grinders) { grinder in
+                            Text(grinder.name)
+                                .tag(grinder)
+                        }
+                    }
                 }
                 
                 Section("Temperature") {
@@ -119,6 +139,8 @@ struct RecipeFormView: View {
         guard let recipe = recipe else { return }
         
         name = recipe.name
+        selectedBrewer = recipe.brewer
+        selectedGrinder = recipe.grinder
         temperature = recipe.temperature
         grindSize = recipe.grindSize
         extractionTime = recipe.extractionTime
@@ -148,6 +170,8 @@ struct RecipeFormView: View {
     
     private func updateRecipe(_ recipe: Recipe, name: String) throws {
         recipe.name = name
+        recipe.brewer = selectedBrewer
+        recipe.grinder = selectedGrinder
         recipe.minTemperature = temperature
         recipe.maxTemperature = temperature
         recipe.minGrindSize = grindSize
@@ -163,8 +187,12 @@ struct RecipeFormView: View {
     }
     
     @discardableResult
-    private func createNewRecipe(name: String) throws -> Recipe {
+    private func createNewRecipe(name: String) throws -> Recipe? {
+        guard let selectedBrewer, let selectedGrinder else { return nil }
+        
         let request = CreateRecipeRequest(
+            grinder: selectedGrinder,
+            brewer: selectedBrewer,
             coffee: coffee,
             name: name,
             temperature: temperature,

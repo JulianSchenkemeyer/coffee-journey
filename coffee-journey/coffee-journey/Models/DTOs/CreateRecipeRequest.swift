@@ -6,8 +6,8 @@
 //
 
 struct CreateRecipeRequest {
-//    let grinder: Equipment
-//    let brewer: Equipment
+    let grinder: Equipment
+    let brewer: Equipment
     
     let coffee: Coffee
     let name: String
