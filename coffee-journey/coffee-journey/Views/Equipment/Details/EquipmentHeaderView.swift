@@ -22,7 +22,7 @@ struct EquipmentHeaderView: View {
                     Spacer()
                         .gridCellUnsizedAxes(.vertical)
 
-                    Text(equipment.type.capitalized)
+                    Text(equipment.type.description.capitalized)
                         .gridColumnAlignment(.trailing)
                 }
 

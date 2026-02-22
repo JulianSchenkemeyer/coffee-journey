@@ -8,20 +8,36 @@
 import Foundation
 import SwiftData
 
+
+enum EquipmentType: String, Codable, CaseIterable, CustomStringConvertible {
+    case kettle
+    case grinder
+    case milkFrother = "Milk Frother"
+    case machine = "Espresso Maschine"
+    
+    
+    var description: String {
+        self.rawValue
+    }
+}
+
 @Model final class Equipment: Identifiable {
     var brewerRecipes: [Recipe]
     var grinderRecipes: [Recipe]
     
     var name: String
     var brand: String
-    var type: String
+    var typeDescription: String
+    var type: EquipmentType {
+        EquipmentType(rawValue: typeDescription) ?? .machine
+    }
     var notes: String
     // last maintenance + maintenance intervall reminder?
     
     init(name: String, brand: String, type: String, notes: String) {
         self.name = name
         self.brand = brand
-        self.type = type
+        self.typeDescription = type
         self.notes = notes
         self.brewerRecipes = []
         self.grinderRecipes = []
@@ -31,7 +47,7 @@ import SwiftData
     init() {
         self.name = ""
         self.brand = ""
-        self.type = ""
+        self.typeDescription = EquipmentType.machine.rawValue
         self.notes = ""
         self.brewerRecipes = []
         self.grinderRecipes = []
@@ -48,7 +64,7 @@ extension Equipment: SearchableModel {
             if term.isEmpty {
                 return true
             } else {
-                return item.name.contains(t) || item.brand.contains(t) || item.type.contains(t)
+                return item.name.contains(t) || item.brand.contains(t) || item.typeDescription.contains(t)
             }
         }
     }
