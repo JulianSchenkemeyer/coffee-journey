@@ -25,8 +25,8 @@ enum SampleDataFactory {
             lastRefill: Calendar.current.date(byAdding: .day, value: -3, to: .now) ?? .now,
             brews: [],
             recipes: [
-                Recipe(name: "Default", temperature: 94, grindsize: 10, extractionTime: 33, input: 18.4, output: 37.3),
-                Recipe(name: "Turbo", temperature: 94, grindsize: 14, extractionTime: 20, input: 18.3, output: 36.5)
+                Recipe(name: "Default", temperature: 94, grindSetting: 10, extractionTime: 33, input: 18.4, output: 37.3),
+                Recipe(name: "Turbo", temperature: 94, grindSetting: 14, extractionTime: 20, input: 18.3, output: 36.5)
             ],
             totalBrews: 5,
             brewsSinceRefill: 1,

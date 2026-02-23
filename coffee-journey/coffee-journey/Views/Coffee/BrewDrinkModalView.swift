@@ -29,7 +29,7 @@ struct BrewDrinkModalView: View {
         _selectedRecipe = State(initialValue: last)
         if let last {
             _usedCoffee = State(initialValue: last.amountBeans)
-            _grindSetting = State(initialValue: last.grindSize)
+            _grindSetting = State(initialValue: last.grindSetting)
             _waterTemperature = State(initialValue: last.temperature)
             _extractionTime = State(initialValue: last.extractionTime)
             _output = State(initialValue: last.output)
@@ -48,7 +48,7 @@ struct BrewDrinkModalView: View {
                     .onChange(of: selectedRecipe) {
                         guard let selectedRecipe else { return }
                         usedCoffee = selectedRecipe.amountBeans
-                        grindSetting = selectedRecipe.grindSize
+                        grindSetting = selectedRecipe.grindSetting
                         waterTemperature = selectedRecipe.temperature
                         extractionTime = selectedRecipe.extractionTime
                         output = selectedRecipe.output

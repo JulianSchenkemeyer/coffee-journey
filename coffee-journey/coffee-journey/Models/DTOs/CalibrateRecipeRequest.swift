@@ -9,7 +9,7 @@ struct CalibrateRecipeRequest {
     let recipe: Recipe
     
     let temperature: Int
-    let grindSize: Double
+    let grindSetting: Double
     let extractionTime: Int
     let amountBeans: Double
     let output: Double

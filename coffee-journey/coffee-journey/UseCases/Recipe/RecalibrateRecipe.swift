@@ -25,9 +25,9 @@ import Foundation
         recipe.maxAmountBeans = avgAmountBeans
         recipe.minAmountBeans = avgAmountBeans
         
-        let avgGrindSize = recipe.grindSize
-        recipe.maxGrindSize = avgGrindSize
-        recipe.minGrindSize = avgGrindSize
+        let avgGrindSize = recipe.grindSetting
+        recipe.maxGrindSetting = avgGrindSize
+        recipe.minGrindSetting = avgGrindSize
         
         let avgOutput = recipe.output
         recipe.maxOutput = avgOutput

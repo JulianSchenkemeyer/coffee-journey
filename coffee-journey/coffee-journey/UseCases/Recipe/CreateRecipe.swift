@@ -16,7 +16,7 @@ import SwiftData
         let recipe = Recipe(
             name: request.name,
             temperature: request.temperature,
-            grindsize: request.grindSize,
+            grindSetting: request.grindSetting,
             extractionTime: request.extractionTime,
             input: request.amountBeans,
             output: request.output,

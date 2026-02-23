@@ -28,8 +28,8 @@ import Foundation
         recipe.lastUsed = .now
         recipe.minAmountBeans = min(recipe.minAmountBeans, brew.amountCoffee)
         recipe.maxAmountBeans = max(recipe.maxAmountBeans, brew.amountCoffee)
-        recipe.minGrindSize = min(recipe.minGrindSize, brew.grindSetting)
-        recipe.maxGrindSize = max(recipe.maxGrindSize, brew.grindSetting)
+        recipe.minGrindSetting = min(recipe.minGrindSetting, brew.grindSetting)
+        recipe.maxGrindSetting = max(recipe.maxGrindSetting, brew.grindSetting)
         recipe.minTemperature = min(recipe.minTemperature, brew.temperature)
         recipe.maxTemperature = max(recipe.maxTemperature, brew.temperature)
         recipe.minExtractionTime = min(recipe.minExtractionTime, brew.extractionTime)

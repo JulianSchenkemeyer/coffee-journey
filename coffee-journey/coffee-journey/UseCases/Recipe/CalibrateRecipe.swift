@@ -23,8 +23,8 @@ import Foundation
         recipe.maxAmountBeans = brew.amountBeans
         recipe.minAmountBeans = brew.amountBeans
         
-        recipe.maxGrindSize = brew.grindSize
-        recipe.minGrindSize = brew.grindSize
+        recipe.maxGrindSetting = brew.grindSetting
+        recipe.minGrindSetting = brew.grindSetting
         
         recipe.maxOutput = brew.output
         recipe.minOutput = brew.output

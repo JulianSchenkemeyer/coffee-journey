@@ -26,14 +26,14 @@ final class Recipe: Identifiable {
         ((minTemperature + maxTemperature) / 2)
     }
     
-    var minGrindSize: Double
-    var maxGrindSize: Double
-    var grindSize: Double {
+    var minGrindSetting: Double
+    var maxGrindSetting: Double
+    var grindSetting: Double {
         // Depends Grinder
         if (false) {
-            ((minGrindSize + maxGrindSize) / 2).roundTo(places: 1)
+            ((minGrindSetting + maxGrindSetting) / 2).roundTo(places: 1)
         } else {
-            ((minGrindSize + maxGrindSize) / 2).rounded()
+            ((minGrindSetting + maxGrindSetting) / 2).rounded()
         }
     }
     
@@ -61,8 +61,8 @@ final class Recipe: Identifiable {
         name: String,
         minTemperature: Int,
         maxTemperature: Int,
-        minGrindSize: Double,
-        maxGrindSize: Double,
+        minGrindSetting: Double,
+        maxGrindSetting: Double,
         minExtractionTime: Int,
         maxExtractionTime: Int,
         minBeans: Double,
@@ -77,8 +77,8 @@ final class Recipe: Identifiable {
         self.name = name
         self.minTemperature = minTemperature
         self.maxTemperature = maxTemperature
-        self.minGrindSize = minGrindSize
-        self.maxGrindSize = maxGrindSize
+        self.minGrindSetting = minGrindSetting
+        self.maxGrindSetting = maxGrindSetting
         self.minExtractionTime = minExtractionTime
         self.maxExtractionTime = maxExtractionTime
         self.minAmountBeans = minBeans
@@ -90,7 +90,7 @@ final class Recipe: Identifiable {
     init(
         name: String,
         temperature: Int,
-        grindsize: Double,
+        grindSetting: Double,
         extractionTime: Int,
         input: Double,
         output: Double,
@@ -102,8 +102,8 @@ final class Recipe: Identifiable {
         self.name = name
         self.minTemperature = temperature
         self.maxTemperature = temperature
-        self.minGrindSize = grindsize
-        self.maxGrindSize = grindsize
+        self.minGrindSetting = grindSetting
+        self.maxGrindSetting = grindSetting
         self.minExtractionTime = extractionTime
         self.maxExtractionTime = extractionTime
         self.minAmountBeans = input

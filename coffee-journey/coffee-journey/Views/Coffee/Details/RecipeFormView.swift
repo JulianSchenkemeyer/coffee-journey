@@ -23,7 +23,7 @@ struct RecipeFormView: View {
     @State private var selectedBrewer: Equipment?
     @State private var selectedGrinder: Equipment?
     @State private var temperature: Int = 96
-    @State private var grindSize: Double = 18.0
+    @State private var grindSetting: Double = 18.0
     @State private var extractionTime: Int = 25
     @State private var amountBeans: Double = 18.0
     @State private var output: Double = 36.0
@@ -60,8 +60,8 @@ struct RecipeFormView: View {
                             in: 0...50,
                             step: 0.1)
                     
-                    Stepper("Grind Setting: \(grindSize, format: .number)",
-                            value: $grindSize,
+                    Stepper("Grind Setting: \(grindSetting, format: .number)",
+                            value: $grindSetting,
                             in: 0...50,
                             step: 1.0)
                 }
@@ -128,7 +128,7 @@ struct RecipeFormView: View {
         selectedBrewer = recipe.brewer
         selectedGrinder = recipe.grinder
         temperature = recipe.temperature
-        grindSize = recipe.grindSize
+        grindSetting = recipe.grindSetting
         extractionTime = recipe.extractionTime
         amountBeans = recipe.amountBeans
         output = recipe.output
@@ -160,8 +160,8 @@ struct RecipeFormView: View {
         recipe.grinder = selectedGrinder
         recipe.minTemperature = temperature
         recipe.maxTemperature = temperature
-        recipe.minGrindSize = grindSize
-        recipe.maxGrindSize = grindSize
+        recipe.minGrindSetting = grindSetting
+        recipe.maxGrindSetting = grindSetting
         recipe.minExtractionTime = extractionTime
         recipe.maxExtractionTime = extractionTime
         recipe.minAmountBeans = amountBeans
@@ -183,7 +183,7 @@ struct RecipeFormView: View {
             coffee: coffee,
             name: name,
             temperature: temperature,
-            grindSize: grindSize,
+            grindSetting: grindSetting,
             extractionTime: extractionTime,
             amountBeans: amountBeans,
             output: output
