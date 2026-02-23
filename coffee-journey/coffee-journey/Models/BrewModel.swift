@@ -16,20 +16,19 @@ enum BrewRating: String, Codable, CustomStringConvertible {
 }
 
 enum BrewTaste: Int, CaseIterable, CustomStringConvertible {
-    case Sour = 1
-    case Bright = 2
-    case Balanced = 3
-    case Dry = 4
-    case Bitter = 5
+    case sour = 1
+    case bright = 2
+    case balanced = 3
+    case dry = 4
+    case bitter = 5
     
     var description: String {
-        switch self.rawValue {
-        case 1: "Sour"
-        case 2: "Bright"
-        case 3: "Balanced"
-        case 4:  "Dry"
-        case 5:  "Bitter"
-        default: "Unknown"
+        switch self {
+        case .sour: "Sour"
+        case .bright: "Bright"
+        case .balanced: "Balanced"
+        case .dry: "Dry"
+        case .bitter: "Bitter"
         }
     }
 }
@@ -45,7 +44,7 @@ enum BrewTaste: Int, CaseIterable, CustomStringConvertible {
     var extractionTime: Int
     var taste: Int
     var tasteDescription: BrewTaste {
-        BrewTaste(rawValue: taste) ?? .Balanced
+        BrewTaste(rawValue: taste) ?? .balanced
     }
     
     var output: Double
