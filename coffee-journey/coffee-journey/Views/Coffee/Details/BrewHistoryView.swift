@@ -148,7 +148,7 @@ struct BrewHistoryList: View {
                                 .frame(width: 20)
                             Text("Temp:")
                                 .fontWeight(.medium)
-                            Text("\(brew.waterTemperature.formatted())°C")
+                            Text("\(brew.temperature.formatted())°C")
                                 .foregroundStyle(.secondary)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)

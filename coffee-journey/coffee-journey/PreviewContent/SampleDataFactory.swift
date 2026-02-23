@@ -104,7 +104,7 @@ enum SampleDataFactory {
                 date: DateHelper.daysAgo(daysAgo, hour: hour, minute: 30),
                 amountCoffee: index % 2 == 0 ? 18.0 : 20.0,
                 grindSetting: index % 2 == 0 ? 5.0 : 20.0,
-                waterTemperature: index % 2 == 0 ? 93 : 96,
+                temperature: index % 2 == 0 ? 93 : 96,
                 extractionTime: index % 2 == 0 ? 30 : 180,
                 taste: (index % 5) + 1,
                 output: index % 2 == 0 ? 36.0 : 320.0,

@@ -46,7 +46,7 @@ struct ConfirmCalibrationModalView: View {
                         Text("Temperature:")
                         Text("\(recipe.temperature, format: .number) °C")
                         Image(systemName: "arrow.right")
-                        Text("\(brew.waterTemperature, format: .number) °C")
+                        Text("\(brew.temperature, format: .number) °C")
                     }
                     GridRow {
                         Text("Extraction Time:")
@@ -74,7 +74,7 @@ struct ConfirmCalibrationModalView: View {
                     Button(role: .confirm) {
                         let request = CalibrateRecipeRequest(
                             recipe: recipe,
-                            temperature: brew.waterTemperature,
+                            temperature: brew.temperature,
                             grindSize: brew.grindSetting,
                             extractionTime: brew.extractionTime,
                             amountBeans: brew.amountCoffee,

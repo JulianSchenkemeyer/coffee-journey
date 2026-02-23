@@ -144,7 +144,7 @@ struct BrewDrinkModalView: View {
             date: .now,
             amountCoffee: usedCoffee,
             grindSetting: grindSetting,
-            waterTemperature: waterTemperature,
+            temperature: waterTemperature,
             extractionTime: extractionTime,
             taste: Int(taste),
             output: output,
