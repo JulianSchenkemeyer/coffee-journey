@@ -11,7 +11,7 @@ import Foundation
     
     @discardableResult
     func callAsFunction(request: CreateCoffeeRequest) throws -> Coffee {
-        let defaultRecipe = Recipe(name: "Espresso", temperature: 96.0, grindsize: 12.0, extractionTime: 30, input: 18.0, output: 36.0)
+        let defaultRecipe = Recipe(name: "Espresso", temperature: 96, grindsize: 12.0, extractionTime: 30, input: 18.0, output: 36.0)
         
         let newCoffee = Coffee(
             name: request.name,

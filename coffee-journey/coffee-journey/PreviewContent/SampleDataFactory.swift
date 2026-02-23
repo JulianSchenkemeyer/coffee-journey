@@ -25,8 +25,8 @@ enum SampleDataFactory {
             lastRefill: Calendar.current.date(byAdding: .day, value: -3, to: .now) ?? .now,
             brews: [],
             recipes: [
-                Recipe(name: "Default", temperature: 94.0, grindsize: 10, extractionTime: 33, input: 18.4, output: 37.3),
-                Recipe(name: "Turbo", temperature: 94.0, grindsize: 14, extractionTime: 20, input: 18.3, output: 36.5)
+                Recipe(name: "Default", temperature: 94, grindsize: 10, extractionTime: 33, input: 18.4, output: 37.3),
+                Recipe(name: "Turbo", temperature: 94, grindsize: 14, extractionTime: 20, input: 18.3, output: 36.5)
             ],
             totalBrews: 5,
             brewsSinceRefill: 1,
@@ -104,7 +104,7 @@ enum SampleDataFactory {
                 date: DateHelper.daysAgo(daysAgo, hour: hour, minute: 30),
                 amountCoffee: index % 2 == 0 ? 18.0 : 20.0,
                 grindSetting: index % 2 == 0 ? 5.0 : 20.0,
-                waterTemperature: index % 2 == 0 ? 93.0 : 96.0,
+                waterTemperature: index % 2 == 0 ? 93 : 96,
                 extractionTime: index % 2 == 0 ? 30 : 180,
                 taste: (index % 5) + 1,
                 output: index % 2 == 0 ? 36.0 : 320.0,

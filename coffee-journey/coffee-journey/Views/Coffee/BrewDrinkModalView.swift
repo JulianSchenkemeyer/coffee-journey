@@ -17,7 +17,7 @@ struct BrewDrinkModalView: View {
     @State private var selectedRecipe: Recipe?
     @State private var usedCoffee = 18.0
     @State private var grindSetting = 8.0
-    @State private var waterTemperature = 96.0
+    @State private var waterTemperature = 96
     @State private var extractionTime = 30
     @State private var output: Double = 36.0
     @State private var taste = 3.0
@@ -70,7 +70,7 @@ struct BrewDrinkModalView: View {
                         Stepper("Temperature: \(waterTemperature, format: .number) °C",
                                 value: $waterTemperature,
                                 in: 80...100,
-                                step: 1.0)
+                                step: 1)
                         
                         Stepper("Extraction Time: \(extractionTime, format: .number) s",
                                 value: $extractionTime,

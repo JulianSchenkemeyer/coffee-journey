@@ -20,10 +20,10 @@ final class Recipe: Identifiable {
     var name: String
     var lastUsed: Date?
     
-    var minTemperature: Double
-    var maxTemperature: Double
-    var temperature: Double {
-        ((minTemperature + maxTemperature) / 2).rounded()
+    var minTemperature: Int
+    var maxTemperature: Int
+    var temperature: Int {
+        ((minTemperature + maxTemperature) / 2)
     }
     
     var minGrindSize: Double
@@ -59,8 +59,8 @@ final class Recipe: Identifiable {
     
     init(
         name: String,
-        minTemperature: Double,
-        maxTemperature: Double,
+        minTemperature: Int,
+        maxTemperature: Int,
         minGrindSize: Double,
         maxGrindSize: Double,
         minExtractionTime: Int,
@@ -89,7 +89,7 @@ final class Recipe: Identifiable {
     
     init(
         name: String,
-        temperature: Double,
+        temperature: Int,
         grindsize: Double,
         extractionTime: Int,
         input: Double,

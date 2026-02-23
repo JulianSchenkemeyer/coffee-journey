@@ -41,7 +41,7 @@ enum BrewTaste: Int, CaseIterable, CustomStringConvertible {
     var date: Date
     var amountCoffee: Double
     var grindSetting: Double
-    var waterTemperature: Double
+    var waterTemperature: Int
     var extractionTime: Int
     var taste: Int
     var tasteDescription: BrewTaste {
@@ -54,7 +54,7 @@ enum BrewTaste: Int, CaseIterable, CustomStringConvertible {
         BrewRating(rawValue: ratingString) ?? .thumbsUp
     }
     
-    init(date: Date, amountCoffee: Double, grindSetting: Double, waterTemperature: Double, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
+    init(date: Date, amountCoffee: Double, grindSetting: Double, waterTemperature: Int, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
         self.date = date
         self.amountCoffee = amountCoffee
         self.grindSetting = grindSetting
@@ -65,7 +65,7 @@ enum BrewTaste: Int, CaseIterable, CustomStringConvertible {
         self.ratingString = rating.rawValue
     }
     
-    init(recipe: Recipe, date: Date, amountCoffee: Double, grindSetting: Double, waterTemperature: Double, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
+    init(recipe: Recipe, date: Date, amountCoffee: Double, grindSetting: Double, waterTemperature: Int, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
         self.recipe = recipe
         self.date = date
         self.amountCoffee = amountCoffee

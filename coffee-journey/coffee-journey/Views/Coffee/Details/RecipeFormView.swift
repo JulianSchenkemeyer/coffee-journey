@@ -22,7 +22,7 @@ struct RecipeFormView: View {
     @State private var name: String = ""
     @State private var selectedBrewer: Equipment?
     @State private var selectedGrinder: Equipment?
-    @State private var temperature: Double = 90.0
+    @State private var temperature: Int = 96
     @State private var grindSize: Double = 18.0
     @State private var extractionTime: Int = 25
     @State private var amountBeans: Double = 18.0
@@ -70,7 +70,7 @@ struct RecipeFormView: View {
                     Stepper("Temperature: \(temperature, format: .number) °C",
                             value: $temperature,
                             in: 80...100,
-                            step: 1.0)
+                            step: 1)
                     
                     Stepper("Extraction Time: \(extractionTime, format: .number) s",
                             value: $extractionTime,
