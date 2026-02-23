@@ -131,7 +131,17 @@ struct RecipeCardView: View {
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
         .contextMenu {
             Button("Recalibrate", systemImage: "gearshape.arrow.trianglehead.2.clockwise.rotate.90") {
-                _ = try! recipeUseCases.recalibrate(recipe)
+                
+                let calibrationRequest = CalibrateRecipeRequest(
+                    recipe: recipe,
+                    temperature: recipe.temperature,
+                    grindSetting: recipe.grindSetting,
+                    extractionTime: recipe.extractionTime,
+                    amountBeans: recipe.amountBeans,
+                    output: recipe.output
+                )
+                
+                _ = try! recipeUseCases.calibrate(calibrationRequest)
             }
             
             Button("Edit", systemImage: "pencil") {

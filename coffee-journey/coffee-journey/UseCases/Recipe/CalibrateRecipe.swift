@@ -11,23 +11,23 @@ import Foundation
     let repository: RecipeRepository
     
     @discardableResult
-    func callAsFunction(brew: CalibrateRecipeRequest) throws -> Recipe {
-        let recipe = brew.recipe
+    func callAsFunction(request: CalibrateRecipeRequest) throws -> Recipe {
+        let recipe = request.recipe
         
-        recipe.maxTemperature = brew.temperature
-        recipe.minTemperature = brew.temperature
+        recipe.maxTemperature = request.temperature
+        recipe.minTemperature = request.temperature
         
-        recipe.maxExtractionTime = brew.extractionTime
-        recipe.minExtractionTime = brew.extractionTime
+        recipe.maxExtractionTime = request.extractionTime
+        recipe.minExtractionTime = request.extractionTime
         
-        recipe.maxAmountBeans = brew.amountBeans
-        recipe.minAmountBeans = brew.amountBeans
+        recipe.maxAmountBeans = request.amountBeans
+        recipe.minAmountBeans = request.amountBeans
         
-        recipe.maxGrindSetting = brew.grindSetting
-        recipe.minGrindSetting = brew.grindSetting
+        recipe.maxGrindSetting = request.grindSetting
+        recipe.minGrindSetting = request.grindSetting
         
-        recipe.maxOutput = brew.output
-        recipe.minOutput = brew.output
+        recipe.maxOutput = request.output
+        recipe.minOutput = request.output
         
         return try repository.update(recipe)
     }
