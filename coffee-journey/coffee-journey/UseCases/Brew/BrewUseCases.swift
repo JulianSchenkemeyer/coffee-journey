@@ -20,18 +20,25 @@ import SwiftData
 struct BrewUseCases {
     var update: @MainActor (Brew) throws -> Brew
     var delete: @MainActor (Brew) throws -> Void
+    var brew: @MainActor (Coffee, Brew, Recipe) throws -> Coffee
 }
 
 enum BrewUseCaseFactory {
     
     @MainActor
-    static func make(repository: any BrewRepository) -> BrewUseCases {
-        let update = UpdateBrew(repository: repository).callAsFunction
-        let delete = DeleteBrew(repository: repository).callAsFunction
+    static func make(
+        brewRepository: any BrewRepository,
+        coffeeRepository: any CoffeeRepository,
+        recipeRepository: any RecipeRepository
+    ) -> BrewUseCases {
+        let update = UpdateBrew(repository: brewRepository).callAsFunction
+        let delete = DeleteBrew(repository: brewRepository).callAsFunction
+        let brew = BrewDrink(coffeeRepository: coffeeRepository, recipeRepository: recipeRepository).callAsFunction
         
         return BrewUseCases(
             update: update,
             delete: delete,
+            brew: brew
         )
     }
 }
@@ -40,11 +47,14 @@ extension EnvironmentValues {
     @Entry var brewUseCases: BrewUseCases = {
         return BrewUseCases(
             update: { _ in
-                fatalError("CoffeeUseCases not injected")
+                fatalError("BrewUseCases not injected")
             },
             delete: { _ in
-                fatalError("CoffeeUseCases not injected")
+                fatalError("BrewUseCases not injected")
             },
+            brew: { _, _, _ in
+                fatalError("BrewUseCases not injected")
+            }
         )
     }()
 }
