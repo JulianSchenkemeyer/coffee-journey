@@ -22,11 +22,11 @@ struct RecipeFormView: View {
     @State private var name: String = ""
     @State private var selectedBrewer: Equipment?
     @State private var selectedGrinder: Equipment?
-    @State private var temperature: Int = 96
-    @State private var grindSetting: Double = 18.0
-    @State private var extractionTime: Int = 25
-    @State private var amountBeans: Double = 18.0
-    @State private var output: Double = 36.0
+    @State private var temperature: Int = RecipeConstants.Temperature.defaultValue
+    @State private var grindSetting: Double = RecipeConstants.GrindSetting.defaultValue
+    @State private var extractionTime: Int = RecipeConstants.ExtractionTime.defaultValue
+    @State private var amountBeans: Double = RecipeConstants.Beans.defaultValue
+    @State private var output: Double = RecipeConstants.Output.defaultValue
     
     @State private var submitErrorMessage: String? = nil
         
@@ -55,34 +55,34 @@ struct RecipeFormView: View {
                 }
                 
                 Section("Preperation") {
-                    Stepper("Beans: \(amountBeans, format: .number.precision(.fractionLength(1))) g",
+                    Stepper("Beans: \(amountBeans, format: .number.precision(.fractionLength(1))) \(RecipeConstants.Beans.unit)",
                             value: $amountBeans,
-                            in: 0...50,
-                            step: 0.1)
+                            in: RecipeConstants.Beans.range,
+                            step: RecipeConstants.Beans.step)
                     
                     Stepper("Grind Setting: \(grindSetting, format: .number)",
                             value: $grindSetting,
-                            in: 0...50,
-                            step: 1.0)
+                            in: RecipeConstants.GrindSetting.range,
+                            step: RecipeConstants.GrindSetting.step)
                 }
                 
                 Section("Process") {
-                    Stepper("Temperature: \(temperature, format: .number) °C",
+                    Stepper("Temperature: \(temperature, format: .number) \(RecipeConstants.Temperature.unit)",
                             value: $temperature,
-                            in: 80...100,
-                            step: 1)
+                            in: RecipeConstants.Temperature.range,
+                            step: RecipeConstants.Temperature.step)
                     
-                    Stepper("Extraction Time: \(extractionTime, format: .number) s",
+                    Stepper("Extraction Time: \(extractionTime, format: .number) \(RecipeConstants.ExtractionTime.unit)",
                             value: $extractionTime,
-                            in: 0...180,
-                            step: 1)
+                            in: RecipeConstants.ExtractionTime.range,
+                            step: RecipeConstants.ExtractionTime.step)
                 }
                 
                 Section("Output") {
-                    Stepper("Output: \(output, format: .number.precision(.fractionLength(1))) g",
+                    Stepper("Output: \(output, format: .number.precision(.fractionLength(1))) \(RecipeConstants.Output.unit)",
                             value: $output,
-                            in: 0...100,
-                            step: 0.1)
+                            in: RecipeConstants.Output.range,
+                            step: RecipeConstants.Output.step)
                 }
                 
                 if let submitErrorMessage {

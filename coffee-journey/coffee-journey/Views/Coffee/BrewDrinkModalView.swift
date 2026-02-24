@@ -15,12 +15,12 @@ struct BrewDrinkModalView: View {
     let coffee: Coffee
     
     @State private var selectedRecipe: Recipe?
-    @State private var usedCoffee = 18.0
-    @State private var grindSetting = 8.0
-    @State private var waterTemperature = 96
-    @State private var extractionTime = 30
-    @State private var output: Double = 36.0
-    @State private var taste = 3.0
+    @State private var usedCoffee = RecipeConstants.Beans.defaultValue
+    @State private var grindSetting = RecipeConstants.GrindSetting.defaultValue
+    @State private var temperature = RecipeConstants.Temperature.defaultValue
+    @State private var extractionTime = RecipeConstants.ExtractionTime.defaultValue
+    @State private var output = RecipeConstants.Output.defaultValue
+    @State private var taste = RecipeConstants.Taste.defaultValue
     
     
     init(coffee: Coffee) {
@@ -30,7 +30,7 @@ struct BrewDrinkModalView: View {
         if let last {
             _usedCoffee = State(initialValue: last.amountBeans)
             _grindSetting = State(initialValue: last.grindSetting)
-            _waterTemperature = State(initialValue: last.temperature)
+            _temperature = State(initialValue: last.temperature)
             _extractionTime = State(initialValue: last.extractionTime)
             _output = State(initialValue: last.output)
         }
@@ -49,42 +49,42 @@ struct BrewDrinkModalView: View {
                         guard let selectedRecipe else { return }
                         usedCoffee = selectedRecipe.amountBeans
                         grindSetting = selectedRecipe.grindSetting
-                        waterTemperature = selectedRecipe.temperature
+                        temperature = selectedRecipe.temperature
                         extractionTime = selectedRecipe.extractionTime
                         output = selectedRecipe.output
                     }
                     
                     Section("Preperation") {
-                        Stepper("Beans: \(usedCoffee, format: .number.precision(.fractionLength(1))) g",
+                        Stepper("Beans: \(usedCoffee, format: .number.precision(.fractionLength(1))) \(RecipeConstants.Beans.unit)",
                                 value: $usedCoffee,
-                                in: 0...50,
-                                step: 0.1)
+                                in: RecipeConstants.Beans.range,
+                                step: RecipeConstants.Beans.step)
                         
                         Stepper("Grind Setting: \(grindSetting, format: .number)",
                                 value: $grindSetting,
-                                in: 0...50,
-                                step: 1.0)
+                                in: RecipeConstants.GrindSetting.range,
+                                step: RecipeConstants.GrindSetting.step)
                     }
                     
                     Section("Process") {
-                        Stepper("Temperature: \(waterTemperature, format: .number) °C",
-                                value: $waterTemperature,
-                                in: 80...100,
-                                step: 1)
+                        Stepper("Temperature: \(temperature, format: .number) \(RecipeConstants.Temperature.unit)",
+                                value: $temperature,
+                                in: RecipeConstants.Temperature.range,
+                                step: RecipeConstants.Temperature.step)
                         
-                        Stepper("Extraction Time: \(extractionTime, format: .number) s",
+                        Stepper("Extraction Time: \(extractionTime, format: .number) \(RecipeConstants.ExtractionTime.unit)",
                                 value: $extractionTime,
-                                in: 0...180,
-                                step: 1)
+                                in: RecipeConstants.ExtractionTime.range,
+                                step: RecipeConstants.ExtractionTime.step)
                     }
                     
                     Section() {
-                        Stepper("Output: \(output, format: .number.precision(.fractionLength(1))) g",
+                        Stepper("Output: \(output, format: .number.precision(.fractionLength(1))) \(RecipeConstants.Output.unit)",
                                 value: $output,
-                                in: 0...100,
-                                step: 0.1)
+                                in: RecipeConstants.Output.range,
+                                step: RecipeConstants.Output.step)
                         
-                        Slider(value: $taste, in: 1...5, step: 1.0) {
+                        Slider(value: $taste, in: RecipeConstants.Taste.range, step: RecipeConstants.Taste.step) {
                             Text("Taste")
                         } minimumValueLabel: {
                             Text("Sour")
@@ -144,7 +144,7 @@ struct BrewDrinkModalView: View {
             date: .now,
             amountCoffee: usedCoffee,
             grindSetting: grindSetting,
-            temperature: waterTemperature,
+            temperature: temperature,
             extractionTime: extractionTime,
             taste: Int(taste),
             output: output,
