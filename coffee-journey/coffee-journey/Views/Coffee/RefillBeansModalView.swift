@@ -14,7 +14,7 @@ struct RefillBeansModalView: View {
     
     let coffee: Coffee
     
-    @State private var newBeans = 250.0
+    @State private var newBeans = CoffeeConstants.Amount.defaultValue
     @State private var roastDate = Date.now
     @State private var keepOld: Bool = true
     
@@ -25,8 +25,8 @@ struct RefillBeansModalView: View {
                     Section {
                         Stepper("Coffee: \(newBeans, format: .number.precision(.fractionLength(0...1))) g",
                                 value: $newBeans,
-                                in: 0...2000,
-                                step: 5)
+                                in: CoffeeConstants.Amount.range,
+                                step: CoffeeConstants.Amount.step)
                         DatePicker("Roast Date", selection: $roastDate, displayedComponents: .date)
                         
                         Toggle(isOn: $keepOld) {

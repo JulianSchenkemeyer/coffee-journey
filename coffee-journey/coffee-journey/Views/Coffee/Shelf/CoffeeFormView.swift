@@ -16,10 +16,10 @@ struct CoffeeFormView: View {
 
     @State private var name: String = ""
     @State private var roaster: String = ""
-    @State private var initialAmount: Double = 250
+    @State private var initialAmount: Double = CoffeeConstants.Amount.defaultValue
     @State private var roastCategory: RoastCategory = .medium
     @State private var roastDate: Date = .now
-    @State private var rating: Double = 3.0
+    @State private var rating: Double = CoffeeConstants.Rating.defaultValue
     @State private var notes: String = ""
     @State private var submitErrorMessage: String? = nil
 
@@ -48,8 +48,8 @@ struct CoffeeFormView: View {
                     }
                     if !isEditMode {
                         Stepper("Amount: \(initialAmount, format: .number.precision(.fractionLength(0...1))) g", value: $initialAmount,
-                                in: 0...2000,
-                                step: 5)
+                                in: CoffeeConstants.Amount.range,
+                                step: CoffeeConstants.Amount.step)
                         
                         DatePicker("Roast Date", selection: $roastDate, displayedComponents: .date)
                     }
@@ -57,7 +57,7 @@ struct CoffeeFormView: View {
 
                 Section("Rating") {
                     HStack {
-                        Slider(value: $rating, in: 0...5, step: 0.5) {
+                        Slider(value: $rating, in: CoffeeConstants.Rating.range, step: CoffeeConstants.Rating.step) {
                             Text(String(format: "%.1f", rating))
                         }
                         
