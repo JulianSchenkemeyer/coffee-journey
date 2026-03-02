@@ -22,6 +22,7 @@ struct CoffeeFormView: View {
     @State private var rating: Double = CoffeeConstants.Rating.defaultValue
     @State private var notes: String = ""
     @State private var submitErrorMessage: String? = nil
+    @State private var createdCoffee: Coffee?
 
     var body: some View {
         NavigationStack {
@@ -82,6 +83,9 @@ struct CoffeeFormView: View {
                 }
             }
             .navigationTitle(isEditMode ? "Edit Coffee" : "Add Coffee")
+            .navigationDestination(item: $createdCoffee) { coffee in
+                SetupRecipeView(coffee: coffee)
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .close) {
@@ -97,6 +101,7 @@ struct CoffeeFormView: View {
                 loadCoffeeData()
             }
         }
+        .onDismissMultiStepSheet { dismiss() }
     }
     
     private var isEditMode: Bool { coffee != nil }
@@ -175,8 +180,7 @@ struct CoffeeFormView: View {
         )
         
         do {
-            _ = try coffeeUseCases.create(request)
-            dismiss()
+            createdCoffee = try coffeeUseCases.create(request)
         } catch {
             submitErrorMessage = error.localizedDescription
         }

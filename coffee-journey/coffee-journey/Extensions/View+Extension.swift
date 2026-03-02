@@ -9,6 +9,30 @@ import SwiftUI
 
 
 
+// MARK: - dismissMultiStepSheet environment key
+
+private struct DismissMultiStepSheetKey: EnvironmentKey {
+    static let defaultValue: () -> Void = {}
+}
+
+extension EnvironmentValues {
+    var dismissMultiStepSheet: () -> Void {
+        get { self[DismissMultiStepSheetKey.self] }
+        set { self[DismissMultiStepSheetKey.self] = newValue }
+    }
+}
+
+extension View {
+    /// Injects a closure that dismisses the enclosing sheet from within a
+    /// multi-step navigation flow, where @Environment(\.dismiss) would only
+    /// pop the navigation stack instead of closing the sheet.
+    func onDismissMultiStepSheet(_ action: @escaping () -> Void) -> some View {
+        environment(\.dismissMultiStepSheet, action)
+    }
+}
+
+// MARK: - Stretchy header modifier
+
 extension View {
     func stretchy() -> some View {
         visualEffect { effect, geometry in

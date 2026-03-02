@@ -11,8 +11,6 @@ import Foundation
     
     @discardableResult
     func callAsFunction(request: CreateCoffeeRequest) throws -> Coffee {
-        let defaultRecipe = Recipe(name: "Espresso", temperature: 96, grindSetting: 12.0, extractionTime: 30, input: 18.0, output: 36.0)
-        
         let newCoffee = Coffee(
             name: request.name,
             roaster: request.roaster,
@@ -21,7 +19,7 @@ import Foundation
             amountLeft: request.amount,
             lastRefill: .now,
             brews: [],
-            recipes: [defaultRecipe],
+            recipes: [],
             totalBrews: 0,
             brewsSinceRefill: 0,
             roastDate: request.roastDate,
@@ -29,7 +27,6 @@ import Foundation
             notes: request.notes
         )
         
-        defaultRecipe.coffee = newCoffee
         return try repository.create(newCoffee)
     }
 }
