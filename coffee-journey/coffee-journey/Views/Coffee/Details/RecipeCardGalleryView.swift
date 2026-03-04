@@ -24,11 +24,11 @@ struct RecipeCardGalleryView: View {
                 HStack(spacing: 12) {
                     ForEach(recipes) { recipe in
                         RecipeCardView(coffee: coffee, recipe: recipe)
-                            .frame(width: 300)
+                            .frame(width: 300, height: 240)
                     }
                     
                     AddRecipeCardButtonView(coffee: coffee, isInteractive: isAddButtonInFocus)
-                        .frame(width: 300)
+                        .frame(width: 300, height: 240)
                         .onScrollVisibilityChange(threshold: 0.9) { isVisible in
                             isAddButtonInFocus = isVisible
                         }
@@ -42,5 +42,4 @@ struct RecipeCardGalleryView: View {
 
 #Preview {
     RecipeCardGalleryView(coffee: .Mock.filter, recipes: Recipe.Mock.all)
-        .frame(height: 300)
 }
