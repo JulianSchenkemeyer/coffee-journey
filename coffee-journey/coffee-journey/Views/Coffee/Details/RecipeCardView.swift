@@ -115,6 +115,24 @@ struct RecipeCardView: View {
                     .labelStyle(.iconOnly)
             }
             
+            HStack {
+                if let grinder = recipe.grinder {
+                    Text(grinder.name)
+                        .font(.caption2.bold())
+                        .padding(4)
+                        .padding(.horizontal, 6)
+                        .background(Capsule().opacity(0.3))
+                }
+                
+                if let brewer = recipe.brewer {
+                    Text(brewer.name)
+                        .font(.caption2.bold())
+                        .padding(4)
+                        .padding(.horizontal, 6)
+                        .background(Capsule().opacity(0.3))
+                }
+            }
+            
             Divider()
             
             Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 8) {
@@ -126,7 +144,7 @@ struct RecipeCardView: View {
             }
             .font(.subheadline)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
         .padding(16)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
         .contextMenu {
@@ -163,8 +181,9 @@ struct RecipeCardView: View {
 
 
 #Preview(traits: .modifier(SampleDataModifier())) {
-    @Previewable @Query var coffees: [Coffee]
-    let coffee = coffees.first!
-    return RecipeCardView(coffee: coffee, recipe: coffee.recipes.first!)
+//    @Previewable @Query var coffees: [Coffee]
+//    let coffee = coffees.first
+//    print(coffee.name)
+    RecipeCardView(coffee: .Mock.darkRoast, recipe: .Mock.turboUsed)
 }
 
