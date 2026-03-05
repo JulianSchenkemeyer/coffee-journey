@@ -154,14 +154,16 @@ struct CoffeeFormView: View {
     }
     
     private func update(coffee: Coffee) {
-        coffee.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        coffee.roaster = roaster.trimmingCharacters(in: .whitespacesAndNewlines)
-        coffee.roastCategory = roastCategory.rawValue
-        coffee.rating = rating
-        coffee.notes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
-        
+        let request = UpdateCoffeeRequest(
+            name: name.trimmingCharacters(in: .whitespacesAndNewlines),
+            roaster: roaster.trimmingCharacters(in: .whitespacesAndNewlines),
+            roastCategory: roastCategory,
+            rating: rating,
+            notes: notes.trimmingCharacters(in: .whitespacesAndNewlines)
+        )
+
         do {
-            _ = try coffeeUseCases.update(coffee)
+            _ = try coffeeUseCases.update(coffee, request)
             dismiss()
         } catch {
             submitErrorMessage = error.localizedDescription

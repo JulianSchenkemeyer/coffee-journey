@@ -12,7 +12,7 @@ import SwiftData
 
 struct CoffeeUseCases {
     var create: @MainActor (CreateCoffeeRequest) throws -> Coffee
-    var update: @MainActor (Coffee) throws -> Coffee
+    var update: @MainActor (Coffee, UpdateCoffeeRequest) throws -> Coffee
     var delete: @MainActor (Coffee) throws -> Void
     var checkExists: @MainActor (String, String, Coffee?) throws -> Bool
     var refill: @MainActor (Coffee, Refill, Bool) throws -> Coffee
@@ -44,7 +44,7 @@ extension EnvironmentValues {
             create: { _ in
                 fatalError("CoffeeUseCases not injected")
             },
-            update: { _ in
+            update: { _, _ in
                 fatalError("CoffeeUseCases not injected")
             },
             delete: { _ in
