@@ -101,21 +101,17 @@ struct RecipeFormView: View {
     }
 
     private func updateRecipe(_ recipe: Recipe, name: String) throws {
-        recipe.name = name
-        recipe.brewer = selectedBrewer
-        recipe.grinder = selectedGrinder
-        recipe.minTemperature = temperature
-        recipe.maxTemperature = temperature
-        recipe.minGrindSetting = grindSetting
-        recipe.maxGrindSetting = grindSetting
-        recipe.minExtractionTime = extractionTime
-        recipe.maxExtractionTime = extractionTime
-        recipe.minAmountBeans = amountBeans
-        recipe.maxAmountBeans = amountBeans
-        recipe.minOutput = output
-        recipe.maxOutput = output
-
-        _ = try recipeUseCases.update(recipe)
+        let request = UpdateRecipeRequest(
+            name: name,
+            brewer: selectedBrewer,
+            grinder: selectedGrinder,
+            temperature: temperature,
+            grindSetting: grindSetting,
+            extractionTime: extractionTime,
+            amountBeans: amountBeans,
+            output: output
+        )
+        _ = try recipeUseCases.update(recipe, request)
     }
 
     @discardableResult

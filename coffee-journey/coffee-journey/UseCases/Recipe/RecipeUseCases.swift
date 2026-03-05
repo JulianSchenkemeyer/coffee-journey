@@ -12,7 +12,7 @@ import SwiftData
 
 struct RecipeUseCases {
     var create: @MainActor (CreateRecipeRequest) throws -> Recipe
-    var update: @MainActor (Recipe) throws -> Recipe
+    var update: @MainActor (Recipe, UpdateRecipeRequest) throws -> Recipe
     var delete: @MainActor (Recipe) throws -> Void
     var calibrate: @MainActor (CalibrateRecipeRequest) throws -> Recipe
 }
@@ -41,7 +41,7 @@ extension EnvironmentValues {
             create: { _ in
                 fatalError("RecipeUseCases not injected")
             },
-            update: { _ in
+            update: { _, _ in
                 fatalError("RecipeUseCases not injected")
             },
             delete: { _ in
