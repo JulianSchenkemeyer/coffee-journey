@@ -80,13 +80,19 @@ struct BrewHistoryList: View {
     var body: some View {
         List(brews) { brew in
             VStack(alignment: .leading, spacing: 8) {
-                // Date and Rating
-                HStack {
-                    Text(brew.date, format: .dateTime)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(brew.recipe?.name ?? "Unknown Recipe")
                         .font(.headline)
-                    Spacer()
-                    Text(brew.rating == .thumbsUp ? "👍" : "👎")
-                        .font(.title3)
+                    
+                    // Date and Rating
+                    HStack {
+                        Text(brew.date, format: .dateTime)
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Text(brew.rating == .thumbsUp ? "👍" : "👎")
+                            .font(.title3)
+                    }
                 }
                 
                 // Taste with visual indicator
