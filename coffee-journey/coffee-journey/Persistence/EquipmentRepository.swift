@@ -24,24 +24,45 @@ final class SwiftDataEquipmentRepository: EquipmentRepository {
     
     func create(_ equipment: Equipment) throws -> Equipment {
         context.insert(equipment)
-        try context.save()
         
-        return equipment
+        do {
+            try context.save()
+            
+            return equipment
+        } catch {
+            context.rollback()
+            throw PersistenceError.insertFailed
+        }
     }
     
     func update(_ equipment: Equipment) throws -> Equipment {
-        try context.save()
-        
-        return equipment
+        do {
+            try context.save()
+            
+            return equipment
+        } catch {
+            context.rollback()
+            throw PersistenceError.updateFailed
+        }
     }
     
     func delete(_ equipment: Equipment) throws {
         context.delete(equipment)
-        try context.save()
+        
+        do {
+            try context.save()
+        } catch {
+            context.rollback()
+            throw PersistenceError.deleteFailed
+        }
     }
     
     func fetchAll() throws -> [Equipment] {
-        try context.fetch(FetchDescriptor<Equipment>())
+        do {
+            return try context.fetch(FetchDescriptor<Equipment>())
+        } catch {
+            throw PersistenceError.fetchFailed
+        }
     }
     
     func findById(_ id: PersistentIdentifier) throws -> Equipment? {
@@ -49,7 +70,12 @@ final class SwiftDataEquipmentRepository: EquipmentRepository {
             $0.id == id
         }
         let descriptor = FetchDescriptor<Equipment>(predicate: predicate)
-        return try context.fetch(descriptor).first
+        
+        do {
+            return try context.fetch(descriptor).first
+        } catch {
+            throw PersistenceError.fetchFailed
+        }
     }
 }
 

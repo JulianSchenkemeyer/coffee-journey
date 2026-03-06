@@ -22,24 +22,45 @@ final class SwiftDataRecipeRepository: RecipeRepository {
     
     func create(_ recipe: Recipe) throws -> Recipe {
         context.insert(recipe)
-        try context.save()
         
-        return recipe
-    }
-    
-    func fetchAll() throws -> [Recipe] {
-        try context.fetch(FetchDescriptor<Recipe>())
+        do {
+            try context.save()
+            
+            return recipe
+        } catch {
+            context.rollback()
+            throw PersistenceError.insertFailed
+        }
     }
     
     func update(_ recipe: Recipe) throws -> Recipe {
-        try context.save()
-        
-        return recipe
+        do {
+            try context.save()
+            
+            return recipe
+        } catch {
+            context.rollback()
+            throw PersistenceError.updateFailed
+        }
     }
     
     func delete(_ recipe: Recipe) throws {
         context.delete(recipe)
-        try context.save()
+        
+        do {
+            try context.save()
+        } catch {
+            context.rollback()
+            throw PersistenceError.deleteFailed
+        }
+    }
+    
+    func fetchAll() throws -> [Recipe] {
+        do {
+            return try context.fetch(FetchDescriptor<Recipe>())
+        } catch {
+            throw PersistenceError.fetchFailed
+        }
     }
 }
 

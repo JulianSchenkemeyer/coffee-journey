@@ -20,13 +20,24 @@ final class SwiftDataBrewRepository: BrewRepository {
     init(context: ModelContext) { self.context = context }
     
     func update(_ brew: Brew) throws -> Brew {
-        try context.save()
-        
-        return brew
+        do {
+            try context.save()
+            
+            return brew
+        } catch {
+            context.rollback()
+            throw PersistenceError.updateFailed
+        }
     }
     
     func delete(_ brew: Brew) throws {
         context.delete(brew)
-        try context.save()
+        
+        do {
+            try context.save()
+        } catch {
+            context.rollback()
+            throw PersistenceError.deleteFailed
+        }
     }
 }
