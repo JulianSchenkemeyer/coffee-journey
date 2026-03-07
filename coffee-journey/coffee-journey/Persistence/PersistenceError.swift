@@ -7,23 +7,23 @@
 import Foundation
 
 
-enum PersistenceError: LocalizedError {
+enum PersistenceError: PresentableError {
+    
     case insertFailed
     case updateFailed
     case deleteFailed
     case fetchFailed
     
-    var errorDescription: String? {
-        //TODO: improve description
+    nonisolated var content: (title: String, description: String) {
         switch self {
         case .insertFailed:
-            return "Insert failed"
+            return (title: "Insert failed", description: "")
         case .updateFailed:
-            return "Update failed"
+            return (title: "Update failed", description: "")
         case .deleteFailed:
-            return "Delete failed"
+            return (title: "Delete failed", description: "")
         case .fetchFailed:
-            return "Fetch failed"
+            return (title: "Fetch failed", description: "")
         }
     }
 }
