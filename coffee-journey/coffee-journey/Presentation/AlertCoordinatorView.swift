@@ -30,7 +30,7 @@ struct AlertCoordinatorView<Content: View>: View {
             ) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text(alertCoordinator.activeAlert?.message ?? "")
+                Text(alertCoordinator.activeAlert?.description ?? "")
             }
     }
 }
