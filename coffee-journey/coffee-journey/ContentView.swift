@@ -15,20 +15,22 @@ struct ContentView: View {
     private let searchRouter = Router()
 
     var body: some View {
-        SheetCoordinatorView {
-            TabView {
-                Tab("Coffee", systemImage: "cup.and.heat.waves") {
-                    CoffeeShelfView()
-                        .environment(\.router, coffeeRouter)
-                }
-                Tab("Equipment", systemImage: "wrench.and.screwdriver") {
-                    EquipmentShelfView()
-                        .environment(\.router, equipmentRouter)
-                }
-
-                Tab(role: .search) {
-                    SearchView()
-                        .environment(\.router, searchRouter)
+        AlertCoordinatorView {
+            SheetCoordinatorView {
+                TabView {
+                    Tab("Coffee", systemImage: "cup.and.heat.waves") {
+                        CoffeeShelfView()
+                            .environment(\.router, coffeeRouter)
+                    }
+                    Tab("Equipment", systemImage: "wrench.and.screwdriver") {
+                        EquipmentShelfView()
+                            .environment(\.router, equipmentRouter)
+                    }
+                    
+                    Tab(role: .search) {
+                        SearchView()
+                            .environment(\.router, searchRouter)
+                    }
                 }
             }
         }

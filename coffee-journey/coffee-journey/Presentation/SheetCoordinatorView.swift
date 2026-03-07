@@ -19,7 +19,9 @@ struct SheetCoordinatorView<Content: View>: View {
         
         content()
             .sheet(item: $sheetCoordinator.activeSheet) { sheet in
-                destinationView(for: sheet)
+                AlertCoordinatorView {
+                    destinationView(for: sheet)
+                }
             }
     }
     
