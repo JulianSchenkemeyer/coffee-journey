@@ -11,6 +11,7 @@ import SwiftUI
 struct BrewDrinkModalView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.brewUseCases) private var brewUseCases
+    @Environment(\.alertCoordinator) private var alertCoordinator
     
     let coffee: Coffee
     
@@ -150,7 +151,12 @@ struct BrewDrinkModalView: View {
             output: output,
             rating: rating
         )
-        _ = try! brewUseCases.brew(coffee, brew, selectedRecipe)
+        
+        do {
+            _ = try brewUseCases.brew(coffee, brew, selectedRecipe)
+        } catch {
+            alertCoordinator.show(error)
+        }
     }
 }
 

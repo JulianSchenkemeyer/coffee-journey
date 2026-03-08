@@ -11,6 +11,7 @@ import SwiftUI
 struct RefillBeansModalView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.coffeeUseCases) private var coffeeUseCases
+    @Environment(\.alertCoordinator) private var alertCoordinator
     
     let coffee: Coffee
     
@@ -37,8 +38,7 @@ struct RefillBeansModalView: View {
                 }
                 
                 Button {
-                    _ = try! coffeeUseCases.refill(coffee, Refill(amount: newBeans, roastDate: roastDate, date: .now), !keepOld)
-                    dismiss()
+                    refillBeans()
                 } label: {
                     Label("Refill Beans", systemImage: "arrow.trianglehead.clockwise")
                         .fontWeight(.semibold)
@@ -57,6 +57,15 @@ struct RefillBeansModalView: View {
                     }
                 }
             }
+        }
+    }
+    
+    private func refillBeans() {
+        do {
+            _ = try coffeeUseCases.refill(coffee, Refill(amount: newBeans, roastDate: roastDate, date: .now), !keepOld)
+            dismiss()
+        } catch {
+            alertCoordinator.show(error)
         }
     }
 }

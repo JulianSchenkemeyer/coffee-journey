@@ -14,6 +14,7 @@ import SwiftData
 struct SetupRecipeView: View {
     @Environment(\.recipeUseCases) private var recipeUseCases
     @Environment(\.dismissMultiStepSheet) private var dismissMultiStepSheet
+    @Environment(\.alertCoordinator) private var alertCoordinator
 
     var coffee: Coffee
 
@@ -26,7 +27,6 @@ struct SetupRecipeView: View {
     @State private var amountBeans: Double = RecipeConstants.Beans.defaultValue
     @State private var output: Double = RecipeConstants.Output.defaultValue
 
-    @State private var submitErrorMessage: String? = nil
 
     var body: some View {
         RecipeFormContent(
@@ -38,7 +38,6 @@ struct SetupRecipeView: View {
             extractionTime: $extractionTime,
             amountBeans: $amountBeans,
             output: $output,
-            submitErrorMessage: $submitErrorMessage
         )
         .navigationTitle("Set Up Recipe")
         .navigationBarTitleDisplayMode(.inline)
@@ -65,7 +64,6 @@ struct SetupRecipeView: View {
     }
 
     private func submit() {
-        submitErrorMessage = nil
         guard isFormValid, let selectedBrewer, let selectedGrinder else { return }
 
         let request = CreateRecipeRequest(
@@ -84,7 +82,7 @@ struct SetupRecipeView: View {
             _ = try recipeUseCases.create(request)
             dismissMultiStepSheet()
         } catch {
-            submitErrorMessage = error.localizedDescription
+            alertCoordinator.show(error)
         }
     }
 }

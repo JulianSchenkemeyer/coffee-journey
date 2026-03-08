@@ -22,7 +22,6 @@ struct RecipeFormContent: View {
     @Binding var extractionTime: Int
     @Binding var amountBeans: Double
     @Binding var output: Double
-    @Binding var submitErrorMessage: String?
 
     var body: some View {
         Form {
@@ -74,13 +73,6 @@ struct RecipeFormContent: View {
                         value: $output,
                         in: RecipeConstants.Output.range,
                         step: RecipeConstants.Output.step)
-            }
-
-            if let submitErrorMessage {
-                Section {
-                    Text(submitErrorMessage)
-                        .foregroundStyle(.red)
-                }
             }
         }
     }

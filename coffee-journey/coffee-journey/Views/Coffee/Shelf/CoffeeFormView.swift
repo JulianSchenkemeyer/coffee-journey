@@ -11,6 +11,7 @@ import SwiftUI
 struct CoffeeFormView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.coffeeUseCases) private var coffeeUseCases
+    @Environment(\.alertCoordinator) private var alertCoordinator
     
     var coffee: Coffee?
 
@@ -21,7 +22,6 @@ struct CoffeeFormView: View {
     @State private var roastDate: Date = .now
     @State private var rating: Double = CoffeeConstants.Rating.defaultValue
     @State private var notes: String = ""
-    @State private var submitErrorMessage: String? = nil
     @State private var createdCoffee: Coffee?
 
     var body: some View {
@@ -73,13 +73,6 @@ struct CoffeeFormView: View {
                         .multilineTextAlignment(.leading)
                         .frame(minHeight: 120, alignment: .topLeading)
                         .lineLimit(5, reservesSpace: true)
-                }
-                
-                if let submitErrorMessage {
-                    Section {
-                        Text(submitErrorMessage)
-                            .foregroundStyle(.red)
-                    }
                 }
             }
             .navigationTitle(isEditMode ? "Edit Coffee" : "Add Coffee")
@@ -143,7 +136,6 @@ struct CoffeeFormView: View {
     }
 
     private func submit() {
-        submitErrorMessage = nil
         guard isFormValid else { return }
 
         if let coffee {
@@ -166,7 +158,7 @@ struct CoffeeFormView: View {
             _ = try coffeeUseCases.update(coffee, request)
             dismiss()
         } catch {
-            submitErrorMessage = error.localizedDescription
+            alertCoordinator.show(error)
         }
     }
     
@@ -184,7 +176,7 @@ struct CoffeeFormView: View {
         do {
             createdCoffee = try coffeeUseCases.create(request)
         } catch {
-            submitErrorMessage = error.localizedDescription
+            alertCoordinator.show(error)
         }
     }
 }

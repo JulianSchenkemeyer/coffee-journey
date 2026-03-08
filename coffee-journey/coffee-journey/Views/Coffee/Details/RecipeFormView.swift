@@ -12,6 +12,7 @@ import SwiftData
 struct RecipeFormView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.recipeUseCases) private var recipeUseCases
+    @Environment(\.alertCoordinator) private var alertCoordinator
 
     var coffee: Coffee
     var recipe: Recipe?
@@ -25,8 +26,7 @@ struct RecipeFormView: View {
     @State private var amountBeans: Double = RecipeConstants.Beans.defaultValue
     @State private var output: Double = RecipeConstants.Output.defaultValue
 
-    @State private var submitErrorMessage: String? = nil
-
+    
     var body: some View {
         NavigationStack {
             RecipeFormContent(
@@ -38,7 +38,6 @@ struct RecipeFormView: View {
                 extractionTime: $extractionTime,
                 amountBeans: $amountBeans,
                 output: $output,
-                submitErrorMessage: $submitErrorMessage
             )
             .navigationTitle(isEditMode ? "Edit Recipe" : "New Recipe")
             .navigationBarTitleDisplayMode(.inline)
@@ -83,10 +82,8 @@ struct RecipeFormView: View {
     }
 
     private func submit() {
-        submitErrorMessage = nil
-        guard isFormValid else { return }
-
         let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard isFormValid else { return }
 
         do {
             if let recipe = recipe {
@@ -96,7 +93,7 @@ struct RecipeFormView: View {
             }
             dismiss()
         } catch {
-            submitErrorMessage = error.localizedDescription
+            alertCoordinator.show(error)
         }
     }
 
@@ -114,11 +111,7 @@ struct RecipeFormView: View {
         _ = try recipeUseCases.update(recipe, request)
     }
 
-    @discardableResult
-    private func createNewRecipe(name: String) throws -> Recipe? {
-        // TODO: Error Handling
-        guard let selectedBrewer, let selectedGrinder else { return nil }
-
+    private func createNewRecipe(name: String) throws {
         let request = CreateRecipeRequest(
             grinder: selectedGrinder,
             brewer: selectedBrewer,
@@ -131,7 +124,7 @@ struct RecipeFormView: View {
             output: output
         )
 
-        return try recipeUseCases.create(request)
+        _ = try recipeUseCases.create(request)
     }
 }
 

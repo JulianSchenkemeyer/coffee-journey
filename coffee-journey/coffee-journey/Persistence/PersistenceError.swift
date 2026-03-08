@@ -17,9 +17,9 @@ enum PersistenceError: PresentableError {
     nonisolated var content: (title: String, description: String) {
         switch self {
         case .insertFailed:
-            return (title: "Insert failed", description: "")
+            return (title: "Insert failed", description: "Could not insert the object.")
         case .updateFailed:
-            return (title: "Update failed", description: "")
+            return (title: "Update failed", description: "Could not update the object.")
         case .deleteFailed:
             return (title: "Delete failed", description: "")
         case .fetchFailed:

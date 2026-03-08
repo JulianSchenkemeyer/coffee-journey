@@ -12,6 +12,7 @@ import SwiftUI
 struct EquipmentFormView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.equipmentUseCases) private var equipmentUseCases
+    @Environment(\.alertCoordinator) private var alertCoordinator
     
     var equipment: Equipment?
 
@@ -19,8 +20,6 @@ struct EquipmentFormView: View {
     @State private var brand: String = ""
     @State private var type: EquipmentType = .machine
     @State private var notes: String = ""
-
-    @State private var submitErrorMessage: String? = nil
 
 
     var body: some View {
@@ -46,13 +45,6 @@ struct EquipmentFormView: View {
                         .multilineTextAlignment(.leading)
                         .frame(minHeight: 120, alignment: .topLeading)
                         .lineLimit(5, reservesSpace: true)
-                }
-
-                if let submitErrorMessage {
-                    Section {
-                        Text(submitErrorMessage)
-                            .foregroundStyle(.red)
-                    }
                 }
             }
             .navigationTitle("Add Equipment")
@@ -80,7 +72,6 @@ struct EquipmentFormView: View {
     }
 
     private func submit() {
-        submitErrorMessage = nil
         guard isFormValid else { return }
 
         let request = CreateEquipmentRequest(
@@ -94,7 +85,7 @@ struct EquipmentFormView: View {
             _ = try equipmentUseCases.create(request)
             dismiss()
         } catch {
-            submitErrorMessage = error.localizedDescription
+            alertCoordinator.show(error)
         }
     }
 }
