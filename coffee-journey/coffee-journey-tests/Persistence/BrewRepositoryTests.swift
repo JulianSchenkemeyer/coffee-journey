@@ -11,7 +11,7 @@ import SwiftData
 
 
 @MainActor
-struct SwiftDataBrewRepositoryTest {
+struct SwiftDataBrewRepositoryTests {
 
     // MARK: - Helpers
 
