@@ -77,7 +77,7 @@ struct SwiftDataCoffeeRepositoryTests {
     }
 
     @Test func createReturnsTheSameCoffee() throws {
-        let (repository, context) = try prepareEnvironment()
+        let (repository, _) = try prepareEnvironment()
         let coffee = Coffee(
             name: "Kenya AA",
             roaster: "Onyx",
