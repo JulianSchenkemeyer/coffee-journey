@@ -68,34 +68,21 @@ final class SwiftDataCoffeeRepository: CoffeeRepository {
         do {
             let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
             let trimmedRoaster = roaster.trimmingCharacters(in: .whitespacesAndNewlines)
-            
-            // Use case-sensitive predicate to narrow down results, then do case-insensitive comparison in-memory
+            let orderedSame = ComparisonResult.orderedSame
+
             let predicate = #Predicate<Coffee> { coffee in
-                coffee.name.contains(trimmedName) && coffee.roaster.contains(trimmedRoaster)
+                coffee.name.caseInsensitiveCompare(trimmedName) == orderedSame &&
+                coffee.roaster.caseInsensitiveCompare(trimmedRoaster) == orderedSame
             }
-            
-            let descriptor = FetchDescriptor<Coffee>(predicate: predicate)
-            let candidates = try context.fetch(descriptor)
-            
-            // Now do case-insensitive comparison on the smaller result set
-            let lowercasedName = trimmedName.lowercased()
-            let lowercasedRoaster = trimmedRoaster.lowercased()
-            
-            for coffee in candidates {
-                // If we're excluding a coffee (edit mode), skip it
-                if let excluding = excluding, coffee.persistentModelID == excluding.persistentModelID {
-                    continue
-                }
-                
-                let coffeeName = coffee.name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-                let coffeeRoaster = coffee.roaster.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-                
-                if coffeeName == lowercasedName && coffeeRoaster == lowercasedRoaster {
-                    return true
-                }
+
+            let candidates = try context.fetch(FetchDescriptor<Coffee>(predicate: predicate))
+
+            // Filter out the excluded coffee in-memory (edit mode),
+            // since PersistentIdentifier cannot be used inside a #Predicate.
+            return candidates.contains { coffee in
+                guard let excluding else { return true }
+                return coffee.persistentModelID != excluding.persistentModelID
             }
-            
-            return false
         } catch {
             throw PersistenceError.fetchFailed
         }
