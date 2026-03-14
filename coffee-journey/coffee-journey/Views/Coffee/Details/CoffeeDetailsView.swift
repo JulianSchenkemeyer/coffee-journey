@@ -71,7 +71,7 @@ struct CoffeeDetailsView: View {
                     
                     Divider()
                     
-                    Button("Empty Beans", systemImage: "clear", role: .destructive) {
+                    Button("Empty Beans", systemImage: "clear") {
                         sheetCoordinator.present(.confirmEmptying(coffee))
                     }
                     
