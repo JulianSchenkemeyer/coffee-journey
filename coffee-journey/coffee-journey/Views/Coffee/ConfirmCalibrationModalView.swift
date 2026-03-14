@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ConfirmCalibrationModalView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.alertCoordinator) private var alertCoordinator
     @Environment(\.recipeUseCases) private var recipeUseCases
     
     let recipe: Recipe
@@ -81,8 +82,12 @@ struct ConfirmCalibrationModalView: View {
                             output: brew.output
                         )
                         
-                        _ = try! recipeUseCases.calibrate(request)
-                        dismiss()
+                        do {
+                            _ = try recipeUseCases.calibrate(request)
+                            dismiss()
+                        } catch {
+                            alertCoordinator.show(error)
+                        }
                     }
                 }
             }
