@@ -38,17 +38,17 @@ struct CoffeeShelfView: View {
                         CoffeeShelfEntryView(coffee: coffee)
                     }
                     .swipeActions(edge: .leading) {
-                        Button {
+                        Button("Brew", systemImage: "cup.and.heat.waves.fill") {
                             sheetCoordinator.present(.brew(coffee))
-                        } label: {
-                            Label("Brew", systemImage: "cup.and.heat.waves.fill")
                         }
                     }
                     .swipeActions(edge: .trailing) {
-                        Button {
+                        Button("Refill", systemImage: "arrow.trianglehead.clockwise") {
                             sheetCoordinator.present(.refill(coffee))
-                        } label: {
-                            Label("Refill", systemImage: "arrow.trianglehead.clockwise")
+                        }
+                        
+                        Button("Empty", systemImage: "clear") {
+                            sheetCoordinator.present(.confirmEmptying(coffee))
                         }
                     }
                 }
@@ -59,10 +59,8 @@ struct CoffeeShelfView: View {
                             CoffeeShelfEntryView(coffee: coffee)
                         }
                         .swipeActions(edge: .trailing) {
-                            Button {
+                            Button("Refill", systemImage: "arrow.trianglehead.clockwise") {
                                 sheetCoordinator.present(.refill(coffee))
-                            } label: {
-                                Label("Refill", systemImage: "arrow.trianglehead.clockwise")
                             }
                         }
                         .listRowBackground(Color.secondary.opacity(0.15))
