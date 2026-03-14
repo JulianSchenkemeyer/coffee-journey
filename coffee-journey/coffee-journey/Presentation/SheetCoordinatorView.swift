@@ -37,6 +37,9 @@ struct SheetCoordinatorView<Content: View>: View {
         case .refill(let coffee):
             RefillBeansModalView(coffee: coffee)
                 .presentationDetents([.medium])
+        case .confirmEmptying(let coffee):
+            ConfirmEmptyingModalView(coffee: coffee)
+                .presentationDetents([.fraction(0.25)])
         case .addCoffee(let coffee):
             CoffeeFormView(coffee: coffee)
         case .editRecipe(let coffee, let recipe):

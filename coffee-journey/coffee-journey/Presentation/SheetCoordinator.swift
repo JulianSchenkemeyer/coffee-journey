@@ -15,6 +15,7 @@ import SwiftUI
         case addCoffee(Coffee?)
         case editRecipe(Coffee, Recipe?)
         case confirmRecipeCalibration(Recipe, Brew)
+        case confirmEmptying(Coffee)
         case addEquipment(Equipment?)
         
         var id: String {
@@ -25,6 +26,7 @@ import SwiftUI
             case .editRecipe: "editRecipe"
             case .confirmRecipeCalibration: "confirmRecipeCalibration"
             case .addEquipment: "addEquipment"
+            case .confirmEmptying: "confirmEmptying"
             }
         }
     }
