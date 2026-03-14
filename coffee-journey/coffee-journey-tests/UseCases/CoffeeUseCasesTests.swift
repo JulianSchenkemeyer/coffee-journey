@@ -237,4 +237,29 @@ struct CoffeeUseCasesTests {
 
         #expect(result.persistentModelID == coffee.persistentModelID)
     }
+    
+    // MARK: EmptyBeans
+    
+    @Test func emptyBeansEmptiesBeans() throws {
+        let (repository, context) = try prepareEnvironment()
+        let emptyBeans = EmptyBeans(repository: repository)
+        let coffee = makeCoffee(amountLeft: 250, into: context)
+        
+        try emptyBeans(coffee: coffee)
+        
+        #expect(coffee.amountLeft == 0.0)
+        #expect(coffee.amount == 250.0)
+    }
+    
+    @Test func emptyBeansDoesNotAddRefill() throws {
+        let (repository, context) = try prepareEnvironment()
+        let emptyBeans = EmptyBeans(repository: repository)
+        let coffee = makeCoffee(amountLeft: 250, into: context)
+        
+        #expect(coffee.refills.count == 1)
+        
+        try emptyBeans(coffee: coffee)
+        
+        #expect(coffee.refills.count == 1)
+    }
 }
