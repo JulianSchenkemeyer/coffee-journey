@@ -16,6 +16,7 @@ struct CoffeeUseCases {
     var delete: @MainActor (Coffee) throws -> Void
     var checkExists: @MainActor (String, String, Coffee?) throws -> Bool
     var refill: @MainActor (Coffee, Refill, Bool) throws -> Coffee
+    var empty: @MainActor (Coffee) throws -> Coffee
 }
 
 enum CoffeeUseCaseFactory {
@@ -27,13 +28,15 @@ enum CoffeeUseCaseFactory {
         let delete = DeleteCoffee(repository: repository).callAsFunction
         let checkExists = CheckCoffeeExists(repository: repository).callAsFunction
         let refill = RefillBeans(repository: repository).callAsFunction
+        let empty = EmptyBeans(repository: repository).callAsFunction
         
         return CoffeeUseCases(
             create: create,
             update: update,
             delete: delete,
             checkExists: checkExists,
-            refill: refill
+            refill: refill,
+            empty: empty
         )
     }
 }
@@ -54,6 +57,9 @@ extension EnvironmentValues {
                 fatalError("CoffeeUseCases not injected")
             },
             refill: { _, _, _ in
+                fatalError("CoffeeUseCases not injected")
+            },
+            empty: { _ in
                 fatalError("CoffeeUseCases not injected")
             }
         )
