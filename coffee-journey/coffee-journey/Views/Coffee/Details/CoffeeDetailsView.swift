@@ -11,6 +11,7 @@ import SwiftData
 
 struct CoffeeDetailsView: View {
     @Environment(\.sheetCoordinator) private var sheetCoordinator
+    @Environment(\.alertCoordinator) private var alertCoordinator
     @Environment(\.router) private var router
     @Environment(\.coffeeUseCases) private var coffeeUseCases
     
@@ -60,7 +61,7 @@ struct CoffeeDetailsView: View {
             
             ToolbarItem(placement: .topBarTrailing) {
                 Menu("Actions", systemImage: "ellipsis") {
-                    Button("Edit", systemImage: "pencil") {
+                    Button("Edit Coffee", systemImage: "pencil") {
                         sheetCoordinator.present(.addCoffee(coffee))
                     }
                     
@@ -70,9 +71,17 @@ struct CoffeeDetailsView: View {
                     
                     Divider()
                     
+                    Button("Empty Beans", systemImage: "clear", role: .destructive) {
+                        sheetCoordinator.present(.confirmEmptying(coffee))
+                    }
+                    
                     Button("Delete", systemImage: "trash", role: .destructive) {
-                        try! coffeeUseCases.delete(coffee)
-                        router.navigateBack()
+                        do {
+                            try coffeeUseCases.delete(coffee)
+                            router.navigateBack()
+                        } catch {
+                            alertCoordinator.show(error)
+                        }
                     }
                 }
             }
