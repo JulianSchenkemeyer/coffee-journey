@@ -18,8 +18,8 @@ struct CoffeeShelfView: View {
     
     @Query(
         filter: #Predicate<Coffee> { $0.amountLeft > 0 },
-        sort: [SortDescriptor(\Coffee.amountLeft, order: .reverse),
-               SortDescriptor(\Coffee.lastRefill, order: .reverse)]
+        sort: [SortDescriptor(\Coffee.lastRefill, order: .forward),
+               SortDescriptor(\Coffee.amountLeft, order: .reverse)]
     ) private var inStockCoffees: [Coffee]
 
     @Query(
