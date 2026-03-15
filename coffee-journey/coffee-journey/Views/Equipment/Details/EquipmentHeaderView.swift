@@ -16,7 +16,7 @@ struct EquipmentHeaderView: View {
         VStack {
             Grid(alignment: .leading, horizontalSpacing: 0, verticalSpacing: 12) {
                 GridRow {
-                    Label("Type", systemImage: "tag.fill")
+                    Label("Type", systemImage: CJSymbol.Equipment.type)
                         .foregroundStyle(.secondary)
 
                     Spacer()
@@ -27,7 +27,7 @@ struct EquipmentHeaderView: View {
                 }
 
                 GridRow {
-                    Label("Brand", systemImage: "building.2.fill")
+                    Label("Brand", systemImage: CJSymbol.Equipment.brand)
                         .foregroundStyle(.secondary)
 
                     Spacer()

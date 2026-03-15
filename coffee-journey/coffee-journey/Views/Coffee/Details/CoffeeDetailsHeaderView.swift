@@ -31,7 +31,7 @@ struct CoffeeDetailsHeaderView: View {
             
             Grid(alignment: .leading, horizontalSpacing: 0, verticalSpacing: 12) {
                 GridRow {
-                    Label("Roasted", systemImage: "flame.fill")
+                    Label("Roasted", systemImage: CJSymbol.Coffee.roasted)
                         .foregroundStyle(.secondary)
                     
                     Spacer()
@@ -47,7 +47,7 @@ struct CoffeeDetailsHeaderView: View {
                 }
                 
                 GridRow {
-                    Label("Refilled", systemImage: "arrow.trianglehead.clockwise")
+                    Label("Refilled", systemImage: CJSymbol.Coffee.refilled)
                         .foregroundStyle(.secondary)
                     
                     Spacer()
@@ -57,7 +57,7 @@ struct CoffeeDetailsHeaderView: View {
                 }
                 
                 GridRow {
-                    Label("Brew", systemImage: "cup.and.heat.waves.fill")
+                    Label("Brew", systemImage: CJSymbol.Coffee.brew)
                         .foregroundStyle(.secondary)
                     
                     Spacer()
@@ -68,7 +68,7 @@ struct CoffeeDetailsHeaderView: View {
                 }
                 
                 GridRow {
-                    Label("Rating", systemImage: "star.fill")
+                    Label("Rating", systemImage: CJSymbol.Coffee.rating)
                         .foregroundStyle(.secondary)
                     
                     Spacer()

@@ -51,31 +51,31 @@ struct CoffeeDetailsView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
-                Button("Refill", systemImage: "arrow.trianglehead.clockwise") {
+                Button("Refill", systemImage: CJSymbol.Action.refill) {
                     sheetCoordinator.present(.refill(coffee))
                 }
-                Button("Brew", systemImage: "cup.and.heat.waves.fill") {
+                Button("Brew", systemImage: CJSymbol.Action.brew) {
                     sheetCoordinator.present(.brew(coffee))
                 }
             }
             
             ToolbarItem(placement: .topBarTrailing) {
                 Menu("Actions", systemImage: "ellipsis") {
-                    Button("Edit Coffee", systemImage: "pencil") {
+                    Button("Edit Coffee", systemImage: CJSymbol.Action.edit) {
                         sheetCoordinator.present(.addCoffee(coffee))
                     }
                     
-                    Button("Brew History", systemImage: "square.stack.fill") {
+                    Button("Brew History", systemImage: CJSymbol.Navigation.brewHistory) {
                         router.navigate(to: .brewHistory(coffee, nil))
                     }
                     
                     Divider()
                     
-                    Button("Empty Beans", systemImage: "clear") {
+                    Button("Empty Beans", systemImage: CJSymbol.Action.clear) {
                         sheetCoordinator.present(.confirmEmptying(coffee))
                     }
                     
-                    Button("Delete", systemImage: "trash", role: .destructive) {
+                    Button("Delete", systemImage: CJSymbol.Action.delete, role: .destructive) {
                         do {
                             try coffeeUseCases.delete(coffee)
                             router.navigateBack()

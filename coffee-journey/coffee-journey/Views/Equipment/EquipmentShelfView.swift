@@ -47,7 +47,7 @@ struct EquipmentShelfView: View {
             }
             .navigationTitle("Equipment Shelf")
             .toolbar {
-                Button("Add Equipment", systemImage: "plus") {
+                Button("Add Equipment", systemImage: CJSymbol.Action.add) {
                     sheetCoordinator.present(.addEquipment(nil))
                 }
             }

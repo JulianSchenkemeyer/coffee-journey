@@ -38,16 +38,16 @@ struct CoffeeShelfView: View {
                         CoffeeShelfEntryView(coffee: coffee)
                     }
                     .swipeActions(edge: .leading) {
-                        Button("Brew", systemImage: "cup.and.heat.waves.fill") {
+                        Button("Brew", systemImage: CJSymbol.Action.brew) {
                             sheetCoordinator.present(.brew(coffee))
                         }
                     }
                     .swipeActions(edge: .trailing) {
-                        Button("Refill", systemImage: "arrow.trianglehead.clockwise") {
+                        Button("Refill", systemImage: CJSymbol.Action.refill) {
                             sheetCoordinator.present(.refill(coffee))
                         }
                         
-                        Button("Empty", systemImage: "clear") {
+                        Button("Empty", systemImage: CJSymbol.Action.clear) {
                             sheetCoordinator.present(.confirmEmptying(coffee))
                         }
                     }
@@ -59,7 +59,7 @@ struct CoffeeShelfView: View {
                             CoffeeShelfEntryView(coffee: coffee)
                         }
                         .swipeActions(edge: .trailing) {
-                            Button("Refill", systemImage: "arrow.trianglehead.clockwise") {
+                            Button("Refill", systemImage: CJSymbol.Action.refill) {
                                 sheetCoordinator.present(.refill(coffee))
                             }
                         }
@@ -69,7 +69,7 @@ struct CoffeeShelfView: View {
             }
             .navigationTitle("Coffee Shelf")
             .toolbar {
-                Button("Add Coffee", systemImage: "plus") {
+                Button("Add Coffee", systemImage: CJSymbol.Action.add) {
                     sheetCoordinator.present(.addCoffee(nil))
                 }
             }

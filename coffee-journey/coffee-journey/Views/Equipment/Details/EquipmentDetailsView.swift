@@ -43,13 +43,13 @@ struct EquipmentDetailsView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu("Actions", systemImage: "ellipsis") {
-                    Button("Edit", systemImage: "pencil") {
+                    Button("Edit", systemImage: CJSymbol.Action.edit) {
                         sheetCoordinator.present(.addEquipment(equipment))
                     }
 
                     Divider()
 
-                    Button("Delete", systemImage: "trash", role: .destructive) {
+                    Button("Delete", systemImage: CJSymbol.Action.delete, role: .destructive) {
                         try! equipmentUseCases.delete(equipment)
                         router.navigateBack()
                     }

@@ -190,7 +190,7 @@ struct BrewHistoryList: View {
                         sheetCoordinator.present(.confirmRecipeCalibration(recipe, brew))
                     }
                 } label: {
-                    Label("Calibrate Recipe", systemImage: "target")
+                    Label("Calibrate Recipe", systemImage: CJSymbol.Action.calibrate)
                 }
             }
             .swipeActions(edge: .trailing) {

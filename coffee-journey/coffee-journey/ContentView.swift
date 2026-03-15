@@ -18,11 +18,11 @@ struct ContentView: View {
         AlertCoordinatorView {
             SheetCoordinatorView {
                 TabView {
-                    Tab("Coffee", systemImage: "cup.and.heat.waves") {
+                    Tab("Coffee", systemImage: CJSymbol.Navigation.coffee) {
                         CoffeeShelfView()
                             .environment(\.router, coffeeRouter)
                     }
-                    Tab("Equipment", systemImage: "wrench.and.screwdriver") {
+                    Tab("Equipment", systemImage: CJSymbol.Navigation.equipment) {
                         EquipmentShelfView()
                             .environment(\.router, equipmentRouter)
                     }

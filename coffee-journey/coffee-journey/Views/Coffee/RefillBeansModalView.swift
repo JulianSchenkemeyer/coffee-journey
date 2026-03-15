@@ -40,7 +40,7 @@ struct RefillBeansModalView: View {
                 Button {
                     refillBeans()
                 } label: {
-                    Label("Refill Beans", systemImage: "arrow.trianglehead.clockwise")
+                    Label("Refill Beans", systemImage: CJSymbol.Action.refill)
                         .fontWeight(.semibold)
                         .padding()
                 }

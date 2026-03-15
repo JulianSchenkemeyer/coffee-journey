@@ -148,7 +148,7 @@ struct RecipeCardView: View {
         .padding(16)
         .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
         .contextMenu {
-            Button("Recalibrate", systemImage: "gearshape.arrow.trianglehead.2.clockwise.rotate.90") {
+            Button("Recalibrate", systemImage: CJSymbol.Action.recalibrate) {
                 
                 let calibrationRequest = CalibrateRecipeRequest(
                     recipe: recipe,
@@ -162,17 +162,17 @@ struct RecipeCardView: View {
                 _ = try! recipeUseCases.calibrate(calibrationRequest)
             }
             
-            Button("Edit", systemImage: "pencil") {
+            Button("Edit Recipe", systemImage: CJSymbol.Action.edit) {
                 sheetCoordinator.present(.editRecipe(coffee, recipe))
             }
             
-            Button("Show Brews", systemImage: "square.stack.fill") {
+            Button("Show Brews", systemImage: CJSymbol.Navigation.brewHistory) {
                 router.navigate(to: .brewHistory(coffee, recipe))
             }
             
             Divider()
             
-            Button("Delete", systemImage: "trash", role: .destructive) {
+            Button("Delete", systemImage: CJSymbol.Action.delete, role: .destructive) {
                 print("delete")
             }
         }
