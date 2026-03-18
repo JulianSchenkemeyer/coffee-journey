@@ -11,6 +11,7 @@ import SwiftData
 
 struct BrewHistoryView: View {
     let coffee: Coffee
+    
     @State private var selectedRecipe: Recipe?
     
     init(coffee: Coffee, recipe: Recipe? = nil) {
@@ -48,6 +49,7 @@ struct BrewHistoryView: View {
 
 struct BrewHistoryList: View {
     @Environment(\.sheetCoordinator) private var sheetCoordinator
+    @Environment(\.alertCoordinator) private var alertCoordinator
     @Environment(\.brewUseCases) private var brewUseCases
 
     
@@ -195,7 +197,11 @@ struct BrewHistoryList: View {
             }
             .swipeActions(edge: .trailing) {
                 Button(role: .destructive) {
-                    try! brewUseCases.delete(brew)
+                    do {
+                        try brewUseCases.delete(brew)
+                    } catch {
+                        alertCoordinator.show(error)
+                    }
                 }
             }
             .padding(.vertical, 4)
