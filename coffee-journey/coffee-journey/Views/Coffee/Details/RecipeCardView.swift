@@ -13,9 +13,12 @@ struct RecipeCardView: View {
     @Environment(\.recipeUseCases) private var recipeUseCases
     @Environment(\.router) private var router
     @Environment(\.sheetCoordinator) private var sheetCoordinator
+    @Environment(\.alertCoordinator) private var alertCoordinator
     
     let coffee: Coffee
     let recipe: Recipe
+    
+    @State private var showDeleteConfirmation = false
     
     
     // MARK: - Helper Methods
@@ -159,7 +162,11 @@ struct RecipeCardView: View {
                     output: recipe.output
                 )
                 
-                _ = try! recipeUseCases.calibrate(calibrationRequest)
+                do {
+                    _ = try recipeUseCases.calibrate(calibrationRequest)
+                } catch {
+                    alertCoordinator.show(error)
+                }
             }
             
             Button("Edit Recipe", systemImage: CJSymbol.Action.edit) {
@@ -173,8 +180,21 @@ struct RecipeCardView: View {
             Divider()
             
             Button("Delete", systemImage: CJSymbol.Action.delete, role: .destructive) {
-                print("delete")
+                showDeleteConfirmation = true
             }
+        }
+        .alert("Delete \(recipe.name)?", isPresented: $showDeleteConfirmation) {
+            Button("Delete", role: .destructive) {
+                do {
+                    try recipeUseCases.delete(recipe)
+                    router.navigateBack()
+                } catch {
+                    alertCoordinator.show(error)
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will permanently delete this recipe.")
         }
     }
 }
