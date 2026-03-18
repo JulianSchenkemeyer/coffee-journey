@@ -11,10 +11,13 @@ import SwiftData
 
 struct EquipmentDetailsView: View {
     @Environment(\.sheetCoordinator) private var sheetCoordinator
+    @Environment(\.alertCoordinator) private var alertCoordinator
     @Environment(\.router) private var router
     @Environment(\.equipmentUseCases) private var equipmentUseCases
 
     let equipment: Equipment
+    
+    @State private var showDeleteConfirmation = false
 
     var body: some View {
         ScrollView {
@@ -39,19 +42,30 @@ struct EquipmentDetailsView: View {
         }
         .navigationTitle(equipment.name)
         .navigationSubtitle(equipment.brand)
-        .toolbarBackground(.hidden, for: .navigationBar)
+        .alert("Delete \(equipment.name)?", isPresented: $showDeleteConfirmation) {
+            Button("Delete", role: .destructive) {
+                do {
+                    try equipmentUseCases.delete(equipment)
+                    router.navigateBack()
+                } catch {
+                    alertCoordinator.show(error)
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will permanently delete this equipment.")
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu("Actions", systemImage: "ellipsis") {
-                    Button("Edit", systemImage: CJSymbol.Action.edit) {
+                    Button("Edit Equipment", systemImage: CJSymbol.Action.edit) {
                         sheetCoordinator.present(.addEquipment(equipment))
                     }
 
                     Divider()
 
                     Button("Delete", systemImage: CJSymbol.Action.delete, role: .destructive) {
-                        try! equipmentUseCases.delete(equipment)
-                        router.navigateBack()
+                        showDeleteConfirmation = true
                     }
                 }
             }
