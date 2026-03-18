@@ -16,6 +16,8 @@ struct CoffeeDetailsView: View {
     @Environment(\.coffeeUseCases) private var coffeeUseCases
     
     let coffee: Coffee
+
+    @State private var showDeleteConfirmation = false
     
     var amountLeft: String {
         return coffee.amountLeft.formatted(.number.precision(.fractionLength(0...1)))
@@ -49,6 +51,19 @@ struct CoffeeDetailsView: View {
         .navigationTitle(coffee.name)
         .navigationSubtitle(coffee.roaster)
         .toolbarBackground(.hidden, for: .navigationBar)
+        .alert("Delete \(coffee.name)?", isPresented: $showDeleteConfirmation) {
+            Button("Delete", role: .destructive) {
+                do {
+                    try coffeeUseCases.delete(coffee)
+                    router.navigateBack()
+                } catch {
+                    alertCoordinator.show(error)
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("This will permanently delete this coffee along with all its brews and recipes.")
+        }
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 Button("Refill", systemImage: CJSymbol.Action.refill) {
@@ -76,12 +91,7 @@ struct CoffeeDetailsView: View {
                     }
                     
                     Button("Delete", systemImage: CJSymbol.Action.delete, role: .destructive) {
-                        do {
-                            try coffeeUseCases.delete(coffee)
-                            router.navigateBack()
-                        } catch {
-                            alertCoordinator.show(error)
-                        }
+                        showDeleteConfirmation = true
                     }
                 }
             }
