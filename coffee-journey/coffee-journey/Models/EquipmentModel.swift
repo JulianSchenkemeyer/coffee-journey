@@ -32,23 +32,25 @@ enum EquipmentType: String, Codable, CaseIterable, CustomStringConvertible {
         EquipmentType(rawValue: typeDescription) ?? .machine
     }
     var notes: String
-    // last maintenance + maintenance intervall reminder?
+    var maintenanceCounter: Int?
     
     init(name: String, brand: String, type: String, notes: String) {
         self.name = name
         self.brand = brand
         self.typeDescription = type
         self.notes = notes
+        self.maintenanceCounter = 0
         self.brewerRecipes = []
         self.grinderRecipes = []
     }
-    
+
     // Convenience initializer with sensible defaults for SwiftData
     init() {
         self.name = ""
         self.brand = ""
         self.typeDescription = EquipmentType.machine.rawValue
         self.notes = ""
+        self.maintenanceCounter = 0
         self.brewerRecipes = []
         self.grinderRecipes = []
     }

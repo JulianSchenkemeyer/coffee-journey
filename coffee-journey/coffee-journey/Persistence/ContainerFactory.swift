@@ -12,8 +12,11 @@ import SwiftData
 enum ContainerFactory {
     
     static func create(configuration: [ModelConfiguration]) -> ModelContainer {
-        let schema = Schema([Coffee.self, Recipe.self, Equipment.self, Brew.self, Refill.self])
-        return try! ModelContainer(for: schema, configurations: configuration)
+        return try! ModelContainer(
+            for: Schema(SchemaV2.models),
+            migrationPlan: CoffeeJourneyMigrationPlan.self,
+            configurations: configuration
+        )
     }
     
     static func createInMemory() -> ModelContainer {
