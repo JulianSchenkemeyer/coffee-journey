@@ -20,7 +20,8 @@ struct BrewDrinkTests {
         let context = ModelContext(container)
         let coffeeRepo = SwiftDataCoffeeRepository(context: context)
         let recipeRepo = SwiftDataRecipeRepository(context: context)
-        let useCase = BrewDrink(coffeeRepository: coffeeRepo, recipeRepository: recipeRepo)
+        let equipmentRepo = SwiftDataEquipmentRepository(context: context)
+        let useCase = BrewDrink(coffeeRepository: coffeeRepo, recipeRepository: recipeRepo, equipmentRepository: equipmentRepo)
         return (useCase, context)
     }
 
@@ -43,8 +44,14 @@ struct BrewDrinkTests {
         context.insert(coffee)
         return coffee
     }
+    
+    private func makeEquipment(type: EquipmentType,into context: ModelContext) -> Equipment {
+        let equipment = Equipment(name: "Generic", brand: "Generic", type: type.rawValue, notes: "")
+        context.insert(equipment)
+        return equipment
+    }
 
-    private func makeRecipe(into context: ModelContext) -> Recipe {
+    private func makeRecipe(brewer: Equipment, grinder: Equipment, into context: ModelContext) -> Recipe {
         let recipe = Recipe(
             name: "Espresso",
             minTemperature: 90,
@@ -56,7 +63,9 @@ struct BrewDrinkTests {
             minBeans: 17.0,
             maxBeans: 19.0,
             minOutput: 30.0,
-            maxOutput: 36.0
+            maxOutput: 36.0,
+            brewer: brewer,
+            grinder: grinder
         )
         context.insert(recipe)
         return recipe
@@ -80,7 +89,9 @@ struct BrewDrinkTests {
     @Test func brewIncrementsTotalBrews() throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
-        let recipe = makeRecipe(into: context)
+        let grinder = makeEquipment(type: .grinder, into: context)
+        let brewer = makeEquipment(type: .machine, into: context)
+        let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew()
 
         try useCase(coffee: coffee, brew: brew, recipe: recipe)
@@ -95,7 +106,45 @@ struct BrewDrinkTests {
     @Test func brewIncrementBrewsSinceRefill() throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
-        let recipe = makeRecipe(into: context)
+        let grinder = makeEquipment(type: .grinder, into: context)
+        let brewer = makeEquipment(type: .machine, into: context)
+        let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
+        let brew = makeBrew()
+
+        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+
+        #expect(coffee.brewsSinceRefill == 1)
+    }
+    
+    @Test func brewIncrementsTotalEquimentUses() throws {
+        let (useCase, context) = try prepareEnvironment()
+        let coffee = makeCoffee(into: context)
+        let grinder = makeEquipment(type: .grinder, into: context)
+        let brewer = makeEquipment(type: .machine, into: context)
+        let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
+        let brew = makeBrew()
+
+        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+
+        #expect(recipe.grinder?.totalUses == 1)
+        #expect(recipe.brewer?.totalUses == 1)
+        #expect(recipe.grinder?.usesSinceLastMaintenance == 1)
+        #expect(recipe.brewer?.usesSinceLastMaintenance == 1)
+        
+        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+
+        #expect(recipe.grinder?.totalUses == 2)
+        #expect(recipe.brewer?.totalUses == 2)
+        #expect(recipe.grinder?.usesSinceLastMaintenance == 2)
+        #expect(recipe.brewer?.usesSinceLastMaintenance == 2)
+    }
+
+    @Test func brewIncrementEquipmentUsesSinceMaintainance() throws {
+        let (useCase, context) = try prepareEnvironment()
+        let coffee = makeCoffee(into: context)
+        let grinder = makeEquipment(type: .grinder, into: context)
+        let brewer = makeEquipment(type: .machine, into: context)
+        let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew()
 
         try useCase(coffee: coffee, brew: brew, recipe: recipe)
@@ -106,7 +155,9 @@ struct BrewDrinkTests {
     @Test func brewDeductsAmountFromCoffee() throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(amountLeft: 250.0, into: context)
-        let recipe = makeRecipe(into: context)
+        let grinder = makeEquipment(type: .grinder, into: context)
+        let brewer = makeEquipment(type: .machine, into: context)
+        let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew(amountCoffee: 18.0)
 
         try useCase(coffee: coffee, brew: brew, recipe: recipe)
@@ -117,7 +168,9 @@ struct BrewDrinkTests {
     @Test func brewDoesNotReduceAmountLeftBelowZero() throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(amountLeft: 10.0, into: context)
-        let recipe = makeRecipe(into: context)
+        let grinder = makeEquipment(type: .grinder, into: context)
+        let brewer = makeEquipment(type: .machine, into: context)
+        let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew(amountCoffee: 18.0)
 
         try useCase(coffee: coffee, brew: brew, recipe: recipe)
@@ -128,7 +181,9 @@ struct BrewDrinkTests {
     @Test func brewAppendsToCoffeeBrewList() throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
-        let recipe = makeRecipe(into: context)
+        let grinder = makeEquipment(type: .grinder, into: context)
+        let brewer = makeEquipment(type: .machine, into: context)
+        let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew()
 
         try useCase(coffee: coffee, brew: brew, recipe: recipe)
@@ -139,7 +194,9 @@ struct BrewDrinkTests {
     @Test func brewReturnsCoffee() throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
-        let recipe = makeRecipe(into: context)
+        let grinder = makeEquipment(type: .grinder, into: context)
+        let brewer = makeEquipment(type: .machine, into: context)
+        let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew()
 
         let result = try useCase(coffee: coffee, brew: brew, recipe: recipe)
@@ -152,7 +209,9 @@ struct BrewDrinkTests {
     @Test func thumbsUpUpdatesRecipeLastUsed() throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
-        let recipe = makeRecipe(into: context)
+        let grinder = makeEquipment(type: .grinder, into: context)
+        let brewer = makeEquipment(type: .machine, into: context)
+        let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew(rating: .thumbsUp)
 
         try useCase(coffee: coffee, brew: brew, recipe: recipe)
@@ -163,8 +222,10 @@ struct BrewDrinkTests {
     @Test func thumbsUpNarrowsRecipeRangeWhenBrewIsWithinBounds() throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
+        let grinder = makeEquipment(type: .grinder, into: context)
+        let brewer = makeEquipment(type: .machine, into: context)
         // Recipe has a wide range; brew falls within it — ranges should not change
-        let recipe = makeRecipe(into: context)   // beans: 17–19, grind: 8–10, temp: 90–96, time: 25–35, output: 30–36
+        let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)   // beans: 17–19, grind: 8–10, temp: 90–96, time: 25–35, output: 30–36
         let brew = makeBrew(rating: .thumbsUp)   // beans: 18, grind: 9, temp: 93, time: 30, output: 33
 
         try useCase(coffee: coffee, brew: brew, recipe: recipe)
@@ -178,6 +239,8 @@ struct BrewDrinkTests {
     @Test func thumbsUpExpandsRecipeRangeWhenBrewIsOutsideBounds() throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
+        _ = makeEquipment(type: .grinder, into: context)
+        _ = makeEquipment(type: .machine, into: context)
         // Recipe with exact single-value ranges
         let recipe = Recipe(
             name: "Espresso",
@@ -214,7 +277,9 @@ struct BrewDrinkTests {
     @Test func thumbsDownDoesNotUpdateRecipeLastUsed() throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
-        let recipe = makeRecipe(into: context)
+        let grinder = makeEquipment(type: .grinder, into: context)
+        let brewer = makeEquipment(type: .machine, into: context)
+        let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew(rating: .thumbsDown)
 
         try useCase(coffee: coffee, brew: brew, recipe: recipe)
@@ -225,7 +290,9 @@ struct BrewDrinkTests {
     @Test func thumbsDownDoesNotChangeRecipeRanges() throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
-        let recipe = makeRecipe(into: context)
+        let grinder = makeEquipment(type: .grinder, into: context)
+        let brewer = makeEquipment(type: .machine, into: context)
+        let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = Brew(
             date: .now,
             amountCoffee: 20.0,
@@ -254,7 +321,9 @@ struct BrewDrinkTests {
     @Test func thumbsDownStillAppendsBrew() throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
-        let recipe = makeRecipe(into: context)
+        let grinder = makeEquipment(type: .grinder, into: context)
+        let brewer = makeEquipment(type: .machine, into: context)
+        let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew(rating: .thumbsDown)
 
         try useCase(coffee: coffee, brew: brew, recipe: recipe)
