@@ -33,6 +33,8 @@ enum EquipmentType: String, Codable, CaseIterable, CustomStringConvertible {
     }
     var notes: String
     var maintenanceCounter: Int?
+    var totalUses: Int?
+    var usesSinceLastMaintenance: Int?
     
     init(name: String, brand: String, type: String, notes: String) {
         self.name = name
@@ -40,6 +42,8 @@ enum EquipmentType: String, Codable, CaseIterable, CustomStringConvertible {
         self.typeDescription = type
         self.notes = notes
         self.maintenanceCounter = 0
+        self.totalUses = 0
+        self.usesSinceLastMaintenance = 0
         self.brewerRecipes = []
         self.grinderRecipes = []
     }
@@ -51,6 +55,8 @@ enum EquipmentType: String, Codable, CaseIterable, CustomStringConvertible {
         self.typeDescription = EquipmentType.machine.rawValue
         self.notes = ""
         self.maintenanceCounter = 0
+        self.totalUses = 0
+        self.usesSinceLastMaintenance = 0
         self.brewerRecipes = []
         self.grinderRecipes = []
     }
