@@ -29,11 +29,12 @@ enum BrewUseCaseFactory {
     static func make(
         brewRepository: any BrewRepository,
         coffeeRepository: any CoffeeRepository,
-        recipeRepository: any RecipeRepository
+        recipeRepository: any RecipeRepository,
+        equipmentRepository: any EquipmentRepository
     ) -> BrewUseCases {
         let update = UpdateBrew(repository: brewRepository).callAsFunction
         let delete = DeleteBrew(repository: brewRepository).callAsFunction
-        let brew = BrewDrink(coffeeRepository: coffeeRepository, recipeRepository: recipeRepository).callAsFunction
+        let brew = BrewDrink(coffeeRepository: coffeeRepository, recipeRepository: recipeRepository, equipmentRepository: equipmentRepository).callAsFunction
         
         return BrewUseCases(
             update: update,

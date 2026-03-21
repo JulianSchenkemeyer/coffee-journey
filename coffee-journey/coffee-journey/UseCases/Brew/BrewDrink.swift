@@ -9,17 +9,33 @@ import Foundation
 @MainActor struct BrewDrink {
     let coffeeRepository: CoffeeRepository
     let recipeRepository: RecipeRepository
+    let equipmentRepository: EquipmentRepository
 
     @discardableResult
     func callAsFunction(coffee: Coffee, brew: Brew, recipe: Recipe) throws -> Coffee {
         let updatedRecipe = updateRecipe(recipe, with: brew)
         brew.recipe = updatedRecipe
         _ = try recipeRepository.update(updatedRecipe)
+        
+        if let grinder = updatedRecipe.grinder, let brewer = updatedRecipe.brewer {
+            let updatedGrinder = incrementEquipmentUses(grinder)
+            _ = try equipmentRepository.update(updatedGrinder)
+            
+            let updatedBrewer = incrementEquipmentUses(brewer)
+            _ = try equipmentRepository.update(updatedBrewer)
+        }
 
         let updatedCoffee = updateCoffee(coffee, brewAmount: brew.amountCoffee)
         updatedCoffee.brews.append(brew)
 
         return try coffeeRepository.update(updatedCoffee)
+    }
+    
+    private func incrementEquipmentUses(_ equipment: Equipment) -> Equipment {
+        equipment.totalUses = (equipment.totalUses ?? 0) + 1
+        equipment.usesSinceLastMaintenance = (equipment.usesSinceLastMaintenance ?? 0) + 1
+        
+        return equipment
     }
 
     private func updateRecipe(_ recipe: Recipe, with brew: Brew) -> Recipe {

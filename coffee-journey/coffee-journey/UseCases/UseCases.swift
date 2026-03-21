@@ -31,7 +31,8 @@ enum UseCaseFactory {
         let brewUseCases = BrewUseCaseFactory.make(
             brewRepository: brewRepository,
             coffeeRepository: coffeeRepository,
-            recipeRepository: recipeRepository
+            recipeRepository: recipeRepository,
+            equipmentRepository: equipmentRepository
         )
         
         return (
