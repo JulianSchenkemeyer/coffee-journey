@@ -33,6 +33,7 @@ enum EquipmentType: String, Codable, CaseIterable, CustomStringConvertible {
     }
     var notes: String
     var maintenanceCounter: Int?
+    var lastMaintenance: Date?
     var totalUses: Int?
     var usesSinceLastMaintenance: Int?
     

@@ -173,4 +173,22 @@ struct EquipmentUseCasesTests {
         
         #expect(equipment.usesSinceLastMaintenance == 0)
     }
+    
+    @Test func performMaintenanceUpdatesLastMaintenanceDate() throws {
+        let (repository, context) = try prepareEnvironment()
+        let useCase = PerformMaintenance(repository: repository)
+        let equipment = makeEquipment(into: context)
+        
+        equipment.totalUses = 3
+        equipment.usesSinceLastMaintenance = 3
+        _ = try context.save()
+        
+        let before = Date.now
+        try useCase(equipment: equipment)
+        let after = Date.now
+        
+        let lastMaintenance = try #require(equipment.lastMaintenance)
+        #expect(lastMaintenance >= before)
+        #expect(lastMaintenance <= after)
+    }
 }
