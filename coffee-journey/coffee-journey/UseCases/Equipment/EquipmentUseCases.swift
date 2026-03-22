@@ -14,6 +14,7 @@ struct EquipmentUseCases {
     var create: @MainActor (CreateEquipmentRequest) throws -> Equipment
     var update: @MainActor (Equipment, UpdateEquipmentRequest) throws -> Equipment
     var delete: @MainActor (Equipment) throws -> Void
+    var performMaintenance: @MainActor (Equipment) throws -> Equipment
 }
 
 enum EquipmentUseCaseFactory {
@@ -23,11 +24,13 @@ enum EquipmentUseCaseFactory {
         let create = CreateEquipment(repository: repository).callAsFunction
         let update = UpdateEquipment(repository: repository).callAsFunction
         let delete = DeleteEquipment(repository: repository).callAsFunction
+        let performMaintenance = PerformMaintenance(repository: repository).callAsFunction
         
         return EquipmentUseCases(
             create: create,
             update: update,
-            delete: delete
+            delete: delete,
+            performMaintenance: performMaintenance
         )
     }
 }
@@ -42,6 +45,9 @@ extension EnvironmentValues {
                 fatalError("EquipmentUseCases not injected")
             },
             delete: { _ in
+                fatalError("EquipmentUseCases not injected")
+            },
+            performMaintenance: { _ in
                 fatalError("EquipmentUseCases not injected")
             }
         )

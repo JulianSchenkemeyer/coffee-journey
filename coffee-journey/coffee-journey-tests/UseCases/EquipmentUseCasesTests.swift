@@ -125,4 +125,52 @@ struct EquipmentUseCasesTests {
         let remaining = try context.fetch(FetchDescriptor<Equipment>())
         #expect(remaining.isEmpty)
     }
+    
+    // MARK: - PerformMaintenance
+    
+    @Test func performMaintenanceIncrementsMaintenanceCounter() throws {
+        let (repository, context) = try prepareEnvironment()
+        let useCase = PerformMaintenance(repository: repository)
+        let equipment = makeEquipment(into: context)
+        
+        equipment.totalUses = 3
+        equipment.usesSinceLastMaintenance = 3
+        _ = try context.save()
+        
+        try useCase(equipment: equipment)
+        
+        #expect(equipment.maintenanceCounter == 1)
+        
+        try useCase(equipment: equipment)
+        
+        #expect(equipment.maintenanceCounter == 2)
+    }
+    
+    @Test func performMaintenanceDoesNotChangeTotalUses() throws {
+        let (repository, context) = try prepareEnvironment()
+        let useCase = PerformMaintenance(repository: repository)
+        let equipment = makeEquipment(into: context)
+        
+        equipment.totalUses = 3
+        equipment.usesSinceLastMaintenance = 3
+        _ = try context.save()
+        
+        try useCase(equipment: equipment)
+        
+        #expect(equipment.totalUses == 3)
+    }
+    
+    @Test func performMaintenanceResets() throws {
+        let (repository, context) = try prepareEnvironment()
+        let useCase = PerformMaintenance(repository: repository)
+        let equipment = makeEquipment(into: context)
+        
+        equipment.totalUses = 3
+        equipment.usesSinceLastMaintenance = 3
+        _ = try context.save()
+        
+        try useCase(equipment: equipment)
+        
+        #expect(equipment.usesSinceLastMaintenance == 0)
+    }
 }
