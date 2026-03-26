@@ -28,6 +28,9 @@ enum EquipmentType: String, Codable, CaseIterable, CustomStringConvertible {
     var name: String
     var brand: String
     var typeDescription: String
+
+    @Relationship(deleteRule: .cascade, inverse: \MaintenanceTemplate.equipment) var maintenanceTemplate: MaintenanceTemplate?
+    
     var type: EquipmentType {
         EquipmentType(rawValue: typeDescription) ?? .machine
     }

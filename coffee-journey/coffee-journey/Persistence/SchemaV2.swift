@@ -22,6 +22,9 @@ enum SchemaV2: VersionedSchema {
             Equipment.self,
             Brew.self,
             Refill.self,
+            MaintenanceTemplate.self,
+            MaintenanceTemplateStep.self,
+            MaintenanceInstance.self,
         ]
     }
 }
