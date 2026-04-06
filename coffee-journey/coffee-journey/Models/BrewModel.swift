@@ -33,46 +33,30 @@ enum BrewTaste: Int, CaseIterable, CustomStringConvertible {
     }
 }
 
-@Model final class Brew {
-    var coffee: Coffee?
-    var recipe: Recipe?
-    
-    var date: Date
-    var amountCoffee: Double
-    var grindSetting: Double
-    var temperature: Int
-    var extractionTime: Int
-    var taste: Int
+typealias Brew = SchemaV2.Brew
+
+
+extension Brew {
     var tasteDescription: BrewTaste {
         BrewTaste(rawValue: taste) ?? .balanced
     }
     
-    var output: Double
-    var ratingString: String
     var rating: BrewRating {
         BrewRating(rawValue: ratingString) ?? .thumbsUp
     }
     
-    init(date: Date, amountCoffee: Double, grindSetting: Double, temperature: Int, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
-        self.date = date
-        self.amountCoffee = amountCoffee
-        self.grindSetting = grindSetting
-        self.temperature = temperature
-        self.extractionTime = extractionTime
-        self.taste = taste
-        self.output = output
-        self.ratingString = rating.rawValue
-    }
-    
-    init(recipe: Recipe, date: Date, amountCoffee: Double, grindSetting: Double, temperature: Int, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
+    convenience init(recipe: Recipe, date: Date, amountCoffee: Double, grindSetting: Double, temperature: Int, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
+        
+        self.init(
+            date: date,
+            amountCoffee: amountCoffee,
+            grindSetting: grindSetting,
+            temperature: temperature,
+            extractionTime: extractionTime,
+            taste: taste,
+            output: output,
+            rating: rating
+        )
         self.recipe = recipe
-        self.date = date
-        self.amountCoffee = amountCoffee
-        self.grindSetting = grindSetting
-        self.temperature = temperature
-        self.extractionTime = extractionTime
-        self.taste = taste
-        self.output = output
-        self.ratingString = rating.rawValue
     }
 }

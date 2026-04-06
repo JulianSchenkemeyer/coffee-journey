@@ -21,51 +21,14 @@ enum EquipmentType: String, Codable, CaseIterable, CustomStringConvertible {
     }
 }
 
-@Model final class Equipment: Identifiable {
-    var brewerRecipes: [Recipe]
-    var grinderRecipes: [Recipe]
-    
-    var name: String
-    var brand: String
-    var typeDescription: String
+typealias Equipment = SchemaV2.Equipment
 
-    @Relationship(deleteRule: .cascade, inverse: \MaintenanceTemplate.equipment) var maintenanceTemplate: MaintenanceTemplate?
-    
+
+extension Equipment {
     var type: EquipmentType {
         EquipmentType(rawValue: typeDescription) ?? .machine
     }
-    var notes: String
-    var maintenanceCounter: Int?
-    var lastMaintenance: Date?
-    var totalUses: Int?
-    var usesSinceLastMaintenance: Int?
-    
-    init(name: String, brand: String, type: String, notes: String) {
-        self.name = name
-        self.brand = brand
-        self.typeDescription = type
-        self.notes = notes
-        self.maintenanceCounter = 0
-        self.totalUses = 0
-        self.usesSinceLastMaintenance = 0
-        self.brewerRecipes = []
-        self.grinderRecipes = []
-    }
-
-    // Convenience initializer with sensible defaults for SwiftData
-    init() {
-        self.name = ""
-        self.brand = ""
-        self.typeDescription = EquipmentType.machine.rawValue
-        self.notes = ""
-        self.maintenanceCounter = 0
-        self.totalUses = 0
-        self.usesSinceLastMaintenance = 0
-        self.brewerRecipes = []
-        self.grinderRecipes = []
-    }
 }
-
 
 extension Equipment {
     // Predicates for use with @Query — #Predicate only supports local variable captures

@@ -100,7 +100,7 @@ struct CoffeeDetailsView: View {
 }
 
 
-#Preview {
+#Preview(traits: .modifier(SampleDataModifier())) {
     NavigationStack {
         CoffeeDetailsView(coffee: .Mock.espresso)
     }
