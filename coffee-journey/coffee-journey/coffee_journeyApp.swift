@@ -10,7 +10,7 @@ import SwiftData
 
 @main
 struct coffee_journeyApp: App {
-    let container: ModelContainer = ContainerFactory.createDefault()
+    let container: ModelContainer
     let context: ModelContext
     let sheetManager = SheetCoordinator()
     
@@ -20,6 +20,7 @@ struct coffee_journeyApp: App {
     let brewUseCases: BrewUseCases
     
     init() {
+        self.container = ContainerFactory.createDefault()
         self.context = ModelContext(container)
         
         // Create all use cases once during initialization
