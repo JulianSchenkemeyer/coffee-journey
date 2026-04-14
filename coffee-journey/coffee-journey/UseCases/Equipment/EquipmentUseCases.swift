@@ -15,6 +15,9 @@ struct EquipmentUseCases {
     var update: @MainActor (Equipment, UpdateEquipmentRequest) throws -> Equipment
     var delete: @MainActor (Equipment) throws -> Void
     var performMaintenance: @MainActor (Equipment) throws -> Equipment
+    var createMaintenanceTemplate: @MainActor (Equipment) throws -> Equipment
+    var updateMaintenanceTemplate: @MainActor (MaintenanceTemplate, UpdateMaintenanceTemplateRequest) throws -> MaintenanceTemplate
+    var deleteMaintenanceTemplate: @MainActor (Equipment) throws -> Equipment
 }
 
 enum EquipmentUseCaseFactory {
@@ -25,12 +28,18 @@ enum EquipmentUseCaseFactory {
         let update = UpdateEquipment(repository: repository).callAsFunction
         let delete = DeleteEquipment(repository: repository).callAsFunction
         let performMaintenance = PerformMaintenance(repository: repository).callAsFunction
-        
+        let createMaintenanceTemplate = CreateMaintenanceTemplate(repository: repository).callAsFunction
+        let updateMaintenanceTemplate = UpdateMaintenanceTemplate(repository: repository).callAsFunction
+        let deleteMaintenanceTemplate = DeleteMaintenanceTemplate(repository: repository).callAsFunction
+
         return EquipmentUseCases(
             create: create,
             update: update,
             delete: delete,
-            performMaintenance: performMaintenance
+            performMaintenance: performMaintenance,
+            createMaintenanceTemplate: createMaintenanceTemplate,
+            updateMaintenanceTemplate: updateMaintenanceTemplate,
+            deleteMaintenanceTemplate: deleteMaintenanceTemplate
         )
     }
 }
@@ -48,6 +57,15 @@ extension EnvironmentValues {
                 fatalError("EquipmentUseCases not injected")
             },
             performMaintenance: { _ in
+                fatalError("EquipmentUseCases not injected")
+            },
+            createMaintenanceTemplate: { _ in
+                fatalError("EquipmentUseCases not injected")
+            },
+            updateMaintenanceTemplate: { _, _ in
+                fatalError("EquipmentUseCases not injected")
+            },
+            deleteMaintenanceTemplate: { _ in
                 fatalError("EquipmentUseCases not injected")
             }
         )
