@@ -27,7 +27,7 @@ struct SampleDataModifier: PreviewModifier {
         let context = container.mainContext
         
         // Seed context with sample data
-        try SampleDataFactory.seedContext(context)
+        try SampleDataFactoryV2.seedContext(context)
         
         return container
     }
