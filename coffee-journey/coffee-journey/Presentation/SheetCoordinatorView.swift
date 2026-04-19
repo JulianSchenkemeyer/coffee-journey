@@ -49,6 +49,8 @@ struct SheetCoordinatorView<Content: View>: View {
                 .presentationDetents([.fraction(0.45)])
         case .addEquipment(let equipment):
             EquipmentFormView(equipment: equipment)
+        case .maintenanceTemplate(let template):
+            MaintenanceTemplateForm(template: template)
         }
     }
 }

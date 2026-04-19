@@ -17,6 +17,7 @@ import SwiftUI
         case confirmRecipeCalibration(Recipe, Brew)
         case confirmEmptying(Coffee)
         case addEquipment(Equipment?)
+        case maintenanceTemplate(MaintenanceTemplate)
         
         var id: String {
             switch self {
@@ -27,6 +28,7 @@ import SwiftUI
             case .confirmRecipeCalibration: "confirmRecipeCalibration"
             case .addEquipment: "addEquipment"
             case .confirmEmptying: "confirmEmptying"
+            case .maintenanceTemplate: "maintenanceTemplate"
             }
         }
     }
