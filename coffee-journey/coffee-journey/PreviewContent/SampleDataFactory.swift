@@ -96,12 +96,20 @@ enum SampleDataFactory {
         var brews: [Brew] = []
         let recipes = coffee.recipes
         
+        
         for index in 0..<10 {
             let daysAgo = -index / 2
             let hour = index % 2 == 0 ? 9 : 14
             
+            var beanAge: Int? = nil
+            if let roastDate = coffee.newestRefill?.roastDate {
+                let date = Calendar.current.date(byAdding: .day, value: daysAgo, to: .now)!
+                beanAge = Calendar.current.dateComponents([.day], from: roastDate, to: date).day!
+            }
+            
             let brew = Brew(
                 date: DateHelper.daysAgo(daysAgo, hour: hour, minute: 30),
+                beanAge: beanAge,
                 amountCoffee: index % 2 == 0 ? 18.0 : 20.0,
                 grindSetting: index % 2 == 0 ? 5.0 : 20.0,
                 temperature: index % 2 == 0 ? 93 : 96,

@@ -143,6 +143,7 @@ struct BrewDrinkModalView: View {
         
         let brew = Brew(
             date: .now,
+            beanAge: coffee.beanAge,
             amountCoffee: usedCoffee,
             grindSetting: grindSetting,
             temperature: temperature,

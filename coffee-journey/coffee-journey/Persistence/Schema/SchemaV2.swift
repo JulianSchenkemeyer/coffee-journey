@@ -13,6 +13,7 @@ import SwiftData
 ///
 /// Changes from V1:
 /// - `Equipment` gains `maintenanceCounter: Int` (default 0, lightweight migration).
+/// - New schemas for `MaintenanceTemplate`, `MaintenanceTemplateStep` and `MaintenanceInstance`
 enum SchemaV2: VersionedSchema {
     static var versionIdentifier: Schema.Version { .init(2, 0, 0) }
 

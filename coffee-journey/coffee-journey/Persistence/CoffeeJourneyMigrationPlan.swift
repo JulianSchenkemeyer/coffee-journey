@@ -22,7 +22,7 @@ import SwiftData
 enum CoffeeJourneyMigrationPlan: SchemaMigrationPlan {
 
     static var schemas: [any VersionedSchema.Type] {
-        [SchemaV1.self, SchemaV2.self]
+        [SchemaV1.self, SchemaV2.self, SchemaV3.self]
     }
 
     static var stages: [MigrationStage] {
@@ -31,6 +31,7 @@ enum CoffeeJourneyMigrationPlan: SchemaMigrationPlan {
             // Optional columns are allowed by lightweight migration — existing rows
             // get nil, new Equipment instances start at nil (treat nil as 0 at the call site).
             .lightweight(fromVersion: SchemaV1.self, toVersion: SchemaV2.self),
+            .lightweight(fromVersion: SchemaV2.self, toVersion: SchemaV3.self)
         ]
     }
 }

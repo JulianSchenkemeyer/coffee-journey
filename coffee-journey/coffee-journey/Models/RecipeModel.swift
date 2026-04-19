@@ -8,7 +8,7 @@ import Foundation
 import SwiftData
 
 
-typealias Recipe = SchemaV2.Recipe
+typealias Recipe = SchemaV3.Recipe
 
 
 extension Recipe {

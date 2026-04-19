@@ -272,6 +272,7 @@ enum SampleDataFactoryV2 {
         ) -> Brew {
             let b = Brew(
                 date: d(date),
+                beanAge: nil,
                 amountCoffee: amountCoffee,
                 grindSetting: grind,
                 temperature: temp,

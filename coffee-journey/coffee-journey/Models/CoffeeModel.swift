@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 
-typealias Coffee = SchemaV2.Coffee
+typealias Coffee = SchemaV3.Coffee
 
 
 extension Coffee {
@@ -20,6 +20,15 @@ extension Coffee {
     var newestRefill: Refill? {
         refills.max(by: { $0.date < $1.date })
     }
+    
+    var beanAge: Int? {
+        guard let roastDate = newestRefill?.roastDate else {
+            return nil
+        }
+        
+        return Calendar.current.dateComponents([.day], from: roastDate, to: .now).day
+    }
+    
     var amount: Double {
         newestRefill?.amount ?? 0
     }

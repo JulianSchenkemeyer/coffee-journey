@@ -33,7 +33,7 @@ enum BrewTaste: Int, CaseIterable, CustomStringConvertible {
     }
 }
 
-typealias Brew = SchemaV2.Brew
+typealias Brew = SchemaV3.Brew
 
 
 extension Brew {
@@ -45,10 +45,25 @@ extension Brew {
         BrewRating(rawValue: ratingString) ?? .thumbsUp
     }
     
-    convenience init(recipe: Recipe, date: Date, amountCoffee: Double, grindSetting: Double, temperature: Int, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
-        
+    convenience init(recipe: Recipe, date: Date, beanAge: Int?, amountCoffee: Double, grindSetting: Double, temperature: Int, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
         self.init(
             date: date,
+            beanAge: beanAge,
+            amountCoffee: amountCoffee,
+            grindSetting: grindSetting,
+            temperature: temperature,
+            extractionTime: extractionTime,
+            taste: taste,
+            output: output,
+            rating: rating
+        )
+        self.recipe = recipe
+    }
+    
+    convenience init(recipe: Recipe, date: Date, amountCoffee: Double, grindSetting: Double, temperature: Int, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
+        self.init(
+            date: date,
+            beanAge: nil,
             amountCoffee: amountCoffee,
             grindSetting: grindSetting,
             temperature: temperature,

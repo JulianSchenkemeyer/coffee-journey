@@ -14,6 +14,7 @@ extension Brew {
             // Today
             Brew(
                 date: DateHelper.daysAgo(0, hour: 14, minute: 30),
+                beanAge: 15,
                 amountCoffee: 20.0,
                 grindSetting: 20.0,
                 temperature: 96,
@@ -24,6 +25,7 @@ extension Brew {
             ),
             Brew(
                 date: DateHelper.daysAgo(0, hour: 9, minute: 13),
+                beanAge: 15,
                 amountCoffee: 18.0,
                 grindSetting: 5.0,
                 temperature: 93,
@@ -35,6 +37,7 @@ extension Brew {
             // 1 day ago
             Brew(
                 date: DateHelper.daysAgo(-1, hour: 8, minute: 33),
+                beanAge: 14,
                 amountCoffee: 20.0,
                 grindSetting: 20.0,
                 temperature: 96,
@@ -45,6 +48,7 @@ extension Brew {
             ),
             Brew(
                 date: DateHelper.daysAgo(-1, hour: 16, minute: 44),
+                beanAge: 14,
                 amountCoffee: 18.0,
                 grindSetting: 5.0,
                 temperature: 93,
@@ -56,6 +60,7 @@ extension Brew {
             // 2 days ago
             Brew(
                 date: DateHelper.daysAgo(-2, hour: 14, minute: 12),
+                beanAge: 13,
                 amountCoffee: 20.0,
                 grindSetting: 20.0,
                 temperature: 96,
@@ -66,6 +71,7 @@ extension Brew {
             ),
             Brew(
                 date: DateHelper.daysAgo(-2, hour: 17, minute: 04),
+                beanAge: 13,
                 amountCoffee: 18.0,
                 grindSetting: 5.0,
                 temperature: 93,
@@ -77,6 +83,7 @@ extension Brew {
             // 3 days ago
             Brew(
                 date: DateHelper.daysAgo(-3, hour: 12, minute: 56),
+                beanAge: 12,
                 amountCoffee: 20.0,
                 grindSetting: 20.0,
                 temperature: 96,
@@ -87,6 +94,7 @@ extension Brew {
             ),
             Brew(
                 date: DateHelper.daysAgo(-3, hour: 15, minute: 28),
+                beanAge: 12,
                 amountCoffee: 18.0,
                 grindSetting: 5.0,
                 temperature: 93,
@@ -98,6 +106,7 @@ extension Brew {
             // 4 days ago
             Brew(
                 date: DateHelper.daysAgo(-4, hour: 12, minute: 56),
+                beanAge: 11,
                 amountCoffee: 20.0,
                 grindSetting: 20.0,
                 temperature: 96,
@@ -108,6 +117,7 @@ extension Brew {
             ),
             Brew(
                 date: DateHelper.daysAgo(-4, hour: 15, minute: 28),
+                beanAge: 11,
                 amountCoffee: 18.0,
                 grindSetting: 5.0,
                 temperature: 93,
