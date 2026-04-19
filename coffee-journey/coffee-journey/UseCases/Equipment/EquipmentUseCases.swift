@@ -15,7 +15,7 @@ struct EquipmentUseCases {
     var update: @MainActor (Equipment, UpdateEquipmentRequest) throws -> Equipment
     var delete: @MainActor (Equipment) throws -> Void
     var performMaintenance: @MainActor (Equipment) throws -> Equipment
-    var createMaintenanceTemplate: @MainActor (Equipment) throws -> Equipment
+    var createMaintenanceTemplate: @MainActor (Equipment) throws -> MaintenanceTemplate
     var updateMaintenanceTemplate: @MainActor (MaintenanceTemplate, UpdateMaintenanceTemplateRequest) throws -> MaintenanceTemplate
     var deleteMaintenanceTemplate: @MainActor (Equipment) throws -> Equipment
 }

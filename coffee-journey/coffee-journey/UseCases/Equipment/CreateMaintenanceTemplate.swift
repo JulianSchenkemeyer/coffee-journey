@@ -12,13 +12,15 @@ import Foundation
     let repository: EquipmentRepository
 
     @discardableResult
-    func callAsFunction(equipment: Equipment) throws -> Equipment {
+    func callAsFunction(equipment: Equipment) throws -> MaintenanceTemplate {
         let template = MaintenanceTemplate(
             title: equipment.name,
             equipment: equipment,
             steps: []
         )
         equipment.maintenanceTemplate = template
-        return try repository.update(equipment)
+        _ = try repository.update(equipment)
+        
+        return template
     }
 }
