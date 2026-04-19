@@ -27,6 +27,7 @@ struct MaintenanceTemplateForm: View {
                     ForEach(steps) { step in
                         stepRow(for: step)
                     }
+                    .onMove(perform: moveStep)
                     
                     Button {
                         addStep()
@@ -56,14 +57,6 @@ struct MaintenanceTemplateForm: View {
         if let index = steps.firstIndex(where: { $0.id == step.id }) {
             MaintenanceStepRow(step: $steps[index], isFocused: focusedStepID == step.id)
                 .focused($focusedStepID, equals: step.id)
-                .draggable(step.id.uuidString) {
-                    Text(step.title.isEmpty ? "New Step" : step.title)
-                        .padding(8)
-                        .background(.regularMaterial, in: .rect(cornerRadius: 8))
-                }
-                .dropDestination(for: String.self) { droppedItems, _ in
-                    return handleDrop(droppedItems, onto: step)
-                }
                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                     Button(role: .destructive) {
                         deleteStep(at: index)
@@ -74,18 +67,8 @@ struct MaintenanceTemplateForm: View {
         }
     }
 
-    private func handleDrop(_ droppedItems: [String], onto targetStep: StepItem) -> Bool {
-        guard let draggedIDString = droppedItems.first,
-              let draggedID = UUID(uuidString: draggedIDString),
-              let fromIndex = steps.firstIndex(where: { $0.id == draggedID }),
-              let toIndex = steps.firstIndex(where: { $0.id == targetStep.id }),
-              fromIndex != toIndex else { return false }
-
-        withAnimation {
-            let item: StepItem = steps.remove(at: fromIndex)
-            steps.insert(item, at: toIndex)
-        }
-        return true
+    private func moveStep(from source: IndexSet, to destination: Int) {
+        steps.move(fromOffsets: source, toOffset: destination)
     }
 
     private func deleteStep(at index: Int) {
