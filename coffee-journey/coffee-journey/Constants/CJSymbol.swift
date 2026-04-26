@@ -33,5 +33,9 @@ enum CJSymbol {
     enum Equipment {
         static let type = "tag.fill"
         static let brand = "building.2.fill"
+        static let uses = "cup.and.heat.waves.fill"
+        static let maintenance = "wrench.fill"
+        static let addMaintenance = "pencil.and.list.clipboard" //"text.pad.header.badge.plus"
+        static let maintenanceInstance = "list.bullet.clipboard"
     }
 }
