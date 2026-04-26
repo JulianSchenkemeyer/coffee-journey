@@ -36,6 +36,34 @@ struct EquipmentHeaderView: View {
                     Text(equipment.brand.isEmpty ? "—" : equipment.brand)
                         .gridColumnAlignment(.trailing)
                 }
+                
+                GridRow {
+                    Label("Total Uses", systemImage: CJSymbol.Equipment.uses)
+                        .foregroundStyle(.secondary)
+
+                    Spacer()
+                        .gridCellUnsizedAxes(.vertical)
+                    
+                    Text("\(equipment.totalUses ?? 0)")
+                }
+                
+                GridRow {
+                    Label("Last Maintenance", systemImage: CJSymbol.Equipment.maintenance)
+                        .foregroundStyle(.secondary)
+                    
+                    Spacer()
+                        .gridCellUnsizedAxes(.vertical)
+                    
+                    if let lastMaintenance = equipment.lastMaintenance {
+                        Text(lastMaintenance, format: .dateTime.day().month().year())
+                            .gridColumnAlignment(.trailing)
+                    } else {
+                        Text("—")
+                            .gridColumnAlignment(.trailing)
+                    }
+                }
+                
+                
             }
             .font(.callout)
             .frame(maxWidth: .infinity)
