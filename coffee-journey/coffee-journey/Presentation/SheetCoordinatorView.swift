@@ -50,7 +50,7 @@ struct SheetCoordinatorView<Content: View>: View {
         case .addEquipment(let equipment):
             EquipmentFormView(equipment: equipment)
         case .maintenanceTemplate(let template):
-            MaintenanceTemplateForm(template: template)
+            MaintenanceView(maintenanceTemplate: template)
         }
     }
 }

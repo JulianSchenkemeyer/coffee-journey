@@ -56,6 +56,18 @@ struct EquipmentDetailsView: View {
             Text("This will permanently delete this equipment.")
         }
         .toolbar {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                if equipment.maintenanceTemplate == nil {
+                    Button("Add Maintenance", systemImage: CJSymbol.Equipment.addMaintenance) {
+                        openMaintenanceTemplate()
+                    }
+                } else {
+                    Button("Add Maintenance", systemImage: CJSymbol.Equipment.maintenanceInstance) {
+                        openMaintenanceTemplate()
+                    }
+                }
+                
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Menu("Actions", systemImage: "ellipsis") {
                     Button("Edit Equipment", systemImage: CJSymbol.Action.edit) {
@@ -68,6 +80,19 @@ struct EquipmentDetailsView: View {
                         showDeleteConfirmation = true
                     }
                 }
+            }
+        }
+    }
+    
+    private func openMaintenanceTemplate() {
+        if let template = equipment.maintenanceTemplate {
+            sheetCoordinator.present(.maintenanceTemplate(template))
+        } else {
+            do {
+                let template = try equipmentUseCases.createMaintenanceTemplate(equipment)
+                sheetCoordinator.present(.maintenanceTemplate(template))
+            } catch {
+                alertCoordinator.show(error)
             }
         }
     }
