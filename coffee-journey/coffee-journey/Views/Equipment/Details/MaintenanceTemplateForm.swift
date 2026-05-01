@@ -21,34 +21,32 @@ struct MaintenanceTemplateForm: View {
     @FocusState private var focusedStepID: UUID?
     
     var body: some View {
-        NavigationStack {
-            List {
-                Section {
-                    ForEach(steps) { step in
-                        stepRow(for: step)
-                    }
-                    .onMove(perform: moveStep)
-                    
-                    Button {
-                        addStep()
-                    } label: {
-                        Label("New Step", systemImage: "plus.circle.fill")
-                            .foregroundStyle(.green)
-                    }
+        List {
+            Section {
+                ForEach(steps) { step in
+                    stepRow(for: step)
+                }
+                .onMove(perform: moveStep)
+
+                Button {
+                    addStep()
+                } label: {
+                    Label("New Step", systemImage: "plus.circle.fill")
+                        .foregroundStyle(.green)
                 }
             }
-            .navigationTitle("Maintenance Template")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(role: .confirm) { submit() }
-                }
+        }
+        .navigationTitle("Maintenance Template")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button(role: .confirm) { submit() }
             }
-            .onAppear {
-                steps = template.steps
-                    .sorted { $0.sortOrder < $1.sortOrder }
-                    .map { StepItem(title: $0.title, notes: $0.notes) }
-            }
+        }
+        .onAppear {
+            steps = template.steps
+                .sorted { $0.sortOrder < $1.sortOrder }
+                .map { StepItem(title: $0.title, notes: $0.notes) }
         }
     }
     
@@ -143,17 +141,21 @@ struct StepItem: Identifiable {
 
 
 #Preview(traits: .modifier(SampleDataModifier())) {
-    MaintenanceTemplateForm(template: MaintenanceTemplate(title: "Espresso Machine", equipment: nil, steps: []))
+    NavigationStack {
+        MaintenanceTemplateForm(template: MaintenanceTemplate(title: "Espresso Machine", equipment: nil, steps: []))
+    }
 }
 
 #Preview("With existing steps", traits: .modifier(SampleDataModifier())) {
-    MaintenanceTemplateForm(template: MaintenanceTemplate(
-        title: "Espresso Machine",
-        equipment: nil,
-        steps: [
-            MaintenanceTemplateStep(title: "Backflush with water", notes: "", sortOrder: 0),
-            MaintenanceTemplateStep(title: "Backflush with cleaner", notes: "Use Cafiza", sortOrder: 1),
-            MaintenanceTemplateStep(title: "Rinse group head", notes: "", sortOrder: 2),
-        ]
-    ))
+    NavigationStack {
+        MaintenanceTemplateForm(template: MaintenanceTemplate(
+            title: "Espresso Machine",
+            equipment: nil,
+            steps: [
+                MaintenanceTemplateStep(title: "Backflush with water", notes: "", sortOrder: 0),
+                MaintenanceTemplateStep(title: "Backflush with cleaner", notes: "Use Cafiza", sortOrder: 1),
+                MaintenanceTemplateStep(title: "Rinse group head", notes: "", sortOrder: 2),
+            ]
+        ))
+    }
 }
