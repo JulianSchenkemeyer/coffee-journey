@@ -14,7 +14,7 @@ struct EquipmentUseCases {
     var create: @MainActor (CreateEquipmentRequest) throws -> Equipment
     var update: @MainActor (Equipment, UpdateEquipmentRequest) throws -> Equipment
     var delete: @MainActor (Equipment) throws -> Void
-    var performMaintenance: @MainActor (Equipment) throws -> Equipment
+    var performMaintenance: @MainActor (Equipment, [String], [String]) throws -> Equipment
     var createMaintenanceTemplate: @MainActor (Equipment) throws -> MaintenanceTemplate
     var updateMaintenanceTemplate: @MainActor (MaintenanceTemplate, UpdateMaintenanceTemplateRequest) throws -> MaintenanceTemplate
     var deleteMaintenanceTemplate: @MainActor (Equipment) throws -> Equipment
@@ -56,7 +56,7 @@ extension EnvironmentValues {
             delete: { _ in
                 fatalError("EquipmentUseCases not injected")
             },
-            performMaintenance: { _ in
+            performMaintenance: { _, _, _ in
                 fatalError("EquipmentUseCases not injected")
             },
             createMaintenanceTemplate: { _ in
