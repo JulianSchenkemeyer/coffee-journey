@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import SwiftData
 
 
 struct MaintenanceStepData {
+    let id: PersistentIdentifier?
     let title: String
     let notes: String
     let sortOrder: Int

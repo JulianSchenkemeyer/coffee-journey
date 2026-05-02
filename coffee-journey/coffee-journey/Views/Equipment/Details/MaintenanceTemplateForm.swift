@@ -46,7 +46,7 @@ struct MaintenanceTemplateForm: View {
         .onAppear {
             steps = template.steps
                 .sorted { $0.sortOrder < $1.sortOrder }
-                .map { StepItem(title: $0.title, notes: $0.notes) }
+                .map { StepItem(persistentID: $0.id, title: $0.title, notes: $0.notes) }
         }
     }
     
@@ -86,6 +86,7 @@ struct MaintenanceTemplateForm: View {
             let title = step.title.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !title.isEmpty else { return nil }
             return MaintenanceStepData(
+                id: step.persistentID,
                 title: title,
                 notes: step.notes.trimmingCharacters(in: .whitespacesAndNewlines),
                 sortOrder: index
@@ -135,6 +136,7 @@ private struct MaintenanceStepRow: View {
 
 struct StepItem: Identifiable {
     let id = UUID()
+    var persistentID: PersistentIdentifier?
     var title: String
     var notes: String
 }

@@ -210,6 +210,7 @@ enum SchemaV3: VersionedSchema {
         var equipment: Equipment?
         
         @Relationship(deleteRule: .cascade, inverse: \MaintenanceTemplateStep.template) var steps: [MaintenanceTemplateStep]
+        // .nullify is intentional: completed maintenance history outlives template deletion.
         @Relationship(deleteRule: .nullify, inverse: \MaintenanceInstance.template) var instances: [MaintenanceInstance]
         
         init(title: String, equipment: Equipment?, steps: [MaintenanceTemplateStep]) {
@@ -247,13 +248,6 @@ enum SchemaV3: VersionedSchema {
             self.completedAt = completedAt
             self.completedSteps = completedSteps
             self.uncompletedSteps = uncompletedSteps
-        }
-        
-        init(template: MaintenanceTemplate, completedAt: Date) {
-            self.template = template
-            self.completedAt = completedAt
-            self.completedSteps = []
-            self.uncompletedSteps = []
         }
     }
 }
