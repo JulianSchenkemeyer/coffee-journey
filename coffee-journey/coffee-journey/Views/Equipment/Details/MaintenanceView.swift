@@ -12,6 +12,8 @@ import SwiftUI
 
 struct MaintenanceView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.alertCoordinator) private var alertCoordinator
+    @Environment(\.equipmentUseCases) private var equipmentUseCases
 
     var maintenanceTemplate: MaintenanceTemplate?
 
@@ -58,6 +60,7 @@ struct MaintenanceView: View {
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                 }
+                .disabled(completedStepIDs.isEmpty)
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .disabled(maintenanceTemplate == nil)
@@ -72,7 +75,20 @@ struct MaintenanceView: View {
     }
     
     private func submit() {
-        
+        guard let template = maintenanceTemplate, let equipment = template.equipment else { return }
+        let completedSteps = template.steps
+            .filter { completedStepIDs.contains($0.id) }
+            .map(\.title)
+        let uncompletedSteps = template.steps
+            .filter { !completedStepIDs.contains($0.id) }
+            .map(\.title)
+
+        do {
+            _ = try equipmentUseCases.performMaintenance(equipment, completedSteps, uncompletedSteps)
+            dismiss()
+        } catch {
+            alertCoordinator.show(error)
+        }
     }
 }
 
