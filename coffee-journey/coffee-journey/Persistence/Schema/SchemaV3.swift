@@ -236,6 +236,8 @@ enum SchemaV3: VersionedSchema {
     }
     
     @Model final class MaintenanceInstance {
+        // nil once the parent template has been deleted — completed maintenance
+        // history outlives its template by design (see `MaintenanceTemplate.instances`).
         var template: MaintenanceTemplate?
         var completedAt: Date
         

@@ -17,6 +17,8 @@ import SwiftData
         template: MaintenanceTemplate,
         request: UpdateMaintenanceTemplateRequest
     ) throws -> MaintenanceTemplate {
+        guard let equipment = template.equipment else { return template }
+        
         let existingByID = Dictionary(
             uniqueKeysWithValues: template.steps.map { ($0.id, $0) }
         )
@@ -24,7 +26,7 @@ import SwiftData
 
         let toDelete = template.steps.filter { !requestedIDs.contains($0.id) }
         for step in toDelete {
-            try repository.delete(step)
+            repository.remove(step)
         }
 
         for data in request.steps {
@@ -43,7 +45,6 @@ import SwiftData
             }
         }
 
-        guard let equipment = template.equipment else { return template }
         _ = try repository.update(equipment)
 
         return template

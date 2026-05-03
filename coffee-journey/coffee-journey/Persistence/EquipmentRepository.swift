@@ -13,9 +13,9 @@ protocol EquipmentRepository {
     func create(_ equipment: Equipment) throws -> Equipment
     func update(_ equipment: Equipment) throws -> Equipment
     func delete(_ equipment: Equipment) throws
-    func delete(_ step: MaintenanceTemplateStep) throws
     func insert(_ instance: MaintenanceInstance)
     func insert(_ step: MaintenanceTemplateStep)
+    func remove(_ step: MaintenanceTemplateStep)
     func fetchAll() throws -> [Equipment]
     func findById(_ id: PersistentIdentifier) throws -> Equipment?
 }
@@ -60,23 +60,16 @@ final class SwiftDataEquipmentRepository: EquipmentRepository {
         }
     }
 
-    func delete(_ step: MaintenanceTemplateStep) throws {
-        context.delete(step)
-
-        do {
-            try context.save()
-        } catch {
-            context.rollback()
-            throw PersistenceError.deleteFailed
-        }
-    }
-
     func insert(_ instance: MaintenanceInstance) {
         context.insert(instance)
     }
 
     func insert(_ step: MaintenanceTemplateStep) {
         context.insert(step)
+    }
+
+    func remove(_ step: MaintenanceTemplateStep) {
+        context.delete(step)
     }
 
     func fetchAll() throws -> [Equipment] {
