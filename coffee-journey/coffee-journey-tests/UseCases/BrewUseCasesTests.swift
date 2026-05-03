@@ -21,7 +21,11 @@ struct BrewDrinkTests {
         let coffeeRepo = SwiftDataCoffeeRepository(context: context)
         let recipeRepo = SwiftDataRecipeRepository(context: context)
         let equipmentRepo = SwiftDataEquipmentRepository(context: context)
-        let useCase = BrewDrink(coffeeRepository: coffeeRepo, recipeRepository: recipeRepo, equipmentRepository: equipmentRepo)
+        let useCase = BrewDrink(
+            recordBrew: RecordBrew(coffeeRepository: coffeeRepo),
+            updateRecipeFromBrew: UpdateRecipeFromBrew(recipeRepository: recipeRepo),
+            incrementEquipmentUses: IncrementEquipmentUses(equipmentRepository: equipmentRepo)
+        )
         return (useCase, context)
     }
 

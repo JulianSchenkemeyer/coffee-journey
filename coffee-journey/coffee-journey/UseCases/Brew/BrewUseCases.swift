@@ -5,16 +5,8 @@
 //  Created by Julian Schenkemeyer on 18.02.26.
 //
 
-//
-//  CoffeeUseCases.swift
-//  coffee-journey
-//
-//  Created by Julian Schenkemeyer on 15.02.26.
-//
-
 import Foundation
 import SwiftUI
-import SwiftData
 
 
 struct BrewUseCases {
@@ -32,9 +24,17 @@ enum BrewUseCaseFactory {
         recipeRepository: any RecipeRepository,
         equipmentRepository: any EquipmentRepository
     ) -> BrewUseCases {
+        let recordBrew = RecordBrew(coffeeRepository: coffeeRepository)
+        let updateRecipeFromBrew = UpdateRecipeFromBrew(recipeRepository: recipeRepository)
+        let incrementEquipmentUses = IncrementEquipmentUses(equipmentRepository: equipmentRepository)
+
         let update = UpdateBrew(repository: brewRepository).callAsFunction
         let delete = DeleteBrew(repository: brewRepository).callAsFunction
-        let brew = BrewDrink(coffeeRepository: coffeeRepository, recipeRepository: recipeRepository, equipmentRepository: equipmentRepository).callAsFunction
+        let brew = BrewDrink(
+            recordBrew: recordBrew,
+            updateRecipeFromBrew: updateRecipeFromBrew,
+            incrementEquipmentUses: incrementEquipmentUses
+        ).callAsFunction
         
         return BrewUseCases(
             update: update,
