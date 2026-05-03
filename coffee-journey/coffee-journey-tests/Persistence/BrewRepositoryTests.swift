@@ -25,6 +25,7 @@ struct SwiftDataBrewRepositoryTests {
     private func insertBrew(into context: ModelContext) throws -> Brew {
         let brew = Brew(
             date: .now,
+            beanAge: 10,
             amountCoffee: 18.0,
             grindSetting: 9.0,
             temperature: 96,

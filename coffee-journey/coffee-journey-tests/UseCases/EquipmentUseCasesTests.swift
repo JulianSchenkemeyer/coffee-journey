@@ -137,11 +137,11 @@ struct EquipmentUseCasesTests {
         equipment.usesSinceLastMaintenance = 3
         _ = try context.save()
         
-        try useCase(equipment: equipment)
+        try useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
         
         #expect(equipment.maintenanceCounter == 1)
         
-        try useCase(equipment: equipment)
+        try useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
         
         #expect(equipment.maintenanceCounter == 2)
     }
@@ -155,7 +155,7 @@ struct EquipmentUseCasesTests {
         equipment.usesSinceLastMaintenance = 3
         _ = try context.save()
         
-        try useCase(equipment: equipment)
+        try useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
         
         #expect(equipment.totalUses == 3)
     }
@@ -169,7 +169,7 @@ struct EquipmentUseCasesTests {
         equipment.usesSinceLastMaintenance = 3
         _ = try context.save()
         
-        try useCase(equipment: equipment)
+        try useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
         
         #expect(equipment.usesSinceLastMaintenance == 0)
     }
@@ -184,7 +184,7 @@ struct EquipmentUseCasesTests {
         _ = try context.save()
         
         let before = Date.now
-        try useCase(equipment: equipment)
+        try useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
         let after = Date.now
         
         let lastMaintenance = try #require(equipment.lastMaintenance)

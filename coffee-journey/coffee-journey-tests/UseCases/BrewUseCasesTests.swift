@@ -74,6 +74,7 @@ struct BrewDrinkTests {
     private func makeBrew(amountCoffee: Double = 18.0, rating: BrewRating = .thumbsUp) -> Brew {
         Brew(
             date: .now,
+            beanAge: 14,
             amountCoffee: amountCoffee,
             grindSetting: 9.0,
             temperature: 93,
@@ -219,7 +220,7 @@ struct BrewDrinkTests {
         #expect(recipe.lastUsed != nil)
     }
 
-    @Test func thumbsUpNarrowsRecipeRangeWhenBrewIsWithinBounds() throws {
+    @Test func thumbsUpDoesNotChangeRecipeRangeWhenBrewIsWithinBounds() throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -254,6 +255,7 @@ struct BrewDrinkTests {
         // Brew with values outside the locked range
         let brew = Brew(
             date: .now,
+            beanAge: 14,
             amountCoffee: 20.0,
             grindSetting: 11.0,
             temperature: 95,
@@ -295,6 +297,7 @@ struct BrewDrinkTests {
         let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = Brew(
             date: .now,
+            beanAge: 18,
             amountCoffee: 20.0,
             grindSetting: 11.0,
             temperature: 99,
