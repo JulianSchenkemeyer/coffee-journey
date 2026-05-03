@@ -9,6 +9,8 @@ import Foundation
 import SwiftData
 
 
+// insert/remove are non-saving — flush via update(_:).
+// create/delete are atomic — they save themselves.
 protocol EquipmentRepository {
     func create(_ equipment: Equipment) throws -> Equipment
     func update(_ equipment: Equipment) throws -> Equipment

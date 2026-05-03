@@ -17,7 +17,9 @@ import SwiftData
         template: MaintenanceTemplate,
         request: UpdateMaintenanceTemplateRequest
     ) throws -> MaintenanceTemplate {
-        guard let equipment = template.equipment else { return template }
+        guard let equipment = template.equipment else {
+            throw PersistenceError.updateFailed
+        }
         
         let existingByID = Dictionary(
             uniqueKeysWithValues: template.steps.map { ($0.id, $0) }
