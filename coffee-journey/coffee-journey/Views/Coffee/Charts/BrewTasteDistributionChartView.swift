@@ -61,7 +61,6 @@ struct BrewTasteDistributionChartView: View {
     let brews: [Brew]
     
     var body: some View {
-    //TODO: Aggregate Data?
         VStack(alignment: .trailing, spacing: 14) {
             Picker("Variable", selection: $option) {
                 ForEach(Options.allCases) { option in
