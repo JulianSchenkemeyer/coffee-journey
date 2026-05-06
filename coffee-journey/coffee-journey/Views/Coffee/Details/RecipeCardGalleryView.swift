@@ -12,6 +12,10 @@ struct RecipeCardGalleryView: View {
     let coffee: Coffee
     let recipes: [Recipe]
     
+    var sortedRecipes: [Recipe] {
+        recipes.sorted(using: KeyPathComparator(\.lastUsed, order: .reverse))
+    }
+    
     @State private var isAddButtonInFocus = false
     
     var body: some View {
@@ -22,7 +26,7 @@ struct RecipeCardGalleryView: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
-                    ForEach(recipes) { recipe in
+                    ForEach(sortedRecipes) { recipe in
                         RecipeCardView(coffee: coffee, recipe: recipe)
                             .frame(width: 300, height: 240)
                     }
