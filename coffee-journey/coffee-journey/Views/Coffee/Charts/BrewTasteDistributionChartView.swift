@@ -17,6 +17,7 @@ struct BrewTasteDistributionChartView: View {
         case GrindSize
         case BrewTime
         case Output
+        case BeanAge
         
         
         var id: String { self.rawValue }
@@ -28,6 +29,7 @@ struct BrewTasteDistributionChartView: View {
             case .GrindSize: return "Grind Size"
             case .BrewTime: return "Brew Time"
             case .Output: return "Output"
+            case .BeanAge: return "Bean Age"
             }
         }
         
@@ -38,6 +40,7 @@ struct BrewTasteDistributionChartView: View {
             case .GrindSize: return brew.grindSetting
             case .BrewTime: return Double(brew.extractionTime)
             case .Output: return brew.output
+            case .BeanAge: return Double(brew.beanAge ?? 0)
             }
         }
         
@@ -48,6 +51,7 @@ struct BrewTasteDistributionChartView: View {
             case .GrindSize: return ""
             case .BrewTime: return "s"
             case .Output: return "g"
+            case .BeanAge: return "days"
             }
         }
     }
