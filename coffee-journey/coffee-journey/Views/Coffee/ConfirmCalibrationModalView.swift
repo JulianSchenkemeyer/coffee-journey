@@ -24,44 +24,18 @@ struct ConfirmCalibrationModalView: View {
                     .font(.title2)
                     .foregroundStyle(.secondary)
 
-                Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 8) {
+                Grid(alignment: .leading, horizontalSpacing: 12, verticalSpacing: 8) {
                     GridRow {
                         Text("")
-                        Text("Recipe").bold()
+                        Text("Current").bold()
                         Text("")
-                        Text("Brew").bold()
-
+                        Text("New").bold()
                     }
-                    GridRow {
-                        Text("Beans:")
-                        Text("\(recipe.amountBeans, format: .number.precision(.fractionLength(1))) g")
-                        Image(systemName: "arrow.right")
-                        Text("\(request.amountBeans, format: .number.precision(.fractionLength(1))) g")
-                    }
-                    GridRow {
-                        Text("Grind Setting:")
-                        Text("\(recipe.grindSetting, format: .number)")
-                        Image(systemName: "arrow.right")
-                        Text("\(request.grindSetting, format: .number)")
-                    }
-                    GridRow {
-                        Text("Temperature:")
-                        Text("\(recipe.temperature, format: .number) °C")
-                        Image(systemName: "arrow.right")
-                        Text("\(request.temperature, format: .number) °C")
-                    }
-                    GridRow {
-                        Text("Extraction Time:")
-                        Text("\(recipe.extractionTime, format: .number) s")
-                        Image(systemName: "arrow.right")
-                        Text("\(request.extractionTime, format: .number) s")
-                    }
-                    GridRow {
-                        Text("Output:")
-                        Text("\(recipe.output, format: .number.precision(.fractionLength(1))) g")
-                        Image(systemName: "arrow.right")
-                        Text("\(request.output, format: .number.precision(.fractionLength(1))) g")
-                    }
+                    ComparisonRow("Beans:", currentMin: recipe.minAmountBeans, currentMax: recipe.maxAmountBeans, new: request.amountBeans, format: .number.precision(.fractionLength(1)), unit: "g")
+                    ComparisonRow("Grind Setting:", currentMin: recipe.minGrindSetting, currentMax: recipe.maxGrindSetting, new: request.grindSetting, format: .number)
+                    ComparisonRow("Temperature:", currentMin: recipe.minTemperature, currentMax: recipe.maxTemperature, new: request.temperature, format: .number, unit: "°C")
+                    ComparisonRow("Extraction Time:", currentMin: recipe.minExtractionTime, currentMax: recipe.maxExtractionTime, new: request.extractionTime, format: .number, unit: "s")
+                    ComparisonRow("Output:", currentMin: recipe.minOutput, currentMax: recipe.maxOutput, new: request.output, format: .number.precision(.fractionLength(1)), unit: "g")
                 }
             }
             .navigationTitle("Calibrate Recipe")
@@ -88,6 +62,33 @@ struct ConfirmCalibrationModalView: View {
     }
 }
 
+
+private struct ComparisonRow<V: Equatable, F: FormatStyle>: View where F.FormatInput == V, F.FormatOutput == String {
+    let label: String
+    let currentMin: V
+    let currentMax: V
+    let new: V
+    let format: F
+    var unit: String?
+
+    init(_ label: String, currentMin: V, currentMax: V, new: V, format: F, unit: String? = nil) {
+        self.label = label
+        self.currentMin = currentMin
+        self.currentMax = currentMax
+        self.new = new
+        self.format = format
+        self.unit = unit
+    }
+
+    var body: some View {
+        GridRow {
+            Text(label)
+            FormattedValueText(min: currentMin, max: currentMax, format: format, unit: unit)
+            Image(systemName: "arrow.right")
+            FormattedValueText(value: new, format: format, unit: unit)
+        }
+    }
+}
 
 #Preview {
     @Previewable let request = CalibrateRecipeRequest(
