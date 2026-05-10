@@ -163,7 +163,7 @@ struct RecipeCardView: View {
                 )
                 
                 do {
-                    _ = try recipeUseCases.calibrate(calibrationRequest)
+                    sheetCoordinator.present(.confirmRecipeCalibration(recipe, calibrationRequest))
                 } catch {
                     alertCoordinator.show(error)
                 }
