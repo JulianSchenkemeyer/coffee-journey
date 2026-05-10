@@ -14,7 +14,7 @@ import SwiftUI
         case refill(Coffee)
         case addCoffee(Coffee?)
         case editRecipe(Coffee, Recipe?)
-        case confirmRecipeCalibration(Recipe, Brew)
+        case confirmRecipeCalibration(Recipe, CalibrateRecipeRequest)
         case confirmEmptying(Coffee)
         case addEquipment(Equipment?)
         case maintenanceTemplate(MaintenanceTemplate)

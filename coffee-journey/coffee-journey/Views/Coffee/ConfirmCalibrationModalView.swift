@@ -14,12 +14,12 @@ struct ConfirmCalibrationModalView: View {
     @Environment(\.recipeUseCases) private var recipeUseCases
     
     let recipe: Recipe
-    let brew: Brew
-    
+    let request: CalibrateRecipeRequest
     
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 14) {
+                
                 Text(recipe.name)
                     .font(.title2)
                     .foregroundStyle(.secondary)
@@ -30,36 +30,37 @@ struct ConfirmCalibrationModalView: View {
                         Text("Recipe").bold()
                         Text("")
                         Text("Brew").bold()
+
                     }
                     GridRow {
                         Text("Beans:")
                         Text("\(recipe.amountBeans, format: .number.precision(.fractionLength(1))) g")
                         Image(systemName: "arrow.right")
-                        Text("\(brew.amountCoffee, format: .number.precision(.fractionLength(1))) g")
+                        Text("\(request.amountBeans, format: .number.precision(.fractionLength(1))) g")
                     }
                     GridRow {
                         Text("Grind Setting:")
                         Text("\(recipe.grindSetting, format: .number)")
                         Image(systemName: "arrow.right")
-                        Text("\(brew.grindSetting, format: .number)")
+                        Text("\(request.grindSetting, format: .number)")
                     }
                     GridRow {
                         Text("Temperature:")
                         Text("\(recipe.temperature, format: .number) °C")
                         Image(systemName: "arrow.right")
-                        Text("\(brew.temperature, format: .number) °C")
+                        Text("\(request.temperature, format: .number) °C")
                     }
                     GridRow {
                         Text("Extraction Time:")
                         Text("\(recipe.extractionTime, format: .number) s")
                         Image(systemName: "arrow.right")
-                        Text("\(brew.extractionTime, format: .number) s")
+                        Text("\(request.extractionTime, format: .number) s")
                     }
                     GridRow {
                         Text("Output:")
                         Text("\(recipe.output, format: .number.precision(.fractionLength(1))) g")
                         Image(systemName: "arrow.right")
-                        Text("\(brew.output, format: .number.precision(.fractionLength(1))) g")
+                        Text("\(request.output, format: .number.precision(.fractionLength(1))) g")
                     }
                 }
             }
@@ -73,15 +74,6 @@ struct ConfirmCalibrationModalView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(role: .confirm) {
-                        let request = CalibrateRecipeRequest(
-                            recipe: recipe,
-                            temperature: brew.temperature,
-                            grindSetting: brew.grindSetting,
-                            extractionTime: brew.extractionTime,
-                            amountBeans: brew.amountCoffee,
-                            output: brew.output
-                        )
-                        
                         do {
                             _ = try recipeUseCases.calibrate(request)
                             dismiss()
@@ -98,9 +90,18 @@ struct ConfirmCalibrationModalView: View {
 
 
 #Preview {
+    @Previewable let request = CalibrateRecipeRequest(
+        recipe: .Mock.espresso,
+        temperature: 96,
+        grindSetting: 20.0,
+        extractionTime: 300,
+        amountBeans: 20.0,
+        output: 40.0
+    )
+    
     Text("test")
         .sheet(isPresented: .constant(true)) {
-            ConfirmCalibrationModalView(recipe: .Mock.espresso, brew: .Mock.brews.first!)
+            ConfirmCalibrationModalView(recipe: .Mock.espresso, request: request)
                 .presentationDetents([.fraction(0.45)])
         }
 }

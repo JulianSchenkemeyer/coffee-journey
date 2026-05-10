@@ -189,7 +189,16 @@ struct BrewHistoryList: View {
             .swipeActions(edge: .leading) {
                 Button {
                     if let recipe = brew.recipe {
-                        sheetCoordinator.present(.confirmRecipeCalibration(recipe, brew))
+                        let request = CalibrateRecipeRequest(
+                            recipe: recipe,
+                            temperature: brew.temperature,
+                            grindSetting: brew.grindSetting,
+                            extractionTime: brew.extractionTime,
+                            amountBeans: brew.amountCoffee,
+                            output: brew.output
+                        )
+                        
+                        sheetCoordinator.present(.confirmRecipeCalibration(recipe, request))
                     }
                 } label: {
                     Label("Calibrate Recipe", systemImage: CJSymbol.Action.calibrate)
