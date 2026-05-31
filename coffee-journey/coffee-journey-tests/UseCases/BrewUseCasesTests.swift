@@ -19,13 +19,15 @@ struct BrewDrinkTests {
         let container = ContainerFactory.createInMemory()
         let context = ModelContext(container)
         let persistenceContext = SwiftDataPersistenceContext(modelContext: context)
+        let transaction = SwiftDataPersistenceTransaction(persistenceContext: persistenceContext)
         let coffeeRepo = SwiftDataCoffeeRepository(persistenceContext: persistenceContext)
         let recipeRepo = SwiftDataRecipeRepository(persistenceContext: persistenceContext)
         let equipmentRepo = SwiftDataEquipmentRepository(persistenceContext: persistenceContext)
         let useCase = BrewDrink(
             recordBrew: RecordBrew(coffeeRepository: coffeeRepo),
             updateRecipeFromBrew: UpdateRecipeFromBrew(recipeRepository: recipeRepo),
-            incrementEquipmentUses: IncrementEquipmentUses(equipmentRepository: equipmentRepo)
+            incrementEquipmentUses: IncrementEquipmentUses(equipmentRepository: equipmentRepo),
+            transaction: transaction
         )
         return (useCase, context)
     }

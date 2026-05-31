@@ -10,17 +10,20 @@ import Foundation
     let recordBrew: RecordBrew
     let updateRecipeFromBrew: UpdateRecipeFromBrew
     let incrementEquipmentUses: IncrementEquipmentUses
+    let transaction: any PersistenceTransaction
 
     @discardableResult
     func callAsFunction(coffee: Coffee, brew: Brew, recipe: Recipe) throws -> Coffee {
-        let updatedRecipe = try updateRecipeFromBrew(recipe: recipe, brew: brew)
-        brew.recipe = updatedRecipe
+        try transaction.perform {
+            let updatedRecipe = try updateRecipeFromBrew(recipe: recipe, brew: brew)
+            brew.recipe = updatedRecipe
 
-        if let grinder = recipe.grinder, let brewer = recipe.brewer {
-            try incrementEquipmentUses(equipment: grinder)
-            try incrementEquipmentUses(equipment: brewer)
+            if let grinder = recipe.grinder, let brewer = recipe.brewer {
+                try incrementEquipmentUses(equipment: grinder)
+                try incrementEquipmentUses(equipment: brewer)
+            }
+
+            return try recordBrew(brew: brew, coffee: coffee)
         }
-
-        return try recordBrew(brew: brew, coffee: coffee)
     }
 }

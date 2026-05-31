@@ -22,7 +22,8 @@ enum BrewUseCaseFactory {
         brewRepository: any BrewRepository,
         coffeeRepository: any CoffeeRepository,
         recipeRepository: any RecipeRepository,
-        equipmentRepository: any EquipmentRepository
+        equipmentRepository: any EquipmentRepository,
+        transaction: any PersistenceTransaction
     ) -> BrewUseCases {
         let recordBrew = RecordBrew(coffeeRepository: coffeeRepository)
         let updateRecipeFromBrew = UpdateRecipeFromBrew(recipeRepository: recipeRepository)
@@ -33,7 +34,8 @@ enum BrewUseCaseFactory {
         let brew = BrewDrink(
             recordBrew: recordBrew,
             updateRecipeFromBrew: updateRecipeFromBrew,
-            incrementEquipmentUses: incrementEquipmentUses
+            incrementEquipmentUses: incrementEquipmentUses,
+            transaction: transaction
         ).callAsFunction
         
         return BrewUseCases(
