@@ -18,7 +18,8 @@ struct EquipmentUseCasesTests {
     private func prepareEnvironment() throws -> (SwiftDataEquipmentRepository, ModelContext) {
         let container = ContainerFactory.createInMemory()
         let context = ModelContext(container)
-        let repository = SwiftDataEquipmentRepository(context: context)
+        let persistenceContext = SwiftDataPersistenceContext(modelContext: context)
+        let repository = SwiftDataEquipmentRepository(persistenceContext: persistenceContext)
         return (repository, context)
     }
 

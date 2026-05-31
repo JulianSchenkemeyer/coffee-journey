@@ -17,42 +17,27 @@ protocol RecipeRepository {
 
 @MainActor
 final class SwiftDataRecipeRepository: RecipeRepository {
-    private let context: ModelContext
-    init(context: ModelContext) { self.context = context }
-    
+    private let persistenceContext: SwiftDataPersistenceContext
+    private var context: ModelContext { persistenceContext.modelContext }
+
+    init(persistenceContext: SwiftDataPersistenceContext) {
+        self.persistenceContext = persistenceContext
+    }
+
     func create(_ recipe: Recipe) throws -> Recipe {
         context.insert(recipe)
-        
-        do {
-            try context.save()
-            
-            return recipe
-        } catch {
-            context.rollback()
-            throw PersistenceError.insertFailed
-        }
+        try persistenceContext.commitOrDefer(onFailure: .insertFailed)
+        return recipe
     }
-    
+
     func update(_ recipe: Recipe) throws -> Recipe {
-        do {
-            try context.save()
-            
-            return recipe
-        } catch {
-            context.rollback()
-            throw PersistenceError.updateFailed
-        }
+        try persistenceContext.commitOrDefer(onFailure: .updateFailed)
+        return recipe
     }
-    
+
     func delete(_ recipe: Recipe) throws {
         context.delete(recipe)
-        
-        do {
-            try context.save()
-        } catch {
-            context.rollback()
-            throw PersistenceError.deleteFailed
-        }
+        try persistenceContext.commitOrDefer(onFailure: .deleteFailed)
     }
     
     func fetchAll() throws -> [Recipe] {

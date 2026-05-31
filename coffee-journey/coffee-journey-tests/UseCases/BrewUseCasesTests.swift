@@ -18,9 +18,10 @@ struct BrewDrinkTests {
     private func prepareEnvironment() throws -> (BrewDrink, ModelContext) {
         let container = ContainerFactory.createInMemory()
         let context = ModelContext(container)
-        let coffeeRepo = SwiftDataCoffeeRepository(context: context)
-        let recipeRepo = SwiftDataRecipeRepository(context: context)
-        let equipmentRepo = SwiftDataEquipmentRepository(context: context)
+        let persistenceContext = SwiftDataPersistenceContext(modelContext: context)
+        let coffeeRepo = SwiftDataCoffeeRepository(persistenceContext: persistenceContext)
+        let recipeRepo = SwiftDataRecipeRepository(persistenceContext: persistenceContext)
+        let equipmentRepo = SwiftDataEquipmentRepository(persistenceContext: persistenceContext)
         let useCase = BrewDrink(
             recordBrew: RecordBrew(coffeeRepository: coffeeRepo),
             updateRecipeFromBrew: UpdateRecipeFromBrew(recipeRepository: recipeRepo),

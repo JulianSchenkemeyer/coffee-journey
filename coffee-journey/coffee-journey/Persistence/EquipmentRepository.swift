@@ -9,8 +9,8 @@ import Foundation
 import SwiftData
 
 
-// insert/remove are non-saving — flush via update(_:).
-// create/delete are atomic — they save themselves.
+// insert/remove are non-saving — flush via update(_:) or wrap in a PersistenceTransaction.
+// create/delete are atomic outside transactions; inside a transaction they defer to the transaction's commit.
 protocol EquipmentRepository {
     func create(_ equipment: Equipment) throws -> Equipment
     func update(_ equipment: Equipment) throws -> Equipment
@@ -24,42 +24,27 @@ protocol EquipmentRepository {
 
 @MainActor
 final class SwiftDataEquipmentRepository: EquipmentRepository {
-    private let context: ModelContext
-    init(context: ModelContext) { self.context = context }
-    
+    private let persistenceContext: SwiftDataPersistenceContext
+    private var context: ModelContext { persistenceContext.modelContext }
+
+    init(persistenceContext: SwiftDataPersistenceContext) {
+        self.persistenceContext = persistenceContext
+    }
+
     func create(_ equipment: Equipment) throws -> Equipment {
         context.insert(equipment)
-        
-        do {
-            try context.save()
-            
-            return equipment
-        } catch {
-            context.rollback()
-            throw PersistenceError.insertFailed
-        }
+        try persistenceContext.commitOrDefer(onFailure: .insertFailed)
+        return equipment
     }
-    
+
     func update(_ equipment: Equipment) throws -> Equipment {
-        do {
-            try context.save()
-            
-            return equipment
-        } catch {
-            context.rollback()
-            throw PersistenceError.updateFailed
-        }
+        try persistenceContext.commitOrDefer(onFailure: .updateFailed)
+        return equipment
     }
-    
+
     func delete(_ equipment: Equipment) throws {
         context.delete(equipment)
-
-        do {
-            try context.save()
-        } catch {
-            context.rollback()
-            throw PersistenceError.deleteFailed
-        }
+        try persistenceContext.commitOrDefer(onFailure: .deleteFailed)
     }
 
     func insert(_ instance: MaintenanceInstance) {

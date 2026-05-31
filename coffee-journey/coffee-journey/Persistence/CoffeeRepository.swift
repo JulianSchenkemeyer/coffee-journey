@@ -17,43 +17,28 @@ protocol CoffeeRepository {
 
 @MainActor
 final class SwiftDataCoffeeRepository: CoffeeRepository {
-    private let context: ModelContext
-    init(context: ModelContext) { self.context = context }
+    private let persistenceContext: SwiftDataPersistenceContext
+    private var context: ModelContext { persistenceContext.modelContext }
 
-    
+    init(persistenceContext: SwiftDataPersistenceContext) {
+        self.persistenceContext = persistenceContext
+    }
+
+
     func create(_ coffee: Coffee) throws -> Coffee {
         context.insert(coffee)
-        
-        do {
-            try context.save()
-            
-            return coffee
-        } catch {
-            context.rollback()
-            throw PersistenceError.insertFailed
-        }
+        try persistenceContext.commitOrDefer(onFailure: .insertFailed)
+        return coffee
     }
-    
+
     func update(_ coffee: Coffee) throws -> Coffee {
-        do {
-            try context.save()
-            
-            return coffee
-        } catch {
-            context.rollback()
-            throw PersistenceError.updateFailed
-        }
+        try persistenceContext.commitOrDefer(onFailure: .updateFailed)
+        return coffee
     }
-    
+
     func delete(_ coffee: Coffee) throws {
         context.delete(coffee)
-
-        do {
-            try context.save()
-        } catch {
-            context.rollback()
-            throw PersistenceError.deleteFailed
-        }
+        try persistenceContext.commitOrDefer(onFailure: .deleteFailed)
     }
     
     func fetchAll() throws -> [Coffee] {

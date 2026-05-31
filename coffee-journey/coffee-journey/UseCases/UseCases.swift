@@ -20,10 +20,12 @@ enum UseCaseFactory {
         equipment: EquipmentUseCases,
         brew: BrewUseCases
     ) {
-        let coffeeRepository = SwiftDataCoffeeRepository(context: context)
-        let equipmentRepository = SwiftDataEquipmentRepository(context: context)
-        let recipeRepository = SwiftDataRecipeRepository(context: context)
-        let brewRepository = SwiftDataBrewRepository(context: context)
+        let persistenceContext = SwiftDataPersistenceContext(modelContext: context)
+        
+        let coffeeRepository = SwiftDataCoffeeRepository(persistenceContext: persistenceContext)
+        let equipmentRepository = SwiftDataEquipmentRepository(persistenceContext: persistenceContext)
+        let recipeRepository = SwiftDataRecipeRepository(persistenceContext: persistenceContext)
+        let brewRepository = SwiftDataBrewRepository(persistenceContext: persistenceContext)
         
         let coffeeUseCases = CoffeeUseCaseFactory.make(repository: coffeeRepository)
         let recipeUseCases = RecipeUseCaseFactory.make(repository: recipeRepository)

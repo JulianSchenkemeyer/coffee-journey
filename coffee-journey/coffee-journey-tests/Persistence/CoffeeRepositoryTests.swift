@@ -18,7 +18,8 @@ struct SwiftDataCoffeeRepositoryTests {
     private func prepareEnvironment() throws -> (SwiftDataCoffeeRepository, ModelContext) {
         let container = ContainerFactory.createInMemory()
         let context = ModelContext(container)
-        let repository = SwiftDataCoffeeRepository(context: context)
+        let persistenceContext = SwiftDataPersistenceContext(modelContext: context)
+        let repository = SwiftDataCoffeeRepository(persistenceContext: persistenceContext)
         return (repository, context)
     }
 

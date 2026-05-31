@@ -16,28 +16,20 @@ protocol BrewRepository {
 
 @MainActor
 final class SwiftDataBrewRepository: BrewRepository {
-    private let context: ModelContext
-    init(context: ModelContext) { self.context = context }
-    
-    func update(_ brew: Brew) throws -> Brew {
-        do {
-            try context.save()
-            
-            return brew
-        } catch {
-            context.rollback()
-            throw PersistenceError.updateFailed
-        }
+    private let persistenceContext: SwiftDataPersistenceContext
+    private var context: ModelContext { persistenceContext.modelContext }
+
+    init(persistenceContext: SwiftDataPersistenceContext) {
+        self.persistenceContext = persistenceContext
     }
-    
+
+    func update(_ brew: Brew) throws -> Brew {
+        try persistenceContext.commitOrDefer(onFailure: .updateFailed)
+        return brew
+    }
+
     func delete(_ brew: Brew) throws {
         context.delete(brew)
-        
-        do {
-            try context.save()
-        } catch {
-            context.rollback()
-            throw PersistenceError.deleteFailed
-        }
+        try persistenceContext.commitOrDefer(onFailure: .deleteFailed)
     }
 }
