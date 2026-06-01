@@ -23,30 +23,7 @@ protocol EquipmentRepository {
 }
 
 @MainActor
-final class SwiftDataEquipmentRepository: EquipmentRepository {
-    private let persistenceContext: SwiftDataPersistenceContext
-    private var context: ModelContext { persistenceContext.modelContext }
-
-    init(persistenceContext: SwiftDataPersistenceContext) {
-        self.persistenceContext = persistenceContext
-    }
-
-    func create(_ equipment: Equipment) throws -> Equipment {
-        context.insert(equipment)
-        try persistenceContext.commitOrDefer(onFailure: .insertFailed)
-        return equipment
-    }
-
-    func update(_ equipment: Equipment) throws -> Equipment {
-        try persistenceContext.commitOrDefer(onFailure: .updateFailed)
-        return equipment
-    }
-
-    func delete(_ equipment: Equipment) throws {
-        context.delete(equipment)
-        try persistenceContext.commitOrDefer(onFailure: .deleteFailed)
-    }
-
+final class SwiftDataEquipmentRepository: SwiftDataRepositoryBase<Equipment>, EquipmentRepository {
     func insert(_ instance: MaintenanceInstance) {
         context.insert(instance)
     }
@@ -59,20 +36,12 @@ final class SwiftDataEquipmentRepository: EquipmentRepository {
         context.delete(step)
     }
 
-    func fetchAll() throws -> [Equipment] {
-        do {
-            return try context.fetch(FetchDescriptor<Equipment>())
-        } catch {
-            throw PersistenceError.fetchFailed
-        }
-    }
-    
     func findById(_ id: PersistentIdentifier) throws -> Equipment? {
         let predicate = #Predicate<Equipment> {
             $0.id == id
         }
         let descriptor = FetchDescriptor<Equipment>(predicate: predicate)
-        
+
         do {
             return try context.fetch(descriptor).first
         } catch {
@@ -80,4 +49,3 @@ final class SwiftDataEquipmentRepository: EquipmentRepository {
         }
     }
 }
-

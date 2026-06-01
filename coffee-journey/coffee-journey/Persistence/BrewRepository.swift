@@ -14,6 +14,9 @@ protocol BrewRepository {
 }
 
 
+// Brews are created via Coffee.brews.append, not via a standalone create call,
+// so SwiftDataBrewRepository deliberately does not inherit from SwiftDataRepositoryBase
+// (which would expose unused create/fetchAll methods).
 @MainActor
 final class SwiftDataBrewRepository: BrewRepository {
     private let persistenceContext: SwiftDataPersistenceContext

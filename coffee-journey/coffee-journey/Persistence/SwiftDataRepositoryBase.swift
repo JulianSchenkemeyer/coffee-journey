@@ -1,0 +1,49 @@
+//
+//  SwiftDataRepositoryBase.swift
+//  coffee-journey
+//
+//  Created by Julian Schenkemeyer on 31.05.26.
+//
+
+import Foundation
+import SwiftData
+
+
+// Generic base providing the four CRUD operations common to every SwiftData
+// repository in the adapter. Concrete repositories inherit from this and add
+// their domain-specific methods (`exists`, `findById`, non-saving inserts, etc.).
+// Internal to the SwiftData adapter — the domain Repository protocols remain
+// the portability boundary.
+@MainActor
+class SwiftDataRepositoryBase<Model: PersistentModel> {
+    let persistenceContext: SwiftDataPersistenceContext
+    var context: ModelContext { persistenceContext.modelContext }
+
+    init(persistenceContext: SwiftDataPersistenceContext) {
+        self.persistenceContext = persistenceContext
+    }
+
+    func create(_ model: Model) throws -> Model {
+        context.insert(model)
+        try persistenceContext.commitOrDefer(onFailure: .insertFailed)
+        return model
+    }
+
+    func update(_ model: Model) throws -> Model {
+        try persistenceContext.commitOrDefer(onFailure: .updateFailed)
+        return model
+    }
+
+    func delete(_ model: Model) throws {
+        context.delete(model)
+        try persistenceContext.commitOrDefer(onFailure: .deleteFailed)
+    }
+
+    func fetchAll() throws -> [Model] {
+        do {
+            return try context.fetch(FetchDescriptor<Model>())
+        } catch {
+            throw PersistenceError.fetchFailed
+        }
+    }
+}
