@@ -117,7 +117,6 @@ struct RecipeCardView: View {
             Button("Delete", role: .destructive) {
                 do {
                     try recipeUseCases.delete(recipe)
-                    router.navigateBack()
                 } catch {
                     alertCoordinator.show(error)
                 }
