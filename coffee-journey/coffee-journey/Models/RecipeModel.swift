@@ -58,7 +58,9 @@ extension Recipe {
             minBeans: input,
             maxBeans: input,
             minOutput: output,
-            maxOutput: output
+            maxOutput: output,
+            brewer: brewer,
+            grinder: grinder
         )
     }
 }
