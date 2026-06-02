@@ -11,7 +11,7 @@ import SwiftData
 
 @MainActor
 protocol PersistenceTransaction {
-    func perform<T>(_ block: @MainActor () throws -> T) throws -> T
+    func perform<T>(_ block: () throws -> T) throws -> T
 }
 
 
@@ -29,29 +29,26 @@ enum TransactionScope {
 struct SwiftDataPersistenceTransaction: PersistenceTransaction {
     let persistenceContext: SwiftDataPersistenceContext
 
-    func perform<T>(_ block: @MainActor () throws -> T) throws -> T {
+    func perform<T>(_ block: () throws -> T) throws -> T {
         // Re-entrant: nested perform calls run inside the outer transaction.
         if TransactionScope.isActive {
             return try block()
         }
 
         return try TransactionScope.$isActive.withValue(true) {
-            let result: T
             do {
-                result = try block()
+                let result = try block()
+                do {
+                    try persistenceContext.modelContext.save()
+                } catch {
+                    throw PersistenceError.updateFailed
+                }
+                return result
             } catch {
                 persistenceContext.modelContext.rollback()
                 throw error
             }
-
-            do {
-                try persistenceContext.modelContext.save()
-            } catch {
-                persistenceContext.modelContext.rollback()
-                throw PersistenceError.updateFailed
-            }
-
-            return result
         }
     }
 }
+

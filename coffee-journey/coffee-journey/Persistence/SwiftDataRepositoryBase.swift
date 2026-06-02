@@ -23,23 +23,23 @@ class SwiftDataRepositoryBase<Model: PersistentModel> {
         self.persistenceContext = persistenceContext
     }
 
-    func create(_ model: Model) throws -> Model {
+    final func create(_ model: Model) throws -> Model {
         context.insert(model)
         try persistenceContext.commitOrDefer(onFailure: .insertFailed)
         return model
     }
 
-    func update(_ model: Model) throws -> Model {
+    final func update(_ model: Model) throws -> Model {
         try persistenceContext.commitOrDefer(onFailure: .updateFailed)
         return model
     }
 
-    func delete(_ model: Model) throws {
+    final func delete(_ model: Model) throws {
         context.delete(model)
         try persistenceContext.commitOrDefer(onFailure: .deleteFailed)
     }
 
-    func fetchAll() throws -> [Model] {
+    final func fetchAll() throws -> [Model] {
         do {
             return try context.fetch(FetchDescriptor<Model>())
         } catch {
