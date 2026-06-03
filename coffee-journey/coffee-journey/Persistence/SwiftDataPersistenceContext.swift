@@ -22,13 +22,15 @@ final class SwiftDataPersistenceContext {
 
     // Called by repositories after staging changes. Saves immediately when
     // not in a transaction; no-ops when one is active (the transaction commits).
-    func commitOrDefer(onFailure errorCase: PersistenceError) throws {
+    // Callers wrap with their own typed PersistenceError when they want to
+    // attach domain semantics to a save failure.
+    func commitOrDefer() throws {
         guard !TransactionScope.isActive else { return }
         do {
             try modelContext.save()
         } catch {
             modelContext.rollback()
-            throw errorCase
+            throw error
         }
     }
 }

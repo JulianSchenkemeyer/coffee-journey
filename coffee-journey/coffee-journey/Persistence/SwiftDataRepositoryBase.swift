@@ -25,18 +25,30 @@ class SwiftDataRepositoryBase<Model: PersistentModel> {
 
     final func create(_ model: Model) throws -> Model {
         context.insert(model)
-        try persistenceContext.commitOrDefer(onFailure: .insertFailed)
+        do {
+            try persistenceContext.commitOrDefer()
+        } catch {
+            throw PersistenceError.insertFailed
+        }
         return model
     }
 
     final func update(_ model: Model) throws -> Model {
-        try persistenceContext.commitOrDefer(onFailure: .updateFailed)
+        do {
+            try persistenceContext.commitOrDefer()
+        } catch {
+            throw PersistenceError.updateFailed
+        }
         return model
     }
 
     final func delete(_ model: Model) throws {
         context.delete(model)
-        try persistenceContext.commitOrDefer(onFailure: .deleteFailed)
+        do {
+            try persistenceContext.commitOrDefer()
+        } catch {
+            throw PersistenceError.deleteFailed
+        }
     }
 
     final func fetchAll() throws -> [Model] {

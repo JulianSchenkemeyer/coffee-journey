@@ -27,12 +27,20 @@ final class SwiftDataBrewRepository: BrewRepository {
     }
 
     func update(_ brew: Brew) throws -> Brew {
-        try persistenceContext.commitOrDefer(onFailure: .updateFailed)
+        do {
+            try persistenceContext.commitOrDefer()
+        } catch {
+            throw PersistenceError.updateFailed
+        }
         return brew
     }
 
     func delete(_ brew: Brew) throws {
         context.delete(brew)
-        try persistenceContext.commitOrDefer(onFailure: .deleteFailed)
+        do {
+            try persistenceContext.commitOrDefer()
+        } catch {
+            throw PersistenceError.deleteFailed
+        }
     }
 }
