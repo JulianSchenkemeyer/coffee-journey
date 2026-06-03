@@ -13,8 +13,8 @@ import Foundation
     let transaction: any PersistenceTransaction
 
     @discardableResult
-    func callAsFunction(coffee: Coffee, brew: Brew, recipe: Recipe) throws -> Coffee {
-        try transaction.perform {
+    func callAsFunction(coffee: Coffee, brew: Brew, recipe: Recipe) async throws -> Coffee {
+        try await transaction.perform {
             let updatedRecipe = try updateRecipeFromBrew(recipe: recipe, brew: brew)
             brew.recipe = updatedRecipe
 

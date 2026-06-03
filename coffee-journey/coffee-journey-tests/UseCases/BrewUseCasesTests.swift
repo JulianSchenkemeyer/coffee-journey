@@ -94,7 +94,7 @@ struct BrewDrinkTests {
 
     // MARK: - Coffee counters
 
-    @Test func brewIncrementsTotalBrews() throws {
+    @Test func brewIncrementsTotalBrews() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -102,16 +102,16 @@ struct BrewDrinkTests {
         let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew()
 
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(coffee.totalBrews == 1)
         
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(coffee.totalBrews == 2)
     }
 
-    @Test func brewIncrementBrewsSinceRefill() throws {
+    @Test func brewIncrementBrewsSinceRefill() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -119,12 +119,12 @@ struct BrewDrinkTests {
         let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew()
 
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(coffee.brewsSinceRefill == 1)
     }
     
-    @Test func brewIncrementsTotalEquimentUses() throws {
+    @Test func brewIncrementsTotalEquimentUses() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -132,14 +132,14 @@ struct BrewDrinkTests {
         let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew()
 
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(recipe.grinder?.totalUses == 1)
         #expect(recipe.brewer?.totalUses == 1)
         #expect(recipe.grinder?.usesSinceLastMaintenance == 1)
         #expect(recipe.brewer?.usesSinceLastMaintenance == 1)
         
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(recipe.grinder?.totalUses == 2)
         #expect(recipe.brewer?.totalUses == 2)
@@ -147,7 +147,7 @@ struct BrewDrinkTests {
         #expect(recipe.brewer?.usesSinceLastMaintenance == 2)
     }
 
-    @Test func brewIncrementEquipmentUsesSinceMaintainance() throws {
+    @Test func brewIncrementEquipmentUsesSinceMaintainance() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -155,12 +155,12 @@ struct BrewDrinkTests {
         let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew()
 
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(coffee.brewsSinceRefill == 1)
     }
 
-    @Test func brewDeductsAmountFromCoffee() throws {
+    @Test func brewDeductsAmountFromCoffee() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(amountLeft: 250.0, into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -168,12 +168,12 @@ struct BrewDrinkTests {
         let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew(amountCoffee: 18.0)
 
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(coffee.amountLeft == 232.0)
     }
 
-    @Test func brewDoesNotReduceAmountLeftBelowZero() throws {
+    @Test func brewDoesNotReduceAmountLeftBelowZero() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(amountLeft: 10.0, into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -181,12 +181,12 @@ struct BrewDrinkTests {
         let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew(amountCoffee: 18.0)
 
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(coffee.amountLeft == 0.0)
     }
 
-    @Test func brewAppendsToCoffeeBrewList() throws {
+    @Test func brewAppendsToCoffeeBrewList() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -194,12 +194,12 @@ struct BrewDrinkTests {
         let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew()
 
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(coffee.brews.count == 1)
     }
 
-    @Test func brewReturnsCoffee() throws {
+    @Test func brewReturnsCoffee() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -207,14 +207,14 @@ struct BrewDrinkTests {
         let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew()
 
-        let result = try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        let result = try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(result.persistentModelID == coffee.persistentModelID)
     }
 
     // MARK: - Recipe calibration (thumbsUp)
 
-    @Test func thumbsUpUpdatesRecipeLastUsed() throws {
+    @Test func thumbsUpUpdatesRecipeLastUsed() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -222,12 +222,12 @@ struct BrewDrinkTests {
         let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew(rating: .thumbsUp)
 
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(recipe.lastUsed != nil)
     }
 
-    @Test func thumbsUpDoesNotChangeRecipeRangeWhenBrewIsWithinBounds() throws {
+    @Test func thumbsUpDoesNotChangeRecipeRangeWhenBrewIsWithinBounds() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -236,7 +236,7 @@ struct BrewDrinkTests {
         let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)   // beans: 17–19, grind: 8–10, temp: 90–96, time: 25–35, output: 30–36
         let brew = makeBrew(rating: .thumbsUp)   // beans: 18, grind: 9, temp: 93, time: 30, output: 33
 
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(recipe.minAmountBeans == 17.0)
         #expect(recipe.maxAmountBeans == 19.0)
@@ -244,7 +244,7 @@ struct BrewDrinkTests {
         #expect(recipe.maxGrindSetting == 10.0)
     }
 
-    @Test func thumbsUpExpandsRecipeRangeWhenBrewIsOutsideBounds() throws {
+    @Test func thumbsUpExpandsRecipeRangeWhenBrewIsOutsideBounds() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
         _ = makeEquipment(type: .grinder, into: context)
@@ -272,7 +272,7 @@ struct BrewDrinkTests {
             rating: .thumbsUp
         )
 
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(recipe.maxAmountBeans == 20.0)
         #expect(recipe.maxGrindSetting == 11.0)
@@ -283,7 +283,7 @@ struct BrewDrinkTests {
 
     // MARK: - Recipe calibration (thumbsDown)
 
-    @Test func thumbsDownDoesNotUpdateRecipeLastUsed() throws {
+    @Test func thumbsDownDoesNotUpdateRecipeLastUsed() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -291,12 +291,12 @@ struct BrewDrinkTests {
         let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew(rating: .thumbsDown)
 
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(recipe.lastUsed == nil)
     }
 
-    @Test func thumbsDownDoesNotChangeRecipeRanges() throws {
+    @Test func thumbsDownDoesNotChangeRecipeRanges() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -314,7 +314,7 @@ struct BrewDrinkTests {
             rating: .thumbsDown
         )
 
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(recipe.minAmountBeans == 17.0)
         #expect(recipe.maxAmountBeans == 19.0)
@@ -328,7 +328,7 @@ struct BrewDrinkTests {
         #expect(recipe.maxOutput == 36.0)
     }
 
-    @Test func thumbsDownStillAppendsBrew() throws {
+    @Test func thumbsDownStillAppendsBrew() async throws {
         let (useCase, context) = try prepareEnvironment()
         let coffee = makeCoffee(into: context)
         let grinder = makeEquipment(type: .grinder, into: context)
@@ -336,7 +336,7 @@ struct BrewDrinkTests {
         let recipe = makeRecipe(brewer: brewer, grinder: grinder, into: context)
         let brew = makeBrew(rating: .thumbsDown)
 
-        try useCase(coffee: coffee, brew: brew, recipe: recipe)
+        try await useCase(coffee: coffee, brew: brew, recipe: recipe)
 
         #expect(coffee.brews.count == 1)
         #expect(coffee.totalBrews == 1)

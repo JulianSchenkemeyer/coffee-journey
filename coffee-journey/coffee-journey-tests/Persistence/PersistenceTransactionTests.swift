@@ -52,11 +52,11 @@ struct SwiftDataPersistenceTransactionTests {
 
     // MARK: - Success
 
-    @Test func performCommitsOnSuccess() throws {
+    @Test func performCommitsOnSuccess() async throws {
         let (transaction, repository, context) = prepareEnvironment()
         let coffee = makeCoffee()
 
-        try transaction.perform {
+        try await transaction.perform {
             _ = try repository.create(coffee)
             coffee.notes = "updated inside transaction"
             _ = try repository.update(coffee)
@@ -67,22 +67,22 @@ struct SwiftDataPersistenceTransactionTests {
         #expect(stored.first?.notes == "updated inside transaction")
     }
 
-    @Test func performReturnsValueFromBlock() throws {
+    @Test func performReturnsValueFromBlock() async throws {
         let (transaction, _, _) = prepareEnvironment()
 
-        let result = try transaction.perform { 42 }
+        let result = try await transaction.perform { 42 }
 
         #expect(result == 42)
     }
 
     // MARK: - Failure
 
-    @Test func performRollsBackOnInnerThrow() throws {
+    @Test func performRollsBackOnInnerThrow() async throws {
         let (transaction, repository, context) = prepareEnvironment()
         let coffee = makeCoffee()
 
-        #expect(throws: TransactionTestError.self) {
-            try transaction.perform {
+        await #expect(throws: TransactionTestError.self) {
+            try await transaction.perform {
                 _ = try repository.create(coffee)
                 throw TransactionTestError(code: 1)
             }
@@ -92,11 +92,11 @@ struct SwiftDataPersistenceTransactionTests {
         #expect(stored.isEmpty, "create inside the transaction must be rolled back")
     }
 
-    @Test func performRethrowsOriginalError() {
+    @Test func performRethrowsOriginalError() async {
         let (transaction, _, _) = prepareEnvironment()
 
-        #expect(throws: TransactionTestError(code: 7)) {
-            try transaction.perform {
+        await #expect(throws: TransactionTestError(code: 7)) {
+            try await transaction.perform {
                 throw TransactionTestError(code: 7)
             }
         }
@@ -104,17 +104,17 @@ struct SwiftDataPersistenceTransactionTests {
 
     // MARK: - Re-entrancy
 
-    @Test func nestedPerformDefersCommitToOuter() throws {
+    @Test func nestedPerformDefersCommitToOuter() async throws {
         let (transaction, repository, context) = prepareEnvironment()
         let coffeeA = makeCoffee(name: "Coffee A")
         let coffeeB = makeCoffee(name: "Coffee B")
 
         // Inner perform should not commit on its own; the outer throw should
         // roll back both inserts.
-        #expect(throws: TransactionTestError.self) {
-            try transaction.perform {
+        await #expect(throws: TransactionTestError.self) {
+            try await transaction.perform {
                 _ = try repository.create(coffeeA)
-                try transaction.perform {
+                try await transaction.perform {
                     _ = try repository.create(coffeeB)
                 }
                 throw TransactionTestError(code: 2)
@@ -125,14 +125,14 @@ struct SwiftDataPersistenceTransactionTests {
         #expect(stored.isEmpty, "inner perform should not commit independently of the outer")
     }
 
-    @Test func nestedPerformCommitsBothOnOuterSuccess() throws {
+    @Test func nestedPerformCommitsBothOnOuterSuccess() async throws {
         let (transaction, repository, context) = prepareEnvironment()
         let coffeeA = makeCoffee(name: "Coffee A")
         let coffeeB = makeCoffee(name: "Coffee B")
 
-        try transaction.perform {
+        try await transaction.perform {
             _ = try repository.create(coffeeA)
-            try transaction.perform {
+            try await transaction.perform {
                 _ = try repository.create(coffeeB)
             }
         }

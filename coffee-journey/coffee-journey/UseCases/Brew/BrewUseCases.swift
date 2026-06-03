@@ -12,7 +12,7 @@ import SwiftUI
 struct BrewUseCases {
     var update: @MainActor (Brew) throws -> Brew
     var delete: @MainActor (Brew) throws -> Void
-    var brew: @MainActor (Coffee, Brew, Recipe) throws -> Coffee
+    var brew: @MainActor (Coffee, Brew, Recipe) async throws -> Coffee
 }
 
 enum BrewUseCaseFactory {

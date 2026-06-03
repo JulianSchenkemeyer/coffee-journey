@@ -153,10 +153,12 @@ struct BrewDrinkModalView: View {
             rating: rating
         )
         
-        do {
-            _ = try brewUseCases.brew(coffee, brew, selectedRecipe)
-        } catch {
-            alertCoordinator.show(error)
+        Task {
+            do {
+                _ = try await brewUseCases.brew(coffee, brew, selectedRecipe)
+            } catch {
+                alertCoordinator.show(error)
+            }
         }
     }
 }
