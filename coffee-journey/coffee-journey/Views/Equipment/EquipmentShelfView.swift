@@ -36,9 +36,15 @@ struct EquipmentShelfView: View {
                                     Text(item.name)
                                         .font(.headline)
                                     
-                                    Text(item.brand)
-                                        .font(.subheadline)
-                                        .foregroundStyle(.secondary)
+                                    VStack(alignment: .leading) {
+                                        Text(item.brand)
+
+                                        if let lastMaintenance = item.lastMaintenance {
+                                            Text("Last Maintenance: \(lastMaintenance.formatted(date: .abbreviated, time: .omitted))")
+                                        }
+                                    }
+                                    .font(.subheadline)
+                                    .foregroundStyle(.secondary)
                                 }
                             }
                         }
