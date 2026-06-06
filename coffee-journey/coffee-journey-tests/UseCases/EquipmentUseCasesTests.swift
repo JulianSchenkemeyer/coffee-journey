@@ -15,12 +15,13 @@ struct EquipmentUseCasesTests {
 
     // MARK: - Helpers
 
-    private func prepareEnvironment() throws -> (SwiftDataEquipmentRepository, ModelContext) {
+    private func prepareEnvironment() throws -> (SwiftDataEquipmentRepository, SwiftDataPersistenceTransaction, ModelContext) {
         let container = ContainerFactory.createInMemory()
         let context = ModelContext(container)
         let persistenceContext = SwiftDataPersistenceContext(modelContext: context)
+        let transaction = SwiftDataPersistenceTransaction(persistenceContext: persistenceContext)
         let repository = SwiftDataEquipmentRepository(persistenceContext: persistenceContext)
-        return (repository, context)
+        return (repository, transaction, context)
     }
 
     private func makeEquipment(into context: ModelContext) -> Equipment {
@@ -46,7 +47,7 @@ struct EquipmentUseCasesTests {
     // MARK: - CreateEquipment
 
     @Test func createEquipmentPersistsEquipment() throws {
-        let (repository, context) = try prepareEnvironment()
+        let (repository, _, context) = try prepareEnvironment()
         let useCase = CreateEquipment(repository: repository)
 
         try useCase(request: makeCreateRequest())
@@ -56,7 +57,7 @@ struct EquipmentUseCasesTests {
     }
 
     @Test func createEquipmentMapsRequestFields() throws {
-        let (repository, _) = try prepareEnvironment()
+        let (repository, _, _) = try prepareEnvironment()
         let useCase = CreateEquipment(repository: repository)
 
         let created = try useCase(request: makeCreateRequest())
@@ -68,7 +69,7 @@ struct EquipmentUseCasesTests {
     }
 
     @Test func createEquipmentReturnsCreatedEquipment() throws {
-        let (repository, _) = try prepareEnvironment()
+        let (repository, _, _) = try prepareEnvironment()
         let useCase = CreateEquipment(repository: repository)
 
         let created = try useCase(request: makeCreateRequest())
@@ -79,7 +80,7 @@ struct EquipmentUseCasesTests {
     // MARK: - UpdateEquipment
 
     @Test func updateEquipmentAppliesRequestFields() throws {
-        let (repository, context) = try prepareEnvironment()
+        let (repository, _, context) = try prepareEnvironment()
         let useCase = UpdateEquipment(repository: repository)
         let equipment = makeEquipment(into: context)
         let request = UpdateEquipmentRequest(
@@ -98,7 +99,7 @@ struct EquipmentUseCasesTests {
     }
 
     @Test func updateEquipmentReturnsSameEquipment() throws {
-        let (repository, context) = try prepareEnvironment()
+        let (repository, _, context) = try prepareEnvironment()
         let useCase = UpdateEquipment(repository: repository)
         let equipment = makeEquipment(into: context)
         let request = UpdateEquipmentRequest(
@@ -116,7 +117,7 @@ struct EquipmentUseCasesTests {
     // MARK: - DeleteEquipment
 
     @Test func deleteEquipmentRemovesFromStore() throws {
-        let (repository, context) = try prepareEnvironment()
+        let (repository, _, context) = try prepareEnvironment()
         let useCase = DeleteEquipment(repository: repository)
         let equipment = makeEquipment(into: context)
         try context.save()
@@ -129,65 +130,116 @@ struct EquipmentUseCasesTests {
     
     // MARK: - PerformMaintenance
     
-    @Test func performMaintenanceIncrementsMaintenanceCounter() throws {
-        let (repository, context) = try prepareEnvironment()
-        let useCase = PerformMaintenance(repository: repository)
+    @Test func performMaintenanceIncrementsMaintenanceCounter() async throws {
+        let (repository, transaction, context) = try prepareEnvironment()
+        let useCase = PerformMaintenance(repository: repository, transaction: transaction)
         let equipment = makeEquipment(into: context)
-        
+
         equipment.totalUses = 3
         equipment.usesSinceLastMaintenance = 3
         _ = try context.save()
-        
-        try useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
-        
+
+        try await useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
+
         #expect(equipment.maintenanceCounter == 1)
-        
-        try useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
-        
+
+        try await useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
+
         #expect(equipment.maintenanceCounter == 2)
     }
-    
-    @Test func performMaintenanceDoesNotChangeTotalUses() throws {
-        let (repository, context) = try prepareEnvironment()
-        let useCase = PerformMaintenance(repository: repository)
+
+    @Test func performMaintenanceDoesNotChangeTotalUses() async throws {
+        let (repository, transaction, context) = try prepareEnvironment()
+        let useCase = PerformMaintenance(repository: repository, transaction: transaction)
         let equipment = makeEquipment(into: context)
-        
+
         equipment.totalUses = 3
         equipment.usesSinceLastMaintenance = 3
         _ = try context.save()
-        
-        try useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
-        
+
+        try await useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
+
         #expect(equipment.totalUses == 3)
     }
-    
-    @Test func performMaintenanceResets() throws {
-        let (repository, context) = try prepareEnvironment()
-        let useCase = PerformMaintenance(repository: repository)
+
+    @Test func performMaintenanceResets() async throws {
+        let (repository, transaction, context) = try prepareEnvironment()
+        let useCase = PerformMaintenance(repository: repository, transaction: transaction)
         let equipment = makeEquipment(into: context)
-        
+
         equipment.totalUses = 3
         equipment.usesSinceLastMaintenance = 3
         _ = try context.save()
-        
-        try useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
-        
+
+        try await useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
+
         #expect(equipment.usesSinceLastMaintenance == 0)
     }
-    
-    @Test func performMaintenanceUpdatesLastMaintenanceDate() throws {
-        let (repository, context) = try prepareEnvironment()
-        let useCase = PerformMaintenance(repository: repository)
+
+    // MARK: - PerformMaintenance atomicity
+
+    private struct MaintenanceTestError: Error {}
+
+    @Test func performMaintenanceRollsBackStagedInstanceOnOuterThrow() async throws {
+        let (repository, transaction, context) = try prepareEnvironment()
+        let useCase = PerformMaintenance(repository: repository, transaction: transaction)
         let equipment = makeEquipment(into: context)
-        
+        let template = MaintenanceTemplate(title: "Test", equipment: equipment, steps: [])
+        equipment.maintenanceTemplate = template
+        try context.save()
+
+        await #expect(throws: MaintenanceTestError.self) {
+            try await transaction.perform {
+                _ = try await useCase(equipment: equipment, completedSteps: ["step"], uncompletedSteps: [])
+                throw MaintenanceTestError()
+            }
+        }
+
+        // Persisted state is what matters for atomicity. SwiftData's rollback reverts the
+        // store, but in-memory model property mutations may linger on the local reference —
+        // that's a SwiftData quirk, not an atomicity bug. The committed store is correct.
+        let instances = try context.fetch(FetchDescriptor<MaintenanceInstance>())
+        #expect(instances.isEmpty, "staged MaintenanceInstance must be rolled back when the outer transaction throws")
+    }
+
+    // MARK: - UpdateMaintenanceTemplate atomicity
+
+    @Test func updateMaintenanceTemplateRollsBackStagedStepsOnOuterThrow() async throws {
+        let (repository, transaction, context) = try prepareEnvironment()
+        let useCase = UpdateMaintenanceTemplate(repository: repository, transaction: transaction)
+        let equipment = makeEquipment(into: context)
+        let template = MaintenanceTemplate(title: "Test", equipment: equipment, steps: [])
+        equipment.maintenanceTemplate = template
+        try context.save()
+
+        let request = UpdateMaintenanceTemplateRequest(steps: [
+            MaintenanceStepData(id: nil, title: "Descale", notes: "", sortOrder: 0)
+        ])
+
+        await #expect(throws: MaintenanceTestError.self) {
+            try await transaction.perform {
+                _ = try await useCase(template: template, request: request)
+                throw MaintenanceTestError()
+            }
+        }
+
+        let steps = try context.fetch(FetchDescriptor<MaintenanceTemplateStep>())
+        #expect(steps.isEmpty, "staged MaintenanceTemplateStep must be rolled back when the outer transaction throws")
+    }
+
+    @Test func performMaintenanceUpdatesLastMaintenanceDate() async throws {
+        let (repository, transaction, context) = try prepareEnvironment()
+        let useCase = PerformMaintenance(repository: repository, transaction: transaction)
+        let equipment = makeEquipment(into: context)
+
         equipment.totalUses = 3
         equipment.usesSinceLastMaintenance = 3
         _ = try context.save()
-        
+
         let before = Date.now
-        try useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
+        try await useCase(equipment: equipment, completedSteps: [], uncompletedSteps: [])
         let after = Date.now
-        
+
         let lastMaintenance = try #require(equipment.lastMaintenance)
         #expect(lastMaintenance >= before)
         #expect(lastMaintenance <= after)

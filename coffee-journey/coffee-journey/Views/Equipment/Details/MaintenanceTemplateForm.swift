@@ -95,11 +95,13 @@ struct MaintenanceTemplateForm: View {
 
         let request = UpdateMaintenanceTemplateRequest(steps: stepData)
 
-        do {
-            _ = try equipmentUseCases.updateMaintenanceTemplate(template, request)
-            dismiss()
-        } catch {
-            alertCoordinator.show(error)
+        Task {
+            do {
+                _ = try await equipmentUseCases.updateMaintenanceTemplate(template, request)
+                dismiss()
+            } catch {
+                alertCoordinator.show(error)
+            }
         }
     }
 }

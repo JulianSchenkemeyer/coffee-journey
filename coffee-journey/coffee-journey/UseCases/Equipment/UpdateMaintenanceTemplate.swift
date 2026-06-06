@@ -11,44 +11,45 @@ import SwiftData
 
 @MainActor struct UpdateMaintenanceTemplate {
     let repository: EquipmentRepository
+    let transaction: any PersistenceTransaction
 
     @discardableResult
     func callAsFunction(
         template: MaintenanceTemplate,
         request: UpdateMaintenanceTemplateRequest
-    ) throws -> MaintenanceTemplate {
-        guard let equipment = template.equipment else {
+    ) async throws -> MaintenanceTemplate {
+        guard template.equipment != nil else {
             throw PersistenceError.updateFailed
         }
-        
-        let existingByID = Dictionary(
-            uniqueKeysWithValues: template.steps.map { ($0.id, $0) }
-        )
-        let requestedIDs = Set(request.steps.compactMap(\.id))
 
-        let toDelete = template.steps.filter { !requestedIDs.contains($0.id) }
-        for step in toDelete {
-            repository.remove(step)
-        }
+        return try await transaction.perform {
+            let existingByID = Dictionary(
+                uniqueKeysWithValues: template.steps.map { ($0.id, $0) }
+            )
+            let requestedIDs = Set(request.steps.compactMap(\.id))
 
-        for data in request.steps {
-            if let id = data.id, let existing = existingByID[id] {
-                existing.title = data.title
-                existing.notes = data.notes
-                existing.sortOrder = data.sortOrder
-            } else {
-                let step = MaintenanceTemplateStep(
-                    title: data.title,
-                    notes: data.notes,
-                    sortOrder: data.sortOrder
-                )
-                repository.insert(step)
-                template.steps.append(step)
+            let toDelete = template.steps.filter { !requestedIDs.contains($0.id) }
+            for step in toDelete {
+                repository.remove(step)
             }
+
+            for data in request.steps {
+                if let id = data.id, let existing = existingByID[id] {
+                    existing.title = data.title
+                    existing.notes = data.notes
+                    existing.sortOrder = data.sortOrder
+                } else {
+                    let step = MaintenanceTemplateStep(
+                        title: data.title,
+                        notes: data.notes,
+                        sortOrder: data.sortOrder
+                    )
+                    repository.insert(step)
+                    template.steps.append(step)
+                }
+            }
+
+            return template
         }
-
-        _ = try repository.update(equipment)
-
-        return template
     }
 }

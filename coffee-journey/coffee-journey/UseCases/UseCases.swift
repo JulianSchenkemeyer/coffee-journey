@@ -30,7 +30,10 @@ enum UseCaseFactory {
 
         let coffeeUseCases = CoffeeUseCaseFactory.make(repository: coffeeRepository)
         let recipeUseCases = RecipeUseCaseFactory.make(repository: recipeRepository)
-        let equipmentUseCases = EquipmentUseCaseFactory.make(repository: equipmentRepository)
+        let equipmentUseCases = EquipmentUseCaseFactory.make(
+            repository: equipmentRepository,
+            transaction: transaction
+        )
         let brewUseCases = BrewUseCaseFactory.make(
             brewRepository: brewRepository,
             coffeeRepository: coffeeRepository,

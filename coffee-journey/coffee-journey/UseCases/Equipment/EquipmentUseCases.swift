@@ -14,22 +14,25 @@ struct EquipmentUseCases {
     var create: @MainActor (CreateEquipmentRequest) throws -> Equipment
     var update: @MainActor (Equipment, UpdateEquipmentRequest) throws -> Equipment
     var delete: @MainActor (Equipment) throws -> Void
-    var performMaintenance: @MainActor (Equipment, [String], [String]) throws -> Equipment
+    var performMaintenance: @MainActor (Equipment, [String], [String]) async throws -> Equipment
     var createMaintenanceTemplate: @MainActor (Equipment) throws -> MaintenanceTemplate
-    var updateMaintenanceTemplate: @MainActor (MaintenanceTemplate, UpdateMaintenanceTemplateRequest) throws -> MaintenanceTemplate
+    var updateMaintenanceTemplate: @MainActor (MaintenanceTemplate, UpdateMaintenanceTemplateRequest) async throws -> MaintenanceTemplate
     var deleteMaintenanceTemplate: @MainActor (Equipment) throws -> Equipment
 }
 
 enum EquipmentUseCaseFactory {
     
     @MainActor
-    static func make(repository: any EquipmentRepository) -> EquipmentUseCases {
+    static func make(
+        repository: any EquipmentRepository,
+        transaction: any PersistenceTransaction
+    ) -> EquipmentUseCases {
         let create = CreateEquipment(repository: repository).callAsFunction
         let update = UpdateEquipment(repository: repository).callAsFunction
         let delete = DeleteEquipment(repository: repository).callAsFunction
-        let performMaintenance = PerformMaintenance(repository: repository).callAsFunction
+        let performMaintenance = PerformMaintenance(repository: repository, transaction: transaction).callAsFunction
         let createMaintenanceTemplate = CreateMaintenanceTemplate(repository: repository).callAsFunction
-        let updateMaintenanceTemplate = UpdateMaintenanceTemplate(repository: repository).callAsFunction
+        let updateMaintenanceTemplate = UpdateMaintenanceTemplate(repository: repository, transaction: transaction).callAsFunction
         let deleteMaintenanceTemplate = DeleteMaintenanceTemplate(repository: repository).callAsFunction
 
         return EquipmentUseCases(

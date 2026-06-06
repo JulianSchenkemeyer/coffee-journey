@@ -83,11 +83,13 @@ struct MaintenanceView: View {
             .filter { !completedStepIDs.contains($0.id) }
             .map(\.title)
 
-        do {
-            _ = try equipmentUseCases.performMaintenance(equipment, completedSteps, uncompletedSteps)
-            dismiss()
-        } catch {
-            alertCoordinator.show(error)
+        Task {
+            do {
+                _ = try await equipmentUseCases.performMaintenance(equipment, completedSteps, uncompletedSteps)
+                dismiss()
+            } catch {
+                alertCoordinator.show(error)
+            }
         }
     }
 }
