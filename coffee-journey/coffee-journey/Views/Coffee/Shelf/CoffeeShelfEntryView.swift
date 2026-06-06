@@ -29,11 +29,13 @@ struct CoffeeShelfEntryView: View {
                                 .minute(.omitted)
                         )
                         
-                        Text(latestRefill.roastDate,
-                             format: Date.RelativeFormatStyle(
-                                allowedFields: [.day, .week], presentation: .numeric)
-                        )
-                        .foregroundStyle(coffee.amountLeft == 0 ? .secondary : roast​Freshness​Color(for: latestRefill.roastDate))
+                        if coffee.amountLeft > 0 {
+                            Text(latestRefill.roastDate,
+                                 format: Date.RelativeFormatStyle(
+                                    allowedFields: [.day, .week], presentation: .numeric)
+                            )
+                            .foregroundStyle(roast​Freshness​Color(for: latestRefill.roastDate))
+                        }
                     }
 
                 }
