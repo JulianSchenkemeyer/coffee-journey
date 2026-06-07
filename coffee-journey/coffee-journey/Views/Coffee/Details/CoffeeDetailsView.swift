@@ -18,6 +18,7 @@ struct CoffeeDetailsView: View {
     let coffee: Coffee
 
     @State private var showDeleteConfirmation = false
+    @State private var selectedRecipe: Recipe?
     
     var amountLeft: String {
         return coffee.amountLeft.formatted(.number.precision(.fractionLength(0...1)))
@@ -42,15 +43,26 @@ struct CoffeeDetailsView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.top, 24)
                 
-                RecipeCardGalleryView(coffee: coffee, recipes: coffee.recipes)
-                
-                BrewTasteDistributionChartView(brews: coffee.brews)
+                RecipeCardGalleryView(coffee: coffee, recipes: coffee.recipes, selectedRecipe: $selectedRecipe)
+
+                VStack(alignment: .leading, spacing: 16) {
+                    Text(selectedRecipe.map { "Filtered by \($0.name)" } ?? "All Brews")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    
+                    BrewTasteDistributionChartView(brews: selectedRecipe?.brews ?? coffee.brews)
+                }
             }
             .padding(.horizontal, 24)
         }
         .navigationTitle(coffee.name)
         .navigationSubtitle(coffee.roaster)
         .toolbarBackground(.hidden, for: .navigationBar)
+        .onChange(of: coffee.recipes) {
+            if let selected = selectedRecipe, !coffee.recipes.contains(where: { $0.id == selected.id }) {
+                selectedRecipe = nil
+            }
+        }
         .alert("Delete \(coffee.name)?", isPresented: $showDeleteConfirmation) {
             Button("Delete", role: .destructive) {
                 do {
