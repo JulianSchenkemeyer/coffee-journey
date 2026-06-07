@@ -30,6 +30,10 @@ struct CoffeeShelfView: View {
     ) private var emptyCoffees: [Coffee]
     
     
+    var isLowOnCoffee: Bool {
+        inStockCoffees.reduce(0) { $0 + $1.amountLeft } < CoffeeConstants.Amount.lowThreshold
+    }
+
     var body: some View {
         RouterView {
             List {
@@ -46,13 +50,13 @@ struct CoffeeShelfView: View {
                         Button("Refill", systemImage: CJSymbol.Action.refill) {
                             sheetCoordinator.present(.refill(coffee))
                         }
-                        
+
                         Button("Empty", systemImage: CJSymbol.Action.clear) {
                             sheetCoordinator.present(.confirmEmptying(coffee))
                         }
                     }
                 }
-        
+
                 Section("Previous") {
                     ForEach(emptyCoffees) { coffee in
                         NavigationLink(value: Router.Route.coffeeDetails(coffee)) {
@@ -68,6 +72,15 @@ struct CoffeeShelfView: View {
                 }
             }
             .navigationTitle("Coffee Shelf")
+            .safeAreaInset(edge: .bottom) {
+                if isLowOnCoffee {
+                    LowCoffeeWarning()
+                        .padding(.horizontal)
+                        .padding(.vertical, 8)
+                        .frame(maxWidth: .infinity)
+                        .background(.clear)
+                }
+            }
             .toolbar {
                 Button("Add Coffee", systemImage: CJSymbol.Action.add) {
                     sheetCoordinator.present(.addCoffee(nil))

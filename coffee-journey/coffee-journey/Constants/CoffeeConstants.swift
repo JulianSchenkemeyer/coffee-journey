@@ -10,6 +10,7 @@ enum CoffeeConstants {
         static let range: ClosedRange<Double> = 0.0...2000.0
         static let step: Double = 5.0
         static let defaultValue: Double = 250.0
+        static let lowThreshold: Double = 50.0
     }
 
     enum Rating {
