@@ -5,8 +5,8 @@
 //  Created by Julian Schenkemeyer on 11.01.26.
 //
 
-import Foundation
 import SwiftUI
+import SwiftData
 import Charts
 
 
@@ -57,8 +57,21 @@ struct BrewTasteDistributionChartView: View {
     }
     
     @State private var option = Options.AmountCoffee
-    
+
     let brews: [Brew]
+
+    /// Returns a stable spread offset in -0.3...0.3 for a given brew.
+    ///
+    /// Using `Double.random` here causes points to jump every time the view
+    /// re-renders (e.g. when a context menu opens). Instead we derive a
+    /// deterministic value from the brew's persistent ID so the offset is
+    /// consistent across renders while still spreading points apart visually.
+    ///
+    /// The formula maps the ID hash → 0...600 via modulo, then scales to
+    /// 0.0...0.6 and shifts to -0.3...0.3. 601 = (0.3 - (-0.3)) * 1000 + 1.
+    private func spreadOffset(for brew: Brew) -> Double {
+        Double(UInt(bitPattern: brew.persistentModelID.hashValue) % 601) / 1000.0 - 0.3
+    }
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 14) {
@@ -73,7 +86,7 @@ struct BrewTasteDistributionChartView: View {
                 PointMark(
                     x: .value(
                         "Taste",
-                        Double(brew.taste) + Double.random(in: -0.3...0.3)
+                        Double(brew.taste) + spreadOffset(for: brew)
                     ) ,
                     y: .value(
                         option.label,
