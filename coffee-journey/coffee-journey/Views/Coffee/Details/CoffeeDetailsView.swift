@@ -21,11 +21,19 @@ struct CoffeeDetailsView: View {
     @State private var selectedRecipe: Recipe?
     
     var amountLeft: String {
-        return coffee.amountLeft.formatted(.number.precision(.fractionLength(0...1)))
+        coffee.amountLeft.formatted(.number.precision(.fractionLength(0...1)))
     }
-    
+
     var amount: String {
-        return coffee.amount.formatted(.number.precision(.fractionLength(0...1)))
+        coffee.amount.formatted(.number.precision(.fractionLength(0...1)))
+    }
+
+    var displayedBrews: [Brew] {
+        guard let selected = selectedRecipe,
+              coffee.recipes.contains(where: { $0.id == selected.id }) else {
+            return coffee.brews
+        }
+        return selected.brews
     }
     
     var body: some View {
@@ -43,14 +51,16 @@ struct CoffeeDetailsView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.top, 24)
                 
-                RecipeCardGalleryView(coffee: coffee, recipes: coffee.recipes, selectedRecipe: $selectedRecipe)
+                RecipeCardGalleryView(coffee: coffee, recipes: coffee.recipes) { recipe in
+                    selectedRecipe = recipe
+                }
 
                 VStack(alignment: .leading, spacing: 16) {
                     Text(selectedRecipe.map { "Filtered by \($0.name)" } ?? "All Brews")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     
-                    BrewTasteDistributionChartView(brews: selectedRecipe?.brews ?? coffee.brews)
+                    BrewTasteDistributionChartView(brews: displayedBrews)
                 }
             }
             .padding(.horizontal, 24)

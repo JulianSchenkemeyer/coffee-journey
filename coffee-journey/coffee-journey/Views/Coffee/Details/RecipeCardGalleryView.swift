@@ -4,20 +4,21 @@
 //
 //  Created by Julian Schenkemeyer on 07.02.26.
 //
-import Foundation
 import SwiftUI
+import SwiftData
 
 
 struct RecipeCardGalleryView: View {
     let coffee: Coffee
     let recipes: [Recipe]
-    @Binding var selectedRecipe: Recipe?
+    var onSelectionChange: (Recipe?) -> Void
 
     var sortedRecipes: [Recipe] {
         recipes.sorted(using: KeyPathComparator(\.lastUsed, order: .reverse))
     }
 
-    @State private var isAddButtonInFocus = false
+    @State private var visibleRecipeID: Recipe.ID?
+    @State private var isAddButtonVisible = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -30,25 +31,25 @@ struct RecipeCardGalleryView: View {
                     ForEach(sortedRecipes) { recipe in
                         RecipeCardView(coffee: coffee, recipe: recipe)
                             .frame(width: 300, height: 240)
-                            .onScrollVisibilityChange(threshold: 0.5) { isVisible in
-                                if isVisible { selectedRecipe = recipe }
-                            }
                     }
 
-                    AddRecipeCardButtonView(coffee: coffee, isInteractive: isAddButtonInFocus)
+                    AddRecipeCardButtonView(coffee: coffee, isInteractive: isAddButtonVisible)
                         .frame(width: 300, height: 240)
                         .onScrollVisibilityChange(threshold: 0.9) { isVisible in
-                            isAddButtonInFocus = isVisible
-                            if isVisible { selectedRecipe = nil }
+                            isAddButtonVisible = isVisible
                         }
                 }
                 .scrollTargetLayout()
             }
             .scrollTargetBehavior(.viewAligned)
+            .scrollPosition(id: $visibleRecipeID)
+            .onChange(of: visibleRecipeID) {
+                onSelectionChange(sortedRecipes.first { $0.id == visibleRecipeID })
+            }
         }
     }
 }
 
 #Preview {
-    RecipeCardGalleryView(coffee: .Mock.filter, recipes: Recipe.Mock.all, selectedRecipe: .constant(nil))
+    RecipeCardGalleryView(coffee: .Mock.filter, recipes: Recipe.Mock.all, onSelectionChange: { _ in })
 }
