@@ -33,7 +33,6 @@ enum BrewTaste: Int, CaseIterable, CustomStringConvertible {
     }
 }
 
-typealias Brew = SchemaV3.Brew
 enum BrewClarity: Int, CaseIterable, CustomStringConvertible {
     case flat = 1
     case soft = 2
@@ -52,6 +51,8 @@ enum BrewClarity: Int, CaseIterable, CustomStringConvertible {
     }
 }
 
+typealias Brew = SchemaV4.Brew
+
 
 extension Brew {
     var tasteDescription: BrewTaste {
@@ -62,7 +63,7 @@ extension Brew {
         BrewRating(rawValue: ratingString) ?? .thumbsUp
     }
     
-    convenience init(recipe: Recipe, date: Date, beanAge: Int?, amountCoffee: Double, grindSetting: Double, temperature: Int, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
+    convenience init(recipe: Recipe, date: Date, beanAge: Int?, amountCoffee: Double, grindSetting: Double, temperature: Int, extractionTime: Int, taste: Int, output: Double, rating: BrewRating, clarity: Int? = nil) {
         self.init(
             date: date,
             beanAge: beanAge,
@@ -72,12 +73,13 @@ extension Brew {
             extractionTime: extractionTime,
             taste: taste,
             output: output,
-            rating: rating
+            rating: rating,
+            clarity: clarity
         )
         self.recipe = recipe
     }
     
-    convenience init(recipe: Recipe, date: Date, amountCoffee: Double, grindSetting: Double, temperature: Int, extractionTime: Int, taste: Int, output: Double, rating: BrewRating) {
+    convenience init(recipe: Recipe, date: Date, amountCoffee: Double, grindSetting: Double, temperature: Int, extractionTime: Int, taste: Int, output: Double, rating: BrewRating, clarity: Int? = nil) {
         self.init(
             date: date,
             beanAge: nil,
@@ -87,7 +89,8 @@ extension Brew {
             extractionTime: extractionTime,
             taste: taste,
             output: output,
-            rating: rating
+            rating: rating,
+            clarity: clarity
         )
         self.recipe = recipe
     }

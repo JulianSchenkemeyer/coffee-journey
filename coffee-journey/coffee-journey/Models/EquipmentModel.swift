@@ -21,7 +21,7 @@ enum EquipmentType: String, Codable, CaseIterable, CustomStringConvertible {
     }
 }
 
-typealias Equipment = SchemaV3.Equipment
+typealias Equipment = SchemaV4.Equipment
 
 
 extension Equipment {

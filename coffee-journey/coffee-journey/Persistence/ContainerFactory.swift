@@ -17,7 +17,7 @@ enum ContainerFactory {
     static func create(configuration: [ModelConfiguration]) -> ModelContainer {
         do {
             return try ModelContainer(
-                for: Schema(SchemaV3.models),
+                for: Schema(SchemaV4.models),
                 migrationPlan: CoffeeJourneyMigrationPlan.self,
                 configurations: configuration
             )
@@ -30,7 +30,7 @@ enum ContainerFactory {
     static func createInMemory() -> ModelContainer {
         do {
             return try ModelContainer(
-                for: Schema(SchemaV3.models),
+                for: Schema(SchemaV4.models),
                 configurations: [ModelConfiguration(isStoredInMemoryOnly: true)]
             )
         } catch {
