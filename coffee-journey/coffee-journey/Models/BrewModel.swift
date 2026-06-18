@@ -34,6 +34,23 @@ enum BrewTaste: Int, CaseIterable, CustomStringConvertible {
 }
 
 typealias Brew = SchemaV3.Brew
+enum BrewClarity: Int, CaseIterable, CustomStringConvertible {
+    case flat = 1
+    case soft = 2
+    case clean = 3
+    case sharp = 4
+    case harsh = 5
+    
+    var description: String {
+        switch self {
+        case .flat: "Flat / Muted"
+        case .soft: "Soft"
+        case .clean: "Clean"
+        case .sharp: "Sharp"
+        case .harsh: "Harsh / Burnt"
+        }
+    }
+}
 
 
 extension Brew {
