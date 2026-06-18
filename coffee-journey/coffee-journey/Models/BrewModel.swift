@@ -59,6 +59,21 @@ extension Brew {
         BrewTaste(rawValue: taste) ?? .balanced
     }
     
+    var clarityDescription: BrewClarity {
+        guard let clarity else { return .clean }
+        return BrewClarity(rawValue: clarity) ?? .clean
+    }
+    
+    var ratio: Double? {
+        guard amountCoffee > 0 else { return nil }
+        return output / amountCoffee
+    }
+    
+    var flowRate: Double? {
+        guard extractionTime > 0 else { return nil }
+        return output / Double(extractionTime)
+    }
+    
     var rating: BrewRating {
         BrewRating(rawValue: ratingString) ?? .thumbsUp
     }
