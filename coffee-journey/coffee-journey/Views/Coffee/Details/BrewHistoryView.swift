@@ -99,8 +99,6 @@ struct BrewHistoryList: View {
                 
                 // Taste with visual indicator
                 VStack(alignment: .leading, spacing: 4) {
-
-                    
                     // Taste scale bar
                     HStack(spacing: 4) {
                         ForEach(1...5, id: \.self) { value in
@@ -114,6 +112,25 @@ struct BrewHistoryList: View {
                         Text("Taste:")
                             .fontWeight(.medium)
                         Text(brew.tasteDescription.description)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                // Clarity with visual indicator
+                VStack(alignment: .leading, spacing: 4) {
+                    // Clarity scale bar
+                    HStack(spacing: 4) {
+                        ForEach(1...5, id: \.self) { value in
+                            RoundedRectangle(cornerRadius: 2)
+                                .fill(value == brew.clarityDescription.rawValue ? Color.accentColor : Color.gray.opacity(0.3))
+                                .frame(height: 6)
+                        }
+                    }
+                    
+                    HStack {
+                        Text("Clarity:")
+                            .fontWeight(.medium)
+                        Text(brew.clarityDescription.description)
                             .foregroundStyle(.secondary)
                     }
                     
@@ -174,14 +191,44 @@ struct BrewHistoryList: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     
-                    HStack(spacing: 6) {
-                        Image(systemName: "drop.fill")
-                            .foregroundStyle(.primary)
-                            .frame(width: 20)
-                        Text("Output:")
-                            .fontWeight(.medium)
-                        Text("\(brew.output.formatted())ml")
-                            .foregroundStyle(.secondary)
+                    HStack(spacing: 0) {
+                        // Left column
+                        HStack(spacing: 6) {
+                            Image(systemName: "drop.fill")
+                                .foregroundStyle(.primary)
+                                .frame(width: 20)
+                            Text("Output:")
+                                .fontWeight(.medium)
+                            Text("\(brew.output.formatted())g")
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        // Right column
+                        if let ratio = brew.ratio {
+                            HStack(spacing: 6) {
+                                Image(systemName: "divide")
+                                    .foregroundStyle(.primary)
+                                    .frame(width: 20)
+                                Text("Ratio:")
+                                    .fontWeight(.medium)
+                                Text("1:\(ratio, format: .number.precision(.fractionLength(1)))")
+                                    .foregroundStyle(.secondary)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
+                    
+                    if let flowRate = brew.flowRate {
+                        HStack(spacing: 6) {
+                            Image(systemName: "waveform.path")
+                                .foregroundStyle(.primary)
+                                .frame(width: 20)
+                            Text("Flow Rate:")
+                                .fontWeight(.medium)
+                            Text("\(flowRate, format: .number.precision(.fractionLength(2))) g/s")
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
                 .font(.subheadline)
