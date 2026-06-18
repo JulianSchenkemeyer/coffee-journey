@@ -12,6 +12,8 @@ struct BrewDrinkModalView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.brewUseCases) private var brewUseCases
     @Environment(\.alertCoordinator) private var alertCoordinator
+
+    @ScaledMetric private var sliderLabelWidth: CGFloat = 55
     
     let coffee: Coffee
     
@@ -22,6 +24,7 @@ struct BrewDrinkModalView: View {
     @State private var extractionTime = RecipeConstants.ExtractionTime.defaultValue
     @State private var output = RecipeConstants.Output.defaultValue
     @State private var taste = RecipeConstants.Taste.defaultValue
+    @State private var clarity = RecipeConstants.Clarity.defaultValue
     
     
     init(coffee: Coffee) {
@@ -88,9 +91,17 @@ struct BrewDrinkModalView: View {
                         Slider(value: $taste, in: RecipeConstants.Taste.range, step: RecipeConstants.Taste.step) {
                             Text("Taste")
                         } minimumValueLabel: {
-                            Text("Sour")
+                            Text("Sour").frame(width: sliderLabelWidth, alignment: .leading)
                         } maximumValueLabel: {
-                            Text("Bitter")
+                            Text("Bitter").frame(width: sliderLabelWidth, alignment: .trailing)
+                        }
+                        
+                        Slider(value: $clarity, in: RecipeConstants.Clarity.range, step: RecipeConstants.Clarity.step) {
+                            Text("Clarity")
+                        } minimumValueLabel: {
+                            Text("Flat").frame(width: sliderLabelWidth, alignment: .leading)
+                        } maximumValueLabel: {
+                            Text("Harsh").frame(width: sliderLabelWidth, alignment: .trailing)
                         }
                     }
                 }
@@ -150,7 +161,8 @@ struct BrewDrinkModalView: View {
             extractionTime: extractionTime,
             taste: Int(taste),
             output: output,
-            rating: rating
+            rating: rating,
+            clarity: Int(clarity)
         )
         
         Task {
@@ -167,4 +179,3 @@ struct BrewDrinkModalView: View {
 #Preview {
     BrewDrinkModalView(coffee: Coffee.Mock.espresso)
 }
-

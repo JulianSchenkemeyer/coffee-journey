@@ -45,4 +45,10 @@ enum RecipeConstants {
         static let step: Double = 1
         static let defaultValue: Double = 3
     }
+
+    enum Clarity {
+        static let range: ClosedRange<Double> = 1.0...5.0
+        static let step: Double = 1
+        static let defaultValue: Double = 3
+    }
 }
