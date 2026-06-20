@@ -12,6 +12,15 @@ struct BrewDrinkModalView: View {
     private enum Stage {
         case parameters
         case rating
+        
+        var contentTransition: AnyTransition {
+            switch self {
+            case .parameters:
+                .move(edge: .top)
+            case .rating:
+                .move(edge: .bottom)
+            }
+        }
     }
 
     @Environment(\.sheetCoordinator) private var sheetCoordinator
@@ -43,10 +52,11 @@ struct BrewDrinkModalView: View {
             _output = State(initialValue: last.output)
         }
     }
+    
 
     var body: some View {
         NavigationStack {
-            Group {
+            VStack {
                 switch stage {
                 case .parameters:
                     BrewParameterFormView(
@@ -59,7 +69,8 @@ struct BrewDrinkModalView: View {
                         output: $output
                     )
                     .navigationSubtitle("Fine-tune your brew")
-
+                    .transition(stage.contentTransition)
+                    
                 case .rating:
                     if let selectedRecipe {
                         BrewRatingFormView(
@@ -74,11 +85,10 @@ struct BrewDrinkModalView: View {
                             onRate: saveBrew
                         )
                         .navigationSubtitle("How was it?")
+                        .transition(stage.contentTransition)
                     }
                 }
             }
-            .id(stage)
-            .transition(.push(from: .trailing))
             .navigationTitle(coffee.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
