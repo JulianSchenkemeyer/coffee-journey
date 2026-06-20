@@ -9,14 +9,19 @@ import SwiftUI
 
 
 struct BrewDrinkModalView: View {
-    @Environment(\.dismiss) private var dismiss
+    private enum Stage {
+        case parameters
+        case rating
+    }
+
+    @Environment(\.sheetCoordinator) private var sheetCoordinator
     @Environment(\.brewUseCases) private var brewUseCases
     @Environment(\.alertCoordinator) private var alertCoordinator
 
-    @ScaledMetric private var sliderLabelWidth: CGFloat = 55
-    
     let coffee: Coffee
-    
+
+    @State private var stage: Stage = .parameters
+
     @State private var selectedRecipe: Recipe?
     @State private var usedCoffee = RecipeConstants.Beans.defaultValue
     @State private var grindSetting = RecipeConstants.GrindSetting.defaultValue
@@ -25,8 +30,7 @@ struct BrewDrinkModalView: View {
     @State private var output = RecipeConstants.Output.defaultValue
     @State private var taste = RecipeConstants.Taste.defaultValue
     @State private var clarity = RecipeConstants.Clarity.defaultValue
-    
-    
+
     init(coffee: Coffee) {
         self.coffee = coffee
         let last = coffee.lastUsedRecipe
@@ -39,119 +43,73 @@ struct BrewDrinkModalView: View {
             _output = State(initialValue: last.output)
         }
     }
-    
+
     var body: some View {
         NavigationStack {
-            VStack {
-                Form {
-                    Picker("Recipe", selection: $selectedRecipe) {
-                        ForEach(coffee.recipes) { recipe in
-                            Text(recipe.name).tag(recipe)
-                        }
-                    }
-                    .onChange(of: selectedRecipe) {
-                        guard let selectedRecipe else { return }
-                        usedCoffee = selectedRecipe.amountBeans
-                        grindSetting = selectedRecipe.grindSetting
-                        temperature = selectedRecipe.temperature
-                        extractionTime = selectedRecipe.extractionTime
-                        output = selectedRecipe.output
-                    }
-                    
-                    Section("Preperation") {
-                        Stepper("Beans: \(usedCoffee, format: .number.precision(.fractionLength(1))) \(RecipeConstants.Beans.unit)",
-                                value: $usedCoffee,
-                                in: RecipeConstants.Beans.range,
-                                step: RecipeConstants.Beans.step)
-                        
-                        Stepper("Grind Setting: \(grindSetting, format: .number)",
-                                value: $grindSetting,
-                                in: RecipeConstants.GrindSetting.range,
-                                step: RecipeConstants.GrindSetting.step)
-                    }
-                    
-                    Section("Process") {
-                        Stepper("Temperature: \(temperature, format: .number) \(RecipeConstants.Temperature.unit)",
-                                value: $temperature,
-                                in: RecipeConstants.Temperature.range,
-                                step: RecipeConstants.Temperature.step)
-                        
-                        Stepper("Extraction Time: \(extractionTime, format: .number) \(RecipeConstants.ExtractionTime.unit)",
-                                value: $extractionTime,
-                                in: RecipeConstants.ExtractionTime.range,
-                                step: RecipeConstants.ExtractionTime.step)
-                    }
-                    
-                    Section() {
-                        Stepper("Output: \(output, format: .number.precision(.fractionLength(1))) \(RecipeConstants.Output.unit)",
-                                value: $output,
-                                in: RecipeConstants.Output.range,
-                                step: RecipeConstants.Output.step)
-                        
-                        Slider(value: $taste, in: RecipeConstants.Taste.range, step: RecipeConstants.Taste.step) {
-                            Text("Taste")
-                        } minimumValueLabel: {
-                            Text("Sour").frame(width: sliderLabelWidth, alignment: .leading)
-                        } maximumValueLabel: {
-                            Text("Bitter").frame(width: sliderLabelWidth, alignment: .trailing)
-                        }
-                        
-                        Slider(value: $clarity, in: RecipeConstants.Clarity.range, step: RecipeConstants.Clarity.step) {
-                            Text("Clarity")
-                        } minimumValueLabel: {
-                            Text("Flat").frame(width: sliderLabelWidth, alignment: .leading)
-                        } maximumValueLabel: {
-                            Text("Harsh").frame(width: sliderLabelWidth, alignment: .trailing)
-                        }
+            Group {
+                switch stage {
+                case .parameters:
+                    BrewParameterFormView(
+                        coffee: coffee,
+                        selectedRecipe: $selectedRecipe,
+                        usedCoffee: $usedCoffee,
+                        grindSetting: $grindSetting,
+                        temperature: $temperature,
+                        extractionTime: $extractionTime,
+                        output: $output
+                    )
+                    .navigationSubtitle("Fine-tune your brew")
+
+                case .rating:
+                    if let selectedRecipe {
+                        BrewRatingFormView(
+                            recipe: selectedRecipe,
+                            usedCoffee: usedCoffee,
+                            grindSetting: grindSetting,
+                            temperature: temperature,
+                            extractionTime: extractionTime,
+                            output: output,
+                            taste: $taste,
+                            clarity: $clarity,
+                            onRate: saveBrew
+                        )
+                        .navigationSubtitle("How was it?")
                     }
                 }
-                
-                HStack {
-                    Button {
-                        saveBrew(with: .thumbsDown)
-                        dismiss()
-                    } label: {
-                        Label("Thumbs down", systemImage: "hand.thumbsdown.fill")
-                            .labelStyle(.iconOnly)
-                            .fontWeight(.semibold)
-                            .padding()
-                            
-                    }
-                    .tint(.red)
-                    
-                    Spacer()
-                    
-                    Button {
-                        saveBrew(with: .thumbsUp)
-                        dismiss()
-                    } label: {
-                        Label("Thumbs Up", systemImage: "hand.thumbsup.fill")
-                            .labelStyle(.iconOnly)
-                            .fontWeight(.semibold)
-                            .padding()
-                    }
-                }
-                .disabled(selectedRecipe == nil)
-                .padding(.horizontal, 20)
-                .buttonStyle(.glassProminent)
-                .frame(maxWidth: .infinity)
             }
+            .id(stage)
+            .transition(.push(from: .trailing))
             .navigationTitle(coffee.name)
-            .navigationSubtitle("Fine-tune your brew")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(role: .cancel) {
-                        dismiss()
+                switch stage {
+                case .parameters:
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(role: .cancel) {
+                            sheetCoordinator.dismiss()
+                        }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Next") {
+                            withAnimation { stage = .rating }
+                        }
+                        .disabled(selectedRecipe == nil)
+                    }
+
+                case .rating:
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Back") {
+                            withAnimation { stage = .parameters }
+                        }
                     }
                 }
             }
         }
     }
-    
-    func saveBrew(with rating: BrewRating) {
+
+    private func saveBrew(with rating: BrewRating) {
         guard let selectedRecipe else { return }
-        
+
         let brew = Brew(
             date: .now,
             beanAge: coffee.beanAge,
@@ -164,14 +122,16 @@ struct BrewDrinkModalView: View {
             rating: rating,
             clarity: Int(clarity)
         )
-        
+
         Task {
             do {
                 _ = try await brewUseCases.brew(coffee, brew, selectedRecipe)
+                sheetCoordinator.dismiss()
             } catch {
                 alertCoordinator.show(error)
             }
         }
+
     }
 }
 
