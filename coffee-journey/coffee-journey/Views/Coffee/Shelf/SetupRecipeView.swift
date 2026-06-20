@@ -10,10 +10,10 @@ import SwiftData
 
 
 /// Inline recipe setup form presented after creating a new coffee.
-/// Lives within CoffeeFormView's NavigationStack, not as a standalone sheet.
+/// Lives within AddCoffeeModalView's NavigationStack, not as a standalone sheet.
 struct SetupRecipeView: View {
     @Environment(\.recipeUseCases) private var recipeUseCases
-    @Environment(\.dismissMultiStepSheet) private var dismissMultiStepSheet
+    @Environment(\.sheetCoordinator) private var sheetCoordinator
     @Environment(\.alertCoordinator) private var alertCoordinator
 
     var coffee: Coffee
@@ -41,11 +41,10 @@ struct SetupRecipeView: View {
         )
         .navigationTitle("Set Up Recipe")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button("Skip") {
-                    dismissMultiStepSheet()
+                    sheetCoordinator.dismiss()
                 }
             }
             ToolbarItem(placement: .confirmationAction) {
@@ -80,7 +79,7 @@ struct SetupRecipeView: View {
 
         do {
             _ = try recipeUseCases.create(request)
-            dismissMultiStepSheet()
+            sheetCoordinator.dismiss()
         } catch {
             alertCoordinator.show(error)
         }
@@ -88,23 +87,12 @@ struct SetupRecipeView: View {
 }
 
 
-/// Wrapper that injects dismissMultiStepSheet from within a real sheet context.
-private struct SetupRecipePreview: View {
-    @Environment(\.dismiss) private var dismiss
-    var coffee: Coffee
-
-    var body: some View {
-        NavigationStack {
-            SetupRecipeView(coffee: coffee)
-        }
-        .onDismissMultiStepSheet { dismiss() }
-    }
-}
-
 #Preview(traits: .modifier(SampleDataModifier())) {
     @Previewable @Query var coffees: [Coffee]
     @Previewable @State var isPresented = true
     Color.clear.sheet(isPresented: $isPresented) {
-        SetupRecipePreview(coffee: coffees.first!)
+        NavigationStack {
+            SetupRecipeView(coffee: coffees.first!)
+        }
     }
 }
