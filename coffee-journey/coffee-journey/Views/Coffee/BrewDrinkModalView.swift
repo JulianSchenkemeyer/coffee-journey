@@ -16,9 +16,9 @@ struct BrewDrinkModalView: View {
         var contentTransition: AnyTransition {
             switch self {
             case .parameters:
-                .move(edge: .top)
+                .move(edge: .leading)
             case .rating:
-                .move(edge: .bottom)
+                .move(edge: .trailing)
             }
         }
     }
