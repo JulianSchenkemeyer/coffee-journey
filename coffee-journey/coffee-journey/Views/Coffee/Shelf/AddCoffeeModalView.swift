@@ -27,8 +27,6 @@ struct AddCoffeeModalView: View {
     @Environment(\.coffeeUseCases) private var coffeeUseCases
     @Environment(\.alertCoordinator) private var alertCoordinator
 
-    var coffee: Coffee?
-
     @State private var stage: Stage = .details
 
     @State private var name: String = ""
@@ -53,10 +51,10 @@ struct AddCoffeeModalView: View {
                         roastDate: $roastDate,
                         rating: $rating,
                         notes: $notes,
-                        isEditMode: isEditMode,
+                        isEditMode: false,
                         isDuplicate: isDuplicate
                     )
-                    .navigationTitle(isEditMode ? "Edit Coffee" : "Add Coffee")
+                    .navigationTitle("Add Coffee")
                     .transition(stage.contentTransition)
 
                 case .recipe:
@@ -79,13 +77,8 @@ struct AddCoffeeModalView: View {
                     }
                 }
             }
-            .onAppear {
-                loadCoffeeData()
-            }
         }
     }
-
-    private var isEditMode: Bool { coffee != nil }
 
     private var isNameValid: Bool {
         !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -98,58 +91,25 @@ struct AddCoffeeModalView: View {
     private var isDuplicate: Bool {
         // Check if a coffee with this name and roaster already exists
         do {
-            return try coffeeUseCases.checkExists(name, roaster, coffee)
+            return try coffeeUseCases.checkExists(name, roaster, nil)
         } catch {
             // If the check fails, allow the form to proceed (fail open)
             return false
         }
     }
-    
+
     private var isFormValid: Bool {
         guard isNameValid else { return false }
         guard isRoasterValid else { return false }
         guard !isDuplicate else { return false }
         return true
     }
-    
-    private func loadCoffeeData() {
-        guard let coffee else { return }
-        
-        self.name = coffee.name
-        self.roaster = coffee.roaster
-        self.roastCategory = .init(rawValue: coffee.roastCategory) ?? .medium
-        self.roastDate = coffee.newestRefill?.roastDate ?? .now
-        self.rating = coffee.rating
-        self.notes = coffee.notes
-    }
 
     private func submit() {
         guard isFormValid else { return }
-
-        if let coffee {
-            update(coffee: coffee)
-        } else {
-            create()
-        }
+        create()
     }
-    
-    private func update(coffee: Coffee) {
-        let request = UpdateCoffeeRequest(
-            name: name.trimmingCharacters(in: .whitespacesAndNewlines),
-            roaster: roaster.trimmingCharacters(in: .whitespacesAndNewlines),
-            roastCategory: roastCategory,
-            rating: rating,
-            notes: notes.trimmingCharacters(in: .whitespacesAndNewlines)
-        )
 
-        do {
-            _ = try coffeeUseCases.update(coffee, request)
-            sheetCoordinator.dismiss()
-        } catch {
-            alertCoordinator.show(error)
-        }
-    }
-    
     private func create() {
         let request = CreateCoffeeRequest(
             name: name.trimmingCharacters(in: .whitespacesAndNewlines),

@@ -83,7 +83,7 @@ struct CoffeeShelfView: View {
             }
             .toolbar {
                 Button("Add Coffee", systemImage: CJSymbol.Action.add) {
-                    sheetCoordinator.present(.addCoffee(nil))
+                    sheetCoordinator.present(.addCoffee)
                 }
             }
         }
