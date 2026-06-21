@@ -13,6 +13,7 @@ class Router {
 
     enum Route: Hashable {
         case coffeeDetails(Coffee)
+        case editCoffee(Coffee)
         case brewHistory(Coffee, Recipe?)
         case equipmentDetails(Equipment)
     }

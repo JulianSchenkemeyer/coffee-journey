@@ -99,7 +99,7 @@ struct CoffeeDetailsView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu("Actions", systemImage: "ellipsis") {
                     Button("Edit Coffee", systemImage: CJSymbol.Action.edit) {
-                        sheetCoordinator.present(.addCoffee(coffee))
+                        router.navigate(to: .editCoffee(coffee))
                     }
                     
                     Button("Brew History", systemImage: CJSymbol.Navigation.brewHistory) {

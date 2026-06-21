@@ -33,6 +33,8 @@ struct RouterView<Content: View>: View {
         switch route {
         case .coffeeDetails(let coffee):
             CoffeeDetailsView(coffee: coffee)
+        case .editCoffee(let coffee):
+            CoffeeEditView(coffee: coffee)
         case .brewHistory(let coffee, let recipe):
             BrewHistoryView(coffee: coffee, recipe: recipe)
         case .equipmentDetails(let equipment):
