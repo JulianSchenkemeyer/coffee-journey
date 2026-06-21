@@ -22,64 +22,34 @@ struct BrewRatingFormView: View {
     @Binding var taste: Double
     @Binding var clarity: Double
 
-    let onRate: (BrewRating) -> Void
-
     var body: some View {
-        VStack {
-            Form {
-                Section("Summary") {
-                    LabeledContent("Recipe", value: recipe.name)
-                    LabeledContent("Beans", value: "\(usedCoffee.formatted(.number.precision(.fractionLength(1)))) \(RecipeConstants.Beans.unit)")
-                    LabeledContent("Grind Setting", value: grindSetting.formatted(.number.precision(.fractionLength(0))))
-                    LabeledContent("Temperature", value: "\(temperature) \(RecipeConstants.Temperature.unit)")
-                    LabeledContent("Extraction Time", value: "\(extractionTime) \(RecipeConstants.ExtractionTime.unit)")
-                    LabeledContent("Output", value: "\(output.formatted(.number.precision(.fractionLength(1)))) \(RecipeConstants.Output.unit)")
-                }
-
-                Section("Rating") {
-                    Slider(value: $taste, in: RecipeConstants.Taste.range, step: RecipeConstants.Taste.step) {
-                        Text("Taste")
-                    } minimumValueLabel: {
-                        Text("Sour").frame(width: sliderLabelWidth, alignment: .leading)
-                    } maximumValueLabel: {
-                        Text("Bitter").frame(width: sliderLabelWidth, alignment: .trailing)
-                    }
-
-                    Slider(value: $clarity, in: RecipeConstants.Clarity.range, step: RecipeConstants.Clarity.step) {
-                        Text("Clarity")
-                    } minimumValueLabel: {
-                        Text("Flat").frame(width: sliderLabelWidth, alignment: .leading)
-                    } maximumValueLabel: {
-                        Text("Harsh").frame(width: sliderLabelWidth, alignment: .trailing)
-                    }
-                }
+        Form {
+            Section("Summary") {
+                LabeledContent("Recipe", value: recipe.name)
+                LabeledContent("Beans", value: "\(usedCoffee.formatted(.number.precision(.fractionLength(1)))) \(RecipeConstants.Beans.unit)")
+                LabeledContent("Grind Setting", value: grindSetting.formatted(.number.precision(.fractionLength(0))))
+                LabeledContent("Temperature", value: "\(temperature) \(RecipeConstants.Temperature.unit)")
+                LabeledContent("Extraction Time", value: "\(extractionTime) \(RecipeConstants.ExtractionTime.unit)")
+                LabeledContent("Output", value: "\(output.formatted(.number.precision(.fractionLength(1)))) \(RecipeConstants.Output.unit)")
             }
 
-            HStack {
-                Button {
-                    onRate(.thumbsDown)
-                } label: {
-                    Label("Thumbs down", systemImage: "hand.thumbsdown.fill")
-                        .labelStyle(.iconOnly)
-                        .fontWeight(.semibold)
-                        .padding()
+            Section("Rating") {
+                Slider(value: $taste, in: RecipeConstants.Taste.range, step: RecipeConstants.Taste.step) {
+                    Text("Taste")
+                } minimumValueLabel: {
+                    Text("Sour").frame(width: sliderLabelWidth, alignment: .leading)
+                } maximumValueLabel: {
+                    Text("Bitter").frame(width: sliderLabelWidth, alignment: .trailing)
                 }
-                .tint(.red)
 
-                Spacer()
-
-                Button {
-                    onRate(.thumbsUp)
-                } label: {
-                    Label("Thumbs Up", systemImage: "hand.thumbsup.fill")
-                        .labelStyle(.iconOnly)
-                        .fontWeight(.semibold)
-                        .padding()
+                Slider(value: $clarity, in: RecipeConstants.Clarity.range, step: RecipeConstants.Clarity.step) {
+                    Text("Clarity")
+                } minimumValueLabel: {
+                    Text("Flat").frame(width: sliderLabelWidth, alignment: .leading)
+                } maximumValueLabel: {
+                    Text("Harsh").frame(width: sliderLabelWidth, alignment: .trailing)
                 }
             }
-            .padding(.horizontal, 20)
-            .buttonStyle(.glassProminent)
-            .frame(maxWidth: .infinity)
         }
     }
 }
@@ -99,8 +69,7 @@ struct BrewRatingFormView: View {
             extractionTime: 30,
             output: 36.0,
             taste: $taste,
-            clarity: $clarity,
-            onRate: { _ in }
+            clarity: $clarity
         )
     }
 }

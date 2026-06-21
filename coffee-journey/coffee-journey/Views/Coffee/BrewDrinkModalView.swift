@@ -81,13 +81,15 @@ struct BrewDrinkModalView: View {
                             extractionTime: extractionTime,
                             output: output,
                             taste: $taste,
-                            clarity: $clarity,
-                            onRate: saveBrew
+                            clarity: $clarity
                         )
                         .navigationSubtitle("How was it?")
                         .transition(stage.contentTransition)
                     }
                 }
+            }
+            .safeAreaInset(edge: .bottom) {
+                bottomBar
             }
             .navigationTitle(coffee.name)
             .navigationBarTitleDisplayMode(.inline)
@@ -99,12 +101,6 @@ struct BrewDrinkModalView: View {
                             sheetCoordinator.dismiss()
                         }
                     }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Next") {
-                            withAnimation { stage = .rating }
-                        }
-                        .disabled(selectedRecipe == nil)
-                    }
 
                 case .rating:
                     ToolbarItem(placement: .cancellationAction) {
@@ -114,6 +110,50 @@ struct BrewDrinkModalView: View {
                     }
                 }
             }
+        }
+    }
+
+    @ViewBuilder private var bottomBar: some View {
+        switch stage {
+        case .parameters:
+            Button {
+                withAnimation { stage = .rating }
+            } label: {
+                Text("Next")
+                    .fontWeight(.semibold)
+                    .padding(.horizontal, 14)
+            }
+            .controlSize(.large)
+            .buttonStyle(.glassProminent)
+            .disabled(selectedRecipe == nil)
+            .padding(.horizontal, 20)
+
+        case .rating:
+            HStack {
+                Button {
+                    saveBrew(with: .thumbsDown)
+                } label: {
+                    Label("Thumbs down", systemImage: "hand.thumbsdown.fill")
+                        .labelStyle(.iconOnly)
+                        .fontWeight(.semibold)
+                        .padding()
+                }
+                .tint(.red)
+
+                Spacer()
+
+                Button {
+                    saveBrew(with: .thumbsUp)
+                } label: {
+                    Label("Thumbs Up", systemImage: "hand.thumbsup.fill")
+                        .labelStyle(.iconOnly)
+                        .fontWeight(.semibold)
+                        .padding()
+                }
+            }
+            .buttonStyle(.glassProminent)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 20)
         }
     }
 
