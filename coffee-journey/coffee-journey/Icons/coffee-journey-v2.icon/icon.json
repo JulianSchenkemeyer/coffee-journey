@@ -1,0 +1,122 @@
+{
+  "fill" : {
+    "linear-gradient" : [
+      "extended-srgb:1.00000,0.80000,0.00000,1.00000",
+      "display-p3:1.00000,0.70245,0.06621,1.00000"
+    ],
+    "orientation" : {
+      "start" : {
+        "x" : 0.5,
+        "y" : 0
+      },
+      "stop" : {
+        "x" : 0.5,
+        "y" : 0.7
+      }
+    }
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "blend-mode" : "plus-darker",
+          "hidden" : false,
+          "image-name" : "bean.svg",
+          "name" : "bean",
+          "position" : {
+            "scale" : 0.85,
+            "translation-in-points" : [
+              7.5269759518537285,
+              -0.8132972695856893
+            ]
+          }
+        },
+        {
+          "blend-mode" : "hard-light",
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "medallion.svg",
+          "name" : "medallion",
+          "position" : {
+            "scale" : 0.85,
+            "translation-in-points" : [
+              -8.855265825710262,
+              14.128018202762746
+            ]
+          }
+        },
+        {
+          "blend-mode" : "plus-lighter",
+          "hidden" : false,
+          "image-name" : "cardinal-ticks.svg",
+          "name" : "cardinal-ticks",
+          "position" : {
+            "scale" : 0.9,
+            "translation-in-points" : [
+              0.4250012750001133,
+              -0.4249999999999545
+            ]
+          }
+        },
+        {
+          "blend-mode" : "plus-lighter",
+          "hidden" : false,
+          "image-name" : "knurl-ticks.svg",
+          "name" : "knurl-ticks",
+          "position" : {
+            "scale" : 0.85,
+            "translation-in-points" : [
+              0.425009775000035,
+              -5.84698179723722
+            ]
+          }
+        },
+        {
+          "blend-mode" : "normal",
+          "hidden" : false,
+          "image-name" : "bezel.svg",
+          "name" : "bezel",
+          "position" : {
+            "scale" : 0.9,
+            "translation-in-points" : [
+              -8.855253675710287,
+              -5.421981797237208
+            ]
+          }
+        },
+        {
+          "blend-mode" : "normal",
+          "fill" : {
+            "automatic-gradient" : "extended-gray:0.00000,1.00000",
+            "orientation" : {
+              "start" : {
+                "x" : 0.5,
+                "y" : 0
+              },
+              "stop" : {
+                "x" : 0.5,
+                "y" : 0.7
+              }
+            }
+          },
+          "image-name" : "background.svg",
+          "name" : "background"
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
