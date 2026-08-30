@@ -22,15 +22,54 @@ struct BrewRatingFormView: View {
     @Binding var taste: Double
     @Binding var clarity: Double
 
+    private var ratio: Double? {
+        guard usedCoffee > 0 else { return nil }
+        return output / usedCoffee
+    }
+
+    private var flowRate: Double? {
+        guard extractionTime > 0 else { return nil }
+        return output / Double(extractionTime)
+    }
+
+    private var brewParameters: [(icon: String, label: String, value: String)] {
+        [
+            ("scalemass.fill", "Coffee", "\(usedCoffee.formatted(.number.precision(.fractionLength(1)))) \(RecipeConstants.Beans.unit)"),
+            ("dial.high.fill", "Grind", grindSetting.formatted(.number.precision(.fractionLength(0)))),
+            ("thermometer.medium", "Temp", "\(temperature) \(RecipeConstants.Temperature.unit)"),
+            ("timer", "Time", "\(extractionTime) \(RecipeConstants.ExtractionTime.unit)"),
+            ("drop.fill", "Output", "\(output.formatted(.number.precision(.fractionLength(1)))) \(RecipeConstants.Output.unit)")
+        ]
+    }
+
+    private var brewMetrics: [(icon: String, label: String, value: String)] {
+        [
+            ("divide", "Ratio", ratio.map { "1:\($0.formatted(.number.precision(.fractionLength(1)))) \(RecipeConstants.Ratio.unit)" } ?? "–"),
+            ("waveform.path", "Flow Rate", flowRate.map { "\($0.formatted(.number.precision(.fractionLength(1)))) \(RecipeConstants.FlowRate.unit)" } ?? "–")
+        ]
+    }
+
+    private let gridColumns = [GridItem(.flexible(), alignment: .leading), GridItem(.flexible(), alignment: .leading)]
+
     var body: some View {
         Form {
             Section("Summary") {
-                LabeledContent("Recipe", value: recipe.name)
-                LabeledContent("Beans", value: "\(usedCoffee.formatted(.number.precision(.fractionLength(1)))) \(RecipeConstants.Beans.unit)")
-                LabeledContent("Grind Setting", value: grindSetting.formatted(.number.precision(.fractionLength(0))))
-                LabeledContent("Temperature", value: "\(temperature) \(RecipeConstants.Temperature.unit)")
-                LabeledContent("Extraction Time", value: "\(extractionTime) \(RecipeConstants.ExtractionTime.unit)")
-                LabeledContent("Output", value: "\(output.formatted(.number.precision(.fractionLength(1)))) \(RecipeConstants.Output.unit)")
+                VStack(alignment: .leading, spacing: 8) {
+                    LazyVGrid(columns: gridColumns, alignment: .leading, spacing: 8) {
+                        ForEach(brewParameters, id: \.label) { row in
+                            parameter(row.icon, row.label, row.value)
+                        }
+                    }
+
+                    Divider()
+
+                    LazyVGrid(columns: gridColumns, alignment: .leading, spacing: 8) {
+                        ForEach(brewMetrics, id: \.label) { row in
+                            parameter(row.icon, row.label, row.value)
+                        }
+                    }
+                }
+                .font(.subheadline)
             }
 
             Section("Rating") {
@@ -50,6 +89,17 @@ struct BrewRatingFormView: View {
                     Text("Harsh").frame(width: sliderLabelWidth, alignment: .trailing)
                 }
             }
+        }
+    }
+
+    private func parameter(_ systemImage: String, _ label: String, _ value: String) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: systemImage)
+                .frame(width: 20)
+            Text("\(label):")
+                .fontWeight(.medium)
+            Text(value)
+                .foregroundStyle(.secondary)
         }
     }
 }
