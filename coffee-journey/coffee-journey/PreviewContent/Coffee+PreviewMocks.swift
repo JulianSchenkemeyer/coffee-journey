@@ -4,6 +4,7 @@ import Foundation
 // These mocks are intended for SwiftUI previews and tests.
 #if DEBUG
 extension Coffee {
+    @MainActor
     struct Mock {
         static let espresso = Coffee(
             name: "Ethiopia Yirgacheffe",

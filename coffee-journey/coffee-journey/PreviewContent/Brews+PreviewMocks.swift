@@ -8,6 +8,7 @@ import Foundation
 
 #if DEBUG
 extension Brew {
+    @MainActor
     struct Mock {
         // 10 brews in the last 5 days, two per day
         static let brews: [Brew] = [
