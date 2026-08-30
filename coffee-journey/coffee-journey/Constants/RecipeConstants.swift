@@ -51,4 +51,12 @@ enum RecipeConstants {
         static let step: Double = 1
         static let defaultValue: Double = 3
     }
+    
+    enum Ratio {
+        static let unit = ""
+    }
+    
+    enum FlowRate {
+        static let unit = "g/s"
+    }
 }
