@@ -30,6 +30,16 @@ enum CJSymbol {
         static let rating = "star.fill"
     }
     
+    enum BrewParameter {
+        static let coffee = "scalemass.fill"
+        static let grind = "dial.high.fill"
+        static let temperature = "thermometer.medium"
+        static let time = "timer"
+        static let output = "drop.fill"
+        static let ratio = "divide"
+        static let flowRate = "waveform.path"
+    }
+    
     enum Equipment {
         static let type = "tag.fill"
         static let brand = "building.2.fill"
