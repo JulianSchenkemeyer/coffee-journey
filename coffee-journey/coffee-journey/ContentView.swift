@@ -32,6 +32,8 @@ struct ContentView: View {
                             .environment(\.router, searchRouter)
                     }
                 }
+                .tabViewSearchActivation(.searchTabSelection)
+
             }
         }
     }
