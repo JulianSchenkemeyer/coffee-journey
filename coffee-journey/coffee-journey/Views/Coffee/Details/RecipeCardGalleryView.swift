@@ -30,11 +30,11 @@ struct RecipeCardGalleryView: View {
                 HStack(spacing: 12) {
                     ForEach(sortedRecipes) { recipe in
                         RecipeCardView(coffee: coffee, recipe: recipe)
-                            .frame(width: 300, height: 240)
+                            .frame(width: 300, height: 200)
                     }
 
                     AddRecipeCardButtonView(coffee: coffee, isInteractive: isAddButtonVisible)
-                        .frame(width: 300, height: 240)
+                        .frame(width: 300, height: 200)
                         .onScrollVisibilityChange(threshold: 0.9) { isVisible in
                             isAddButtonVisible = isVisible
                         }

@@ -38,17 +38,6 @@ struct RecipeCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text(recipe.name)
-                    .font(.title3)
-                    .fontWeight(.semibold)
-             
-                Spacer()
-                
-                Label("Recipe Actions", systemImage: "ellipsis")
-                    .labelStyle(.iconOnly)
-            }
-            
-            HStack {
                 if let grinder = recipe.grinder {
                     Text(grinder.name)
                         .font(.caption2.bold())
@@ -64,6 +53,11 @@ struct RecipeCardView: View {
                         .padding(.horizontal, 6)
                         .background(Capsule().opacity(0.3))
                 }
+             
+                Spacer()
+                
+                Label("Recipe Actions", systemImage: "ellipsis")
+                    .labelStyle(.iconOnly)
             }
             
             Divider()
