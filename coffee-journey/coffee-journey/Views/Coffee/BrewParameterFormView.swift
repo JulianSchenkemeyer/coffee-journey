@@ -34,7 +34,7 @@ struct BrewParameterFormView: View {
                 output = selectedRecipe.output
             }
 
-            Section("Preperation") {
+            Section("Preparation") {
                 Stepper("Beans: \(usedCoffee, format: .number.precision(.fractionLength(1))) \(RecipeConstants.Beans.unit)",
                         value: $usedCoffee,
                         in: RecipeConstants.Beans.range,

@@ -44,7 +44,7 @@ struct RecipeFormContent: View {
                 }
             }
 
-            Section("Preperation") {
+            Section("Preparation") {
                 Stepper("Beans: \(amountBeans, format: .number.precision(.fractionLength(1))) \(RecipeConstants.Beans.unit)",
                         value: $amountBeans,
                         in: RecipeConstants.Beans.range,
