@@ -16,6 +16,25 @@ class Router {
         case editCoffee(Coffee)
         case brewHistory(Coffee, Recipe?)
         case equipmentDetails(Equipment)
+
+        enum Transition {
+            case zoom
+            case standard
+        }
+
+        /// How this route's destination animates in. Changing a case here is enough to switch a
+        /// route's style: `RouterView` reads it to pick the transition, and `zoomSource(_:)` goes
+        /// inert for anything that isn't `.zoom`, so source views need no edits.
+        var transition: Transition {
+            switch self {
+            case .coffeeDetails: .zoom
+            case .equipmentDetails: .zoom
+            // Both are reached from menus rather than a tap on the zoomed view, so the morph
+            // reads as arbitrary. Flip to `.zoom` and re-add a `zoomSource(_:)` anchor to revisit.
+            case .editCoffee: .standard
+            case .brewHistory: .standard
+            }
+        }
     }
 
     // Navigation methods
