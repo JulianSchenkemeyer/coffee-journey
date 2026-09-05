@@ -12,6 +12,10 @@ import SwiftUI
 struct RouterView<Content: View>: View {
     @Environment(\.router) private var router
 
+    /// Shared by every zoom transition in this stack. Published into the environment so sources
+    /// anywhere in the subtree can reach it without being passed the namespace explicitly.
+    @Namespace private var navigationNamespace
+
     @ViewBuilder var content: () -> Content
 
     var body: some View {
@@ -23,13 +27,28 @@ struct RouterView<Content: View>: View {
                     destinationView(for: route)
                 }
         }
+        .environment(\.navigationNamespace, navigationNamespace)
     }
 
     // MARK: - Navigation Destinations
 
-    /// Maps route cases to their corresponding destination views
+    /// Applies the transition the route declares. The route is its own zoom source identity, so no
+    /// separate mapping is needed; routes whose `zoomSource(_:)` anchor isn't on screen fall back
+    /// to the default push on their own.
     @ViewBuilder
     private func destinationView(for route: Router.Route) -> some View {
+        switch route.transition {
+        case .zoom:
+            destinationContent(for: route)
+                .navigationTransition(.zoom(sourceID: route, in: navigationNamespace))
+        case .standard:
+            destinationContent(for: route)
+        }
+    }
+
+    /// Maps route cases to their corresponding destination views
+    @ViewBuilder
+    private func destinationContent(for route: Router.Route) -> some View {
         switch route {
         case .coffeeDetails(let coffee):
             CoffeeDetailsView(coffee: coffee)

@@ -38,7 +38,7 @@ struct CoffeeShelfView: View {
         RouterView {
             List {
                 ForEach(inStockCoffees) { coffee in
-                    NavigationLink(value: Router.Route.coffeeDetails(coffee)) {
+                    RouteLink(.coffeeDetails(coffee)) {
                         CoffeeShelfEntryView(coffee: coffee)
                     }
                     .swipeActions(edge: .leading) {
@@ -59,7 +59,7 @@ struct CoffeeShelfView: View {
 
                 Section("Previous") {
                     ForEach(emptyCoffees) { coffee in
-                        NavigationLink(value: Router.Route.coffeeDetails(coffee)) {
+                        RouteLink(.coffeeDetails(coffee)) {
                             CoffeeShelfEntryView(coffee: coffee)
                         }
                         .swipeActions(edge: .trailing) {

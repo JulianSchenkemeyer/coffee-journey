@@ -31,7 +31,7 @@ struct EquipmentShelfView: View {
                 if let items = groupedEquipment[type] {
                     Section(type.description.capitalized) {
                         ForEach(items) { item in
-                            NavigationLink(value: Router.Route.equipmentDetails(item)) {
+                            RouteLink(.equipmentDetails(item)) {
                                 VStack(alignment: .leading, spacing: 14) {
                                     Text(item.name)
                                         .font(.headline)
@@ -47,6 +47,7 @@ struct EquipmentShelfView: View {
                                     .foregroundStyle(.secondary)
                                 }
                             }
+                            .zoomSource(.equipmentDetails(item))
                         }
                     }
                 }
