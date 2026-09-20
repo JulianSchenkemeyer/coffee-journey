@@ -14,6 +14,9 @@ struct CoffeeDetailsView: View {
     @Environment(\.alertCoordinator) private var alertCoordinator
     @Environment(\.router) private var router
     @Environment(\.coffeeUseCases) private var coffeeUseCases
+    @Environment(\.sheetNamespace) private var sheetNamespace
+    /// Previews only — the environment value is nil outside SheetCoordinatorView.
+    @Namespace private var fallbackSheetNamespace
     
     let coffee: Coffee
 
@@ -87,14 +90,20 @@ struct CoffeeDetailsView: View {
             Text("This will permanently delete this coffee along with all its brews and recipes.")
         }
         .toolbar {
-            ToolbarItemGroup(placement: .topBarTrailing) {
+            // Split out of a ToolbarItemGroup so each button can carry its own zoom anchor.
+            ToolbarItem(placement: .topBarTrailing) {
                 Button("Refill", systemImage: CJSymbol.Action.refill) {
-                    sheetCoordinator.present(.refill(coffee))
-                }
-                Button("Brew", systemImage: CJSymbol.Action.brew) {
-                    sheetCoordinator.present(.brew(coffee))
+                    sheetCoordinator.present(.refill(coffee), from: .refillCoffee(coffee))
                 }
             }
+            .sheetZoomSource(.refillCoffee(coffee), in: sheetNamespace ?? fallbackSheetNamespace)
+            
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Brew", systemImage: CJSymbol.Action.brew) {
+                    sheetCoordinator.present(.brew(coffee), from: .brewCoffee(coffee))
+                }
+            }
+            .sheetZoomSource(.brewCoffee(coffee), in: sheetNamespace ?? fallbackSheetNamespace)
             
             ToolbarItem(placement: .topBarTrailing) {
                 Menu("Actions", systemImage: "ellipsis") {

@@ -15,6 +15,9 @@ struct CoffeeShelfView: View {
     
     @Environment(\.sheetCoordinator) private var sheetCoordinator
     @Environment(\.router) private var router
+    @Environment(\.sheetNamespace) private var sheetNamespace
+    /// Previews only — the environment value is nil outside SheetCoordinatorView.
+    @Namespace private var fallbackSheetNamespace
     
     @Query(
         filter: #Predicate<Coffee> { $0.amountLeft > 0 },
@@ -82,9 +85,12 @@ struct CoffeeShelfView: View {
                 }
             }
             .toolbar {
-                Button("Add Coffee", systemImage: CJSymbol.Action.add) {
-                    sheetCoordinator.present(.addCoffee)
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Add Coffee", systemImage: CJSymbol.Action.add) {
+                        sheetCoordinator.present(.addCoffee, from: .addCoffee)
+                    }
                 }
+                .sheetZoomSource(.addCoffee, in: sheetNamespace ?? fallbackSheetNamespace)
             }
         }
     }

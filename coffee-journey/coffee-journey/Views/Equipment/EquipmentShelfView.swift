@@ -20,6 +20,9 @@ import SwiftData
 struct EquipmentShelfView: View {
     @Environment(\.router) private var router
     @Environment(\.sheetCoordinator) private var sheetCoordinator
+    @Environment(\.sheetNamespace) private var sheetNamespace
+    /// Previews only — the environment value is nil outside SheetCoordinatorView.
+    @Namespace private var fallbackSheetNamespace
     
     @Query var equipment: [Equipment] = []
     
@@ -54,9 +57,12 @@ struct EquipmentShelfView: View {
             }
             .navigationTitle("Equipment Shelf")
             .toolbar {
-                Button("Add Equipment", systemImage: CJSymbol.Action.add) {
-                    sheetCoordinator.present(.addEquipment(nil))
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Add Equipment", systemImage: CJSymbol.Action.add) {
+                        sheetCoordinator.present(.addEquipment(nil), from: .addEquipment)
+                    }
                 }
+                .sheetZoomSource(.addEquipment, in: sheetNamespace ?? fallbackSheetNamespace)
             }
         }
     }

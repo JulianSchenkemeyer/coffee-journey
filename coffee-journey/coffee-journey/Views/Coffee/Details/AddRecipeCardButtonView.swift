@@ -16,7 +16,7 @@ struct AddRecipeCardButtonView: View {
     
     var body: some View {
         Button {
-            sheetCoordinator.present(.editRecipe(coffee, nil))
+            sheetCoordinator.present(.editRecipe(coffee, nil), from: .addRecipe(coffee))
         } label: {
             VStack(spacing: 12) {
                 Image(systemName: "plus.circle.fill")
@@ -31,6 +31,7 @@ struct AddRecipeCardButtonView: View {
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
         }
         .buttonStyle(.plain)
+        .sheetZoomSource(.addRecipe(coffee))
         .allowsHitTesting(isInteractive)
     }
 }

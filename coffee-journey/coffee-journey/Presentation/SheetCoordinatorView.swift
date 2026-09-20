@@ -12,20 +12,39 @@ import SwiftUI
 struct SheetCoordinatorView<Content: View>: View {
     @Environment(\.sheetCoordinator) private var sheetCoordinator
     
+    /// Shared by every sheet zoom transition. Published into the environment so toolbar anchors inside
+    /// the tabs can reach it, since sheets are presented here at the root, above the TabView.
+    @Namespace private var sheetNamespace
+    
     @ViewBuilder var content: () -> Content
     
     var body: some View {
         @Bindable var sheetCoordinator = sheetCoordinator
         
         content()
+            .environment(\.sheetNamespace, sheetNamespace)
             .sheet(item: $sheetCoordinator.activeSheet) { sheet in
-                AlertCoordinatorView {
-                    destinationView(for: sheet)
-                }
+                sheetView(for: sheet)
             }
     }
     
     // MARK: - Sheet Destinations
+    
+    /// Zooms out of whichever control presented the sheet. No anchor means the trigger wasn't a stable
+    /// tappable control — a swipe action or a menu item — so the sheet uses the default slide-up.
+    @ViewBuilder
+    private func sheetView(for sheet: SheetCoordinator.ActiveSheet) -> some View {
+        if let anchor = sheetCoordinator.zoomAnchor {
+            AlertCoordinatorView {
+                destinationView(for: sheet)
+            }
+            .navigationTransition(.zoom(sourceID: anchor, in: sheetNamespace))
+        } else {
+            AlertCoordinatorView {
+                destinationView(for: sheet)
+            }
+        }
+    }
     
     /// Maps sheet cases to their corresponding destination views
     @ViewBuilder

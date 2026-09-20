@@ -35,12 +35,20 @@ import SwiftUI
     
     var activeSheet: ActiveSheet?
     
-    func present(_ sheet: ActiveSheet) {
+    /// The control the active sheet should zoom out of, declared by whoever presented it. A sheet
+    /// presented without an anchor uses the default slide-up — which is every trigger that isn't a
+    /// stable, tappable control (swipe actions, menu items).
+    private(set) var zoomAnchor: SheetAnchor?
+    
+    func present(_ sheet: ActiveSheet, from anchor: SheetAnchor? = nil) {
+        zoomAnchor = anchor
         activeSheet = sheet
     }
     
     func dismiss() {
         activeSheet = nil
+        // zoomAnchor deliberately left set: the dismissal animation still needs it to collapse back
+        // into. Every `present` overwrites it, so a stale value is never read.
     }
 }
 

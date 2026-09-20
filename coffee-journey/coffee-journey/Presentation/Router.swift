@@ -17,15 +17,10 @@ class Router {
         case brewHistory(Coffee, Recipe?)
         case equipmentDetails(Equipment)
 
-        enum Transition {
-            case zoom
-            case standard
-        }
-
         /// How this route's destination animates in. Changing a case here is enough to switch a
         /// route's style: `RouterView` reads it to pick the transition, and `zoomSource(_:)` goes
         /// inert for anything that isn't `.zoom`, so source views need no edits.
-        var transition: Transition {
+        var transition: ZoomTransitionStyle {
             switch self {
             case .coffeeDetails: .zoom
             case .equipmentDetails: .zoom
