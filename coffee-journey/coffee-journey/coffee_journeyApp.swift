@@ -22,7 +22,11 @@ struct coffee_journeyApp: App {
     init() {
         self.container = ContainerFactory.createDefault()
         self.context = ModelContext(container)
-        
+
+#if DEBUG
+        SampleDataSeeder.seedIfRequested(context)
+#endif
+
         // Create all use cases once during initialization
         let useCases = UseCaseFactory.makeAll(context: context)
         self.coffeeUseCases = useCases.coffee
