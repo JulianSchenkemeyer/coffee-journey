@@ -17,9 +17,7 @@ struct LowCoffeeWarning: View {
             Text("You should refill your coffee supply soon")
         }
         .padding()
-        .background(Color.yellow.opacity(0.15).gradient)
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 24))
+        .glassEffect(.regular.tint(.yellow.opacity(0.15)), in: .rect(cornerRadius: 24))
     }
     
 }
