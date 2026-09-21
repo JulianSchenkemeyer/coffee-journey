@@ -38,8 +38,10 @@ struct CoffeeShelfView: View {
     }
 
     var body: some View {
-        RouterView {
-            List {
+        @Bindable var router = router
+
+        NavigationSplitView {
+            List(selection: $router.selection) {
                 ForEach(inStockCoffees) { coffee in
                     RouteLink(.coffeeDetails(coffee)) {
                         CoffeeShelfEntryView(coffee: coffee)
@@ -92,6 +94,8 @@ struct CoffeeShelfView: View {
                 }
                 .sheetZoomSource(.addCoffee, in: sheetNamespace ?? fallbackSheetNamespace)
             }
+        } detail: {
+            RouterView()
         }
     }
 }

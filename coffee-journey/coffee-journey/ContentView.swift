@@ -12,7 +12,6 @@ struct ContentView: View {
     // This ensures navigation state is isolated per tab.
     private let coffeeRouter = Router()
     private let equipmentRouter = Router()
-    private let searchRouter = Router()
 
     var body: some View {
         AlertCoordinatorView {
@@ -29,7 +28,6 @@ struct ContentView: View {
                     
                     Tab(role: .search) {
                         SearchView()
-                            .environment(\.router, searchRouter)
                     }
                 }
                 .tabViewSearchActivation(.searchTabSelection)

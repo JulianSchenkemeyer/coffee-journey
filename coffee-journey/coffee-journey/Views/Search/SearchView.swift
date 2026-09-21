@@ -20,7 +20,7 @@ struct SearchView: View {
     @State private var selectedType = SearchType.coffee
     
     var body: some View {
-        RouterView {
+        NavigationStack {
             VStack(spacing: 24) {
                 Picker("Type", selection: $selectedType) {
                     ForEach(SearchType.allCases, id: \.self) { type in

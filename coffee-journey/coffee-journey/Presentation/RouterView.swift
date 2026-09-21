@@ -7,25 +7,31 @@
 
 import SwiftUI
 
-/// A reusable navigation wrapper that provides centralized navigation destination handling.
-/// Wraps content in a NavigationStack bound to the Router's path and handles all route destinations.
-struct RouterView<Content: View>: View {
+/// The detail column of a shelf's `NavigationSplitView`: it renders whichever route the sidebar
+/// selected and owns the stack of pushes within it. The sidebar picks the subject
+/// (`Router.selection`); this view handles where you are inside that subject (`Router.path`).
+struct RouterView: View {
     @Environment(\.router) private var router
 
     /// Shared by every zoom transition in this stack. Published into the environment so sources
     /// anywhere in the subtree can reach it without being passed the namespace explicitly.
     @Namespace private var navigationNamespace
 
-    @ViewBuilder var content: () -> Content
-
     var body: some View {
         @Bindable var router = router
 
         NavigationStack(path: $router.path) {
-            content()
-                .navigationDestination(for: Router.Route.self) { route in
-                    destinationView(for: route)
+            Group {
+                if let root = router.selection {
+                    destinationContent(for: root)
+                } else {
+                    ContentUnavailableView("No Selection", systemImage: CJSymbol.Navigation.coffee)
                 }
+            }
+            // Outside the `if` so the destination stays registered while nothing is selected.
+            .navigationDestination(for: Router.Route.self) { route in
+                destinationView(for: route)
+            }
         }
         .environment(\.navigationNamespace, navigationNamespace)
     }

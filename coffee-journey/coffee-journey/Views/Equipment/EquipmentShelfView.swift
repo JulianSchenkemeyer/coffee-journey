@@ -27,10 +27,11 @@ struct EquipmentShelfView: View {
     @Query var equipment: [Equipment] = []
     
     var body: some View {
-        RouterView {
-            let groupedEquipment = Dictionary(grouping: equipment, by: \.type)
-            
-            List(EquipmentType.allCases, id: \.self) { type in
+        @Bindable var router = router
+        let groupedEquipment = Dictionary(grouping: equipment, by: \.type)
+
+        NavigationSplitView {
+            List(EquipmentType.allCases, id: \.self, selection: $router.selection) { type in
                 if let items = groupedEquipment[type] {
                     Section(type.description.capitalized) {
                         ForEach(items) { item in
@@ -50,7 +51,6 @@ struct EquipmentShelfView: View {
                                     .foregroundStyle(.secondary)
                                 }
                             }
-                            .zoomSource(.equipmentDetails(item))
                         }
                     }
                 }
@@ -64,6 +64,8 @@ struct EquipmentShelfView: View {
                 }
                 .sheetZoomSource(.addEquipment, in: sheetNamespace ?? fallbackSheetNamespace)
             }
+        } detail: {
+            RouterView()
         }
     }
 }

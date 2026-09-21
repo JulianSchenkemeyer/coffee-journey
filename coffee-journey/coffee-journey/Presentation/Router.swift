@@ -9,6 +9,8 @@ import SwiftUI
 
 @Observable
 class Router {
+    /// The detail column's subject. `path` holds only the pushes within it.
+    var selection: Route?
     var path: [Route] = []
 
     enum Route: Hashable {
@@ -22,8 +24,8 @@ class Router {
         /// inert for anything that isn't `.zoom`, so source views need no edits.
         var transition: ZoomTransitionStyle {
             switch self {
-            case .coffeeDetails: .zoom
-            case .equipmentDetails: .zoom
+            case .coffeeDetails: .standard
+            case .equipmentDetails: .standard
             // Both are reached from menus rather than a tap on the zoomed view, so the morph
             // reads as arbitrary. Flip to `.zoom` and re-add a `zoomSource(_:)` anchor to revisit.
             case .editCoffee: .standard
@@ -38,8 +40,11 @@ class Router {
     }
 
     func navigateBack() {
-        guard !path.isEmpty else { return }
-        path.removeLast()
+        if path.isEmpty {
+            selection = nil
+        } else {
+            path.removeLast()
+        }
     }
 
     func navigateToRoot() {
