@@ -43,7 +43,7 @@ extension Coffee: SearchableModel {
             if term.isEmpty {
                 return true
             } else {
-                return item.name.contains(t) || item.roaster.contains(t)
+                return item.name.localizedStandardContains(t) || item.roaster.localizedStandardContains(t)
             }
         }
     }
