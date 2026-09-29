@@ -53,7 +53,7 @@ extension Equipment: SearchableModel {
             if term.isEmpty {
                 return true
             } else {
-                return item.name.contains(t) || item.brand.contains(t) || item.typeDescription.contains(t)
+                return item.name.localizedStandardContains(t) || item.brand.localizedStandardContains(t) || item.typeDescription.localizedStandardContains(t)
             }
         }
     }
