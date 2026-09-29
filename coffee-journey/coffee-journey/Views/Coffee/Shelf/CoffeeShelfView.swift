@@ -18,6 +18,8 @@ struct CoffeeShelfView: View {
     @Environment(\.sheetNamespace) private var sheetNamespace
     /// Previews only — the environment value is nil outside SheetCoordinatorView.
     @Namespace private var fallbackSheetNamespace
+
+    @State private var searchTerm = ""
     
     @Query(
         filter: #Predicate<Coffee> { $0.amountLeft > 0 },
@@ -41,42 +43,19 @@ struct CoffeeShelfView: View {
         @Bindable var router = router
 
         NavigationSplitView {
-            List(selection: $router.selection) {
-                ForEach(inStockCoffees) { coffee in
-                    RouteLink(.coffeeDetails(coffee)) {
-                        CoffeeShelfEntryView(coffee: coffee)
-                    }
-                    .swipeActions(edge: .leading) {
-                        Button("Brew", systemImage: CJSymbol.Action.brew) {
-                            sheetCoordinator.present(.brew(coffee))
-                        }
-                    }
-                    .swipeActions(edge: .trailing) {
-                        Button("Refill", systemImage: CJSymbol.Action.refill) {
-                            sheetCoordinator.present(.refill(coffee))
-                        }
-
-                        Button("Empty", systemImage: CJSymbol.Action.clear) {
-                            sheetCoordinator.present(.confirmEmptying(coffee))
-                        }
-                    }
-                }
-
-                Section("Previous") {
-                    ForEach(emptyCoffees) { coffee in
-                        RouteLink(.coffeeDetails(coffee)) {
-                            CoffeeShelfEntryView(coffee: coffee)
-                        }
-                        .swipeActions(edge: .trailing) {
-                            Button("Refill", systemImage: CJSymbol.Action.refill) {
-                                sheetCoordinator.present(.refill(coffee))
-                            }
-                        }
-                        .listRowBackground(Color.secondary.opacity(0.15))
-                    }
+            Group {
+                if searchTerm.isEmpty {
+                    shelf(selection: $router.selection)
+                } else {
+                    // Queries the store through `Coffee.search(for:)` rather than filtering the
+                    // shelf's own results, so matches outside the stock/recent split still show up.
+                    SearchResultsView(searchTerm: searchTerm,
+                                      renderer: CoffeeRowRenderer(),
+                                      selection: $router.selection)
                 }
             }
             .navigationTitle("Coffee Shelf")
+            .searchable(text: $searchTerm, placement: .navigationBarDrawer, prompt: "Search Coffees")
             .safeAreaInset(edge: .bottom) {
                 if isLowOnCoffee {
                     LowCoffeeWarning()
@@ -96,6 +75,44 @@ struct CoffeeShelfView: View {
             }
         } detail: {
             RouterView()
+        }
+    }
+
+    private func shelf(selection: Binding<Router.Route?>) -> some View {
+        List(selection: selection) {
+            ForEach(inStockCoffees) { coffee in
+                RouteLink(.coffeeDetails(coffee)) {
+                    CoffeeShelfEntryView(coffee: coffee)
+                }
+                .swipeActions(edge: .leading) {
+                    Button("Brew", systemImage: CJSymbol.Action.brew) {
+                        sheetCoordinator.present(.brew(coffee))
+                    }
+                }
+                .swipeActions(edge: .trailing) {
+                    Button("Refill", systemImage: CJSymbol.Action.refill) {
+                        sheetCoordinator.present(.refill(coffee))
+                    }
+
+                    Button("Empty", systemImage: CJSymbol.Action.clear) {
+                        sheetCoordinator.present(.confirmEmptying(coffee))
+                    }
+                }
+            }
+
+            Section("Previous") {
+                ForEach(emptyCoffees) { coffee in
+                    RouteLink(.coffeeDetails(coffee)) {
+                        CoffeeShelfEntryView(coffee: coffee)
+                    }
+                    .swipeActions(edge: .trailing) {
+                        Button("Refill", systemImage: CJSymbol.Action.refill) {
+                            sheetCoordinator.present(.refill(coffee))
+                        }
+                    }
+                    .listRowBackground(Color.secondary.opacity(0.15))
+                }
+            }
         }
     }
 }

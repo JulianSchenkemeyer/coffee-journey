@@ -23,39 +23,28 @@ struct EquipmentShelfView: View {
     @Environment(\.sheetNamespace) private var sheetNamespace
     /// Previews only — the environment value is nil outside SheetCoordinatorView.
     @Namespace private var fallbackSheetNamespace
-    
+
+    @State private var searchTerm = ""
+
     @Query var equipment: [Equipment] = []
     
     var body: some View {
         @Bindable var router = router
-        let groupedEquipment = Dictionary(grouping: equipment, by: \.type)
 
         NavigationSplitView {
-            List(EquipmentType.allCases, id: \.self, selection: $router.selection) { type in
-                if let items = groupedEquipment[type] {
-                    Section(type.description.capitalized) {
-                        ForEach(items) { item in
-                            RouteLink(.equipmentDetails(item)) {
-                                VStack(alignment: .leading, spacing: 14) {
-                                    Text(item.name)
-                                        .font(.headline)
-                                    
-                                    VStack(alignment: .leading) {
-                                        Text(item.brand)
-
-                                        if let lastMaintenance = item.lastMaintenance {
-                                            Text("Last Maintenance: \(lastMaintenance.formatted(date: .abbreviated, time: .omitted))")
-                                        }
-                                    }
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                                }
-                            }
-                        }
-                    }
+            Group {
+                if searchTerm.isEmpty {
+                    shelf(selection: $router.selection)
+                } else {
+                    // Queries the store through `Equipment.search(for:)`, so results are flat
+                    // rather than grouped by type.
+                    SearchResultsView(searchTerm: searchTerm,
+                                      renderer: EquipmentRowRenderer(),
+                                      selection: $router.selection)
                 }
             }
             .navigationTitle("Equipment Shelf")
+            .searchable(text: $searchTerm, placement: .navigationBarDrawer, prompt: "Search Equipment")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Add Equipment", systemImage: CJSymbol.Action.add) {
@@ -66,6 +55,22 @@ struct EquipmentShelfView: View {
             }
         } detail: {
             RouterView()
+        }
+    }
+
+    private func shelf(selection: Binding<Router.Route?>) -> some View {
+        let groupedEquipment = Dictionary(grouping: equipment, by: \.type)
+
+        return List(EquipmentType.allCases, id: \.self, selection: selection) { type in
+            if let items = groupedEquipment[type] {
+                Section(type.description.capitalized) {
+                    ForEach(items) { item in
+                        RouteLink(.equipmentDetails(item)) {
+                            EquipmentShelfEntryView(equipment: item)
+                        }
+                    }
+                }
+            }
         }
     }
 }
