@@ -25,13 +25,7 @@ struct ContentView: View {
                         EquipmentShelfView()
                             .environment(\.router, equipmentRouter)
                     }
-                    
-                    Tab(role: .search) {
-                        SearchView()
-                    }
                 }
-                .tabViewSearchActivation(.searchTabSelection)
-
             }
         }
     }
