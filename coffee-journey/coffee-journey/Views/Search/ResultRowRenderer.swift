@@ -15,12 +15,16 @@ protocol ResultRowRenderer {
 
 struct CoffeeRowRenderer: ResultRowRenderer {
     func row(for model: Coffee) -> some View {
-        CoffeeShelfEntryView(coffee: model)
+        RouteLink(.coffeeDetails(model)) {
+            CoffeeShelfEntryView(coffee: model)
+        }
     }
 }
 
 struct EquipmentRowRenderer: ResultRowRenderer {
     func row(for model: Equipment) -> some View {
-        Text(model.name)
+        RouteLink(.equipmentDetails(model)) {
+            EquipmentShelfEntryView(equipment: model)
+        }
     }
 }
