@@ -16,6 +16,7 @@ struct AddRecipeCardButtonView: View {
     
     var body: some View {
         Button {
+            guard isInteractive else { return }
             sheetCoordinator.present(.editRecipe(coffee, nil), from: .addRecipe(coffee))
         } label: {
             VStack(spacing: 12) {
@@ -32,7 +33,6 @@ struct AddRecipeCardButtonView: View {
         }
         .buttonStyle(.plain)
         .sheetZoomSource(.addRecipe(coffee))
-        .allowsHitTesting(isInteractive)
     }
 }
 
