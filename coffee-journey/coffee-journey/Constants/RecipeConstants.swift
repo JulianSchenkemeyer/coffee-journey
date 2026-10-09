@@ -15,8 +15,10 @@ enum RecipeConstants {
 
     enum GrindSetting {
         static let range: ClosedRange<Double> = 0.0...50.0
-        static let step: Double = 1.0
-        static let defaultValue: Double = 12.0
+        // nonisolated: read from the (nonisolated) Equipment model extension.
+        nonisolated static let steppedStep: Double = 1.0
+        nonisolated static let steplessStep: Double = 0.1
+        nonisolated static let defaultValue: Double = 12.0
     }
 
     enum Temperature {

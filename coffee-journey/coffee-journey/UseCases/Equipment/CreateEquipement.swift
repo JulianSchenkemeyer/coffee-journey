@@ -16,7 +16,8 @@ import Foundation
             name: request.name,
             brand: request.brand,
             type: request.type.rawValue,
-            notes: request.notes
+            notes: request.notes,
+            grinderOptions: request.grinderOptions
         )
         return try repository.create(newEquipment)
     }

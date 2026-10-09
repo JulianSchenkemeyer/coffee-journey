@@ -51,7 +51,7 @@ enum BrewClarity: Int, CaseIterable, CustomStringConvertible {
     }
 }
 
-typealias Brew = SchemaV4.Brew
+typealias Brew = SchemaV5.Brew
 
 
 extension Brew {
@@ -67,6 +67,9 @@ extension Brew {
     var rating: BrewRating {
         BrewRating(rawValue: ratingString) ?? .thumbsUp
     }
+    
+    // Falls back to whole numbers once the recipe is deleted (`recipe` is nullified).
+    var grindFractionDigits: Int { recipe?.grindFractionDigits ?? 0 }
     
     convenience init(recipe: Recipe, date: Date, beanAge: Int?, amountCoffee: Double, grindSetting: Double, temperature: Int, extractionTime: Int, taste: Int, output: Double, rating: BrewRating, clarity: Int? = nil) {
         self.init(

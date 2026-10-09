@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 
-typealias Coffee = SchemaV4.Coffee
+typealias Coffee = SchemaV5.Coffee
 
 
 extension Coffee {

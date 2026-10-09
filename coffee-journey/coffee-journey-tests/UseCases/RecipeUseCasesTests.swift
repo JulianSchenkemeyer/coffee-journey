@@ -276,4 +276,50 @@ struct RecipeUseCasesTests {
 
         #expect(result.persistentModelID == recipe.persistentModelID)
     }
+
+    // MARK: - Recipe.grindSetting rounding
+
+    private func makeRecipe(grinder: Equipment?, into context: ModelContext) -> Recipe {
+        let recipe = makeWideRecipe(into: context)
+        recipe.minGrindSetting = 9.5
+        recipe.maxGrindSetting = 10.0
+        recipe.grinder = grinder
+        return recipe
+    }
+
+    private func makeGrinder(isStepless: Bool, into context: ModelContext) -> Equipment {
+        let grinder = Equipment(
+            name: "C40",
+            brand: "Comandante",
+            type: EquipmentType.grinder.rawValue,
+            notes: "",
+            grinderOptions: GrinderOptions(isStepless: isStepless, startingPoint: 10)
+        )
+        context.insert(grinder)
+        return grinder
+    }
+
+    @Test func grindSettingRoundsToWholeNumberForSteppedGrinder() throws {
+        let (_, context) = try prepareEnvironment()
+        let recipe = makeRecipe(grinder: makeGrinder(isStepless: false, into: context), into: context)
+
+        #expect(recipe.grindSetting == 10)
+        #expect(recipe.grindFractionDigits == 0)
+    }
+
+    @Test func grindSettingRoundsToOneDecimalForSteplessGrinder() throws {
+        let (_, context) = try prepareEnvironment()
+        let recipe = makeRecipe(grinder: makeGrinder(isStepless: true, into: context), into: context)
+
+        #expect(recipe.grindSetting == 9.8)
+        #expect(recipe.grindFractionDigits == 1)
+    }
+
+    @Test func grindSettingRoundsToWholeNumberWithoutGrinder() throws {
+        let (_, context) = try prepareEnvironment()
+        let recipe = makeRecipe(grinder: nil, into: context)
+
+        #expect(recipe.grindSetting == 10)
+        #expect(recipe.grindFractionDigits == 0)
+    }
 }

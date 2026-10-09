@@ -8,7 +8,7 @@ import Foundation
 import SwiftData
 
 
-typealias Recipe = SchemaV4.Recipe
+typealias Recipe = SchemaV5.Recipe
 
 
 extension Recipe {
@@ -17,13 +17,11 @@ extension Recipe {
     }
     
     var grindSetting: Double {
-        // Depends Grinder
-        if (false) {
-            ((minGrindSetting + maxGrindSetting) / 2).roundTo(places: 1)
-        } else {
-            ((minGrindSetting + maxGrindSetting) / 2).rounded()
-        }
+        let average = (minGrindSetting + maxGrindSetting) / 2
+        return grinder?.isStepless == true ? average.roundTo(places: 1) : average.rounded()
     }
+    
+    var grindFractionDigits: Int { grinder?.grindFractionDigits ?? 0 }
     
     var extractionTime: Int {
         (minExtractionTime + maxExtractionTime) / 2

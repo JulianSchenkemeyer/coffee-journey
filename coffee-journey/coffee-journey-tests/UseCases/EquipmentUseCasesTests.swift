@@ -114,6 +114,80 @@ struct EquipmentUseCasesTests {
         #expect(result.persistentModelID == equipment.persistentModelID)
     }
 
+    // MARK: - Grinder options
+
+    @Test func createEquipmentPersistsGrinderOptions() throws {
+        let (repository, _, context) = try prepareEnvironment()
+        let useCase = CreateEquipment(repository: repository)
+        let request = CreateEquipmentRequest(
+            name: "C40",
+            brand: "Comandante",
+            type: .grinder,
+            notes: "",
+            grinderOptions: GrinderOptions(isStepless: true, startingPoint: 7.5)
+        )
+
+        try useCase(request: request)
+
+        // Fresh context so the options come back from the store, not the in-memory object.
+        let fetched = try ModelContext(context.container).fetch(FetchDescriptor<Equipment>())
+        let options = try #require(fetched.first?.grinderOptions)
+        #expect(options.isStepless)
+        #expect(options.startingPoint == 7.5)
+    }
+
+    @Test func equipmentWithoutGrinderOptionsFallsBackToDefaults() throws {
+        let (repository, _, context) = try prepareEnvironment()
+        let useCase = CreateEquipment(repository: repository)
+
+        try useCase(request: makeCreateRequest())
+
+        let fetched = try #require(try ModelContext(context.container).fetch(FetchDescriptor<Equipment>()).first)
+        #expect(fetched.grinderOptions == nil)
+        #expect(fetched.isStepless == false)
+        #expect(fetched.grindStep == RecipeConstants.GrindSetting.steppedStep)
+        #expect(fetched.startingGrindSetting == RecipeConstants.GrindSetting.defaultValue)
+    }
+
+    @Test func updateEquipmentReplacesGrinderOptions() throws {
+        let (repository, _, context) = try prepareEnvironment()
+        let useCase = UpdateEquipment(repository: repository)
+        let equipment = makeEquipment(into: context)
+        equipment.grinderOptions = GrinderOptions(isStepless: true, startingPoint: 7.5)
+        let request = UpdateEquipmentRequest(
+            name: equipment.name,
+            brand: equipment.brand,
+            type: .grinder,
+            notes: "",
+            grinderOptions: GrinderOptions(isStepless: false, startingPoint: 15)
+        )
+
+        try useCase(equipment: equipment, request: request)
+
+        #expect(equipment.isStepless == false)
+        #expect(equipment.grindStep == RecipeConstants.GrindSetting.steppedStep)
+        #expect(equipment.startingGrindSetting == 15)
+    }
+
+    @Test func updateEquipmentCanClearGrinderOptions() throws {
+        let (repository, _, context) = try prepareEnvironment()
+        let useCase = UpdateEquipment(repository: repository)
+        let equipment = makeEquipment(into: context)
+        equipment.grinderOptions = GrinderOptions(isStepless: true, startingPoint: 7.5)
+        let request = UpdateEquipmentRequest(
+            name: equipment.name,
+            brand: equipment.brand,
+            type: .machine,
+            notes: "",
+            grinderOptions: nil
+        )
+
+        try useCase(equipment: equipment, request: request)
+
+        let fetched = try #require(try ModelContext(context.container).fetch(FetchDescriptor<Equipment>()).first)
+        #expect(fetched.grinderOptions == nil)
+    }
+
     // MARK: - DeleteEquipment
 
     @Test func deleteEquipmentRemovesFromStore() throws {

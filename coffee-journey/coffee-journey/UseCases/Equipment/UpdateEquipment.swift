@@ -14,6 +14,7 @@
         equipment.brand = request.brand
         equipment.typeDescription = request.type.rawValue
         equipment.notes = request.notes
+        equipment.grinderOptions = request.grinderOptions
         return try repository.update(equipment)
     }
 }

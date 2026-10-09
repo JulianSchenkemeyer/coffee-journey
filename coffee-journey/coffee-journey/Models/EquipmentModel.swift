@@ -21,13 +21,19 @@ enum EquipmentType: String, Codable, CaseIterable, CustomStringConvertible {
     }
 }
 
-typealias Equipment = SchemaV4.Equipment
+typealias Equipment = SchemaV5.Equipment
+typealias GrinderOptions = SchemaV5.GrinderOptions
 
 
 extension Equipment {
     var type: EquipmentType {
         EquipmentType(rawValue: typeDescription) ?? .machine
     }
+    
+    var isStepless: Bool { grinderOptions?.isStepless ?? false }
+    var grindStep: Double { isStepless ? RecipeConstants.GrindSetting.steplessStep : RecipeConstants.GrindSetting.steppedStep }
+    var grindFractionDigits: Int { isStepless ? 1 : 0 }
+    var startingGrindSetting: Double { grinderOptions?.startingPoint ?? RecipeConstants.GrindSetting.defaultValue }
 }
 
 extension Equipment {

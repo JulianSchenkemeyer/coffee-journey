@@ -22,7 +22,7 @@ import SwiftData
 enum CoffeeJourneyMigrationPlan: SchemaMigrationPlan {
 
     static var schemas: [any VersionedSchema.Type] {
-        [SchemaV1.self, SchemaV2.self, SchemaV3.self, SchemaV4.self]
+        [SchemaV1.self, SchemaV2.self, SchemaV3.self, SchemaV4.self, SchemaV5.self]
     }
 
     static var stages: [MigrationStage] {
@@ -34,7 +34,10 @@ enum CoffeeJourneyMigrationPlan: SchemaMigrationPlan {
             .lightweight(fromVersion: SchemaV2.self, toVersion: SchemaV3.self),
             // Lightweight: Brew gains `clarity: Int?`.
             // Optional column — existing rows get nil (clarity not recorded for old brews).
-            .lightweight(fromVersion: SchemaV3.self, toVersion: SchemaV4.self)
+            .lightweight(fromVersion: SchemaV3.self, toVersion: SchemaV4.self),
+            // Lightweight: Equipment gains `grinderOptions: GrinderOptions?`.
+            // Optional composite attribute — existing rows get nil (no options configured).
+            .lightweight(fromVersion: SchemaV4.self, toVersion: SchemaV5.self)
         ]
     }
 }
