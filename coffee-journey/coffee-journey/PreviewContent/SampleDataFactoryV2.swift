@@ -36,9 +36,11 @@ enum SampleDataFactoryV2 {
     static func createEquipment() -> EquipmentBundle {
         EquipmentBundle(
             robot: Equipment(name: "Robot", brand: "Cafelat", type: "Espresso Maschine", notes: ""),
-            c40red: Equipment(name: "C40 + Red Cilx", brand: "Comandante", type: "grinder", notes: ""),
+            c40red: Equipment(name: "C40 + Red Cilx", brand: "Comandante", type: "grinder", notes: "",
+                              grinderOptions: GrinderOptions(isStepless: true, startingPoint: 13)),
             picopresso: Equipment(name: "Picopresso", brand: "Wacaco", type: "Espresso Maschine", notes: ""),
-            c40: Equipment(name: "C40", brand: "Comandante", type: "grinder", notes: "")
+            c40: Equipment(name: "C40", brand: "Comandante", type: "grinder", notes: "",
+                           grinderOptions: GrinderOptions(isStepless: false, startingPoint: 9))
         )
     }
 

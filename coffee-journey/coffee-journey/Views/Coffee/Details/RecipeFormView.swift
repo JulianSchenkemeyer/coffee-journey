@@ -38,6 +38,7 @@ struct RecipeFormView: View {
                 extractionTime: $extractionTime,
                 amountBeans: $amountBeans,
                 output: $output,
+                appliesGrinderStartingPoint: !isEditMode
             )
             .navigationTitle(isEditMode ? "Edit Recipe" : "New Recipe")
             .navigationBarTitleDisplayMode(.inline)

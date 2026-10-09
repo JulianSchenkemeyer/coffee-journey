@@ -19,6 +19,8 @@ struct EquipmentFormView: View {
     @State private var name: String = ""
     @State private var brand: String = ""
     @State private var type: EquipmentType = .machine
+    @State private var isStepless = false
+    @State private var startingPoint: Double = RecipeConstants.GrindSetting.defaultValue
     @State private var notes: String = ""
 
 
@@ -38,6 +40,17 @@ struct EquipmentFormView: View {
                             Text(category.rawValue.capitalized).tag(category)
                         }
                     }
+                    
+                    if type == .grinder {
+                        Toggle(isOn: $isStepless) {
+                            Text("Is stepless?")
+                        }
+                        
+                        Stepper("Starting Point: \(startingPoint, format: .number.precision(.fractionLength(isStepless ? 1 : 0)))",
+                                value: $startingPoint,
+                                in: RecipeConstants.GrindSetting.range,
+                                step: isStepless ? RecipeConstants.GrindSetting.steplessStep : RecipeConstants.GrindSetting.steppedStep)
+                    }
                 }
 
                 Section("Notes") {
@@ -47,7 +60,7 @@ struct EquipmentFormView: View {
                         .lineLimit(5, reservesSpace: true)
                 }
             }
-            .navigationTitle("Add Equipment")
+            .navigationTitle(equipment == nil ? "Add Equipment" : "Edit Equipment")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(role: .close) {
@@ -58,6 +71,9 @@ struct EquipmentFormView: View {
                     Button(role: .confirm) { submit() }
                         .disabled(!isFormValid)
                 }
+            }
+            .onAppear {
+                loadEquipmentData()
             }
         }
     }
@@ -71,18 +87,49 @@ struct EquipmentFormView: View {
         return true
     }
 
+    private func loadEquipmentData() {
+        guard let equipment else { return }
+
+        name = equipment.name
+        brand = equipment.brand
+        type = equipment.type
+        notes = equipment.notes
+        if let options = equipment.grinderOptions {
+            isStepless = options.isStepless
+            startingPoint = options.startingPoint
+        }
+    }
+
     private func submit() {
         guard isFormValid else { return }
 
-        let request = CreateEquipmentRequest(
-            name: name.trimmingCharacters(in: .whitespacesAndNewlines),
-            brand: brand.trimmingCharacters(in: .whitespacesAndNewlines),
-            type: type,
-            notes: notes
-        )
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedBrand = brand.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Only grinders carry options; retyping a grinder clears them.
+        let grinderOptions = type == .grinder
+            ? GrinderOptions(isStepless: isStepless, startingPoint: startingPoint)
+            : nil
         
         do {
-            _ = try equipmentUseCases.create(request)
+            if let equipment {
+                let request = UpdateEquipmentRequest(
+                    name: trimmedName,
+                    brand: trimmedBrand,
+                    type: type,
+                    notes: notes,
+                    grinderOptions: grinderOptions
+                )
+                _ = try equipmentUseCases.update(equipment, request)
+            } else {
+                let request = CreateEquipmentRequest(
+                    name: trimmedName,
+                    brand: trimmedBrand,
+                    type: type,
+                    notes: notes,
+                    grinderOptions: grinderOptions
+                )
+                _ = try equipmentUseCases.create(request)
+            }
             dismiss()
         } catch {
             alertCoordinator.show(error)

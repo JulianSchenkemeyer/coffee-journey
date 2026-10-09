@@ -32,7 +32,7 @@ struct ConfirmCalibrationModalView: View {
                         Text("New").bold()
                     }
                     ComparisonRow("Beans:", currentMin: recipe.minAmountBeans, currentMax: recipe.maxAmountBeans, new: request.amountBeans, format: .number.precision(.fractionLength(1)), unit: "g")
-                    ComparisonRow("Grind Setting:", currentMin: recipe.minGrindSetting, currentMax: recipe.maxGrindSetting, new: request.grindSetting, format: .number)
+                    ComparisonRow("Grind Setting:", currentMin: recipe.minGrindSetting, currentMax: recipe.maxGrindSetting, new: request.grindSetting, format: .number.precision(.fractionLength(recipe.grindFractionDigits)))
                     ComparisonRow("Temperature:", currentMin: recipe.minTemperature, currentMax: recipe.maxTemperature, new: request.temperature, format: .number, unit: "°C")
                     ComparisonRow("Extraction Time:", currentMin: recipe.minExtractionTime, currentMax: recipe.maxExtractionTime, new: request.extractionTime, format: .number, unit: "s")
                     ComparisonRow("Output:", currentMin: recipe.minOutput, currentMax: recipe.maxOutput, new: request.output, format: .number.precision(.fractionLength(1)), unit: "g")

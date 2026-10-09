@@ -18,6 +18,10 @@ struct BrewParameterFormView: View {
     @Binding var extractionTime: Int
     @Binding var output: Double
 
+    private var grinder: Equipment? { selectedRecipe?.grinder }
+    private var grindStep: Double { grinder?.grindStep ?? RecipeConstants.GrindSetting.steppedStep }
+    private var grindDigits: Int { grinder?.grindFractionDigits ?? 0 }
+
     var body: some View {
         Form {
             Picker("Recipe", selection: $selectedRecipe) {
@@ -40,10 +44,10 @@ struct BrewParameterFormView: View {
                         in: RecipeConstants.Beans.range,
                         step: RecipeConstants.Beans.step)
 
-                Stepper("Grind Setting: \(grindSetting, format: .number)",
+                Stepper("Grind Setting: \(grindSetting, format: .number.precision(.fractionLength(grindDigits)))",
                         value: $grindSetting,
                         in: RecipeConstants.GrindSetting.range,
-                        step: RecipeConstants.GrindSetting.step)
+                        step: grindStep)
             }
 
             Section("Process") {

@@ -8,12 +8,13 @@ import SwiftUI
 
 struct BrewSummaryGrid: View {
     let summary: BrewSummary
+    var grindFractionDigits: Int = 0
 
     private let columns = [GridItem(.flexible(), alignment: .leading), GridItem(.flexible(), alignment: .leading)]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            grid(summary.parameterRows)
+            grid(summary.parameterRows(grindFractionDigits: grindFractionDigits))
 
             Divider()
 
@@ -50,7 +51,7 @@ private struct SummaryRow: Identifiable {
 private let missingValue = "–"
 
 private extension BrewSummary {
-    var parameterRows: [SummaryRow] {
+    func parameterRows(grindFractionDigits: Int) -> [SummaryRow] {
         [
             SummaryRow(id: "coffee",
                        symbol: CJSymbol.BrewParameter.coffee,
@@ -59,7 +60,7 @@ private extension BrewSummary {
             SummaryRow(id: "grind",
                        symbol: CJSymbol.BrewParameter.grind,
                        label: "Grind:",
-                       value: grindSetting.formatted(.number.precision(.fractionLength(0)))),
+                       value: grindSetting.formatted(.number.precision(.fractionLength(grindFractionDigits)))),
             SummaryRow(id: "temperature",
                        symbol: CJSymbol.BrewParameter.temperature,
                        label: "Temp:",

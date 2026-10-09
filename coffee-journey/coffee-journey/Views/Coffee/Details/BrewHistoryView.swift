@@ -138,7 +138,7 @@ struct BrewHistoryList: View {
                 }
                 
                 // Brew parameters
-                BrewSummaryGrid(summary: BrewSummary(brew: brew))
+                BrewSummaryGrid(summary: BrewSummary(brew: brew), grindFractionDigits: brew.grindFractionDigits)
             }
             .swipeActions(edge: .leading) {
                 Button {

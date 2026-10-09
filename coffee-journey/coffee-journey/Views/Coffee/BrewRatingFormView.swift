@@ -31,7 +31,7 @@ struct BrewRatingFormView: View {
                     temperature: temperature,
                     extractionTime: extractionTime,
                     output: output
-                ))
+                ), grindFractionDigits: recipe.grindFractionDigits)
             }
 
             Section("Rating") {

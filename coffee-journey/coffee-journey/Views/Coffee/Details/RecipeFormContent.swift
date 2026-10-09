@@ -22,6 +22,10 @@ struct RecipeFormContent: View {
     @Binding var extractionTime: Int
     @Binding var amountBeans: Double
     @Binding var output: Double
+    var appliesGrinderStartingPoint: Bool = true
+
+    private var grindStep: Double { selectedGrinder?.grindStep ?? RecipeConstants.GrindSetting.steppedStep }
+    private var grindDigits: Int { selectedGrinder?.grindFractionDigits ?? 0 }
 
     var body: some View {
         Form {
@@ -42,6 +46,10 @@ struct RecipeFormContent: View {
                             .tag(grinder)
                     }
                 }
+                .onChange(of: selectedGrinder) { _, newGrinder in
+                    guard appliesGrinderStartingPoint, let newGrinder else { return }
+                    grindSetting = newGrinder.startingGrindSetting
+                }
             }
 
             Section("Preparation") {
@@ -50,10 +58,10 @@ struct RecipeFormContent: View {
                         in: RecipeConstants.Beans.range,
                         step: RecipeConstants.Beans.step)
 
-                Stepper("Grind Setting: \(grindSetting, format: .number)",
+                Stepper("Grind Setting: \(grindSetting, format: .number.precision(.fractionLength(grindDigits)))",
                         value: $grindSetting,
                         in: RecipeConstants.GrindSetting.range,
-                        step: RecipeConstants.GrindSetting.step)
+                        step: grindStep)
             }
 
             Section("Process") {

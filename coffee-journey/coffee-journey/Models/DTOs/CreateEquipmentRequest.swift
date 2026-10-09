@@ -13,5 +13,6 @@ struct CreateEquipmentRequest {
     let brand: String
     let type: EquipmentType
     let notes: String
+    var grinderOptions: GrinderOptions? = nil
 }
 

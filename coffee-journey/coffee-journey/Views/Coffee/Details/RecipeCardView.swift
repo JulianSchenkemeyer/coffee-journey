@@ -64,7 +64,7 @@ struct RecipeCardView: View {
             
             Grid(alignment: .leading, horizontalSpacing: 16, verticalSpacing: 8) {
                 rangeRow(icon: "scalemass.fill", label: "Beans", min: recipe.minAmountBeans, max: recipe.maxAmountBeans, format: .number.precision(.fractionLength(1)), unit: "g")
-                rangeRow(icon: "dial.high.fill", label: "Grind", min: recipe.minGrindSetting, max: recipe.maxGrindSetting, format: .number)
+                rangeRow(icon: "dial.high.fill", label: "Grind", min: recipe.minGrindSetting, max: recipe.maxGrindSetting, format: .number.precision(.fractionLength(recipe.grindFractionDigits)))
                 rangeRow(icon: "thermometer.medium", label: "Temp", min: recipe.minTemperature, max: recipe.maxTemperature, format: .number, unit: "°C")
                 rangeRow(icon: "timer", label: "Time", min: recipe.minExtractionTime, max: recipe.maxExtractionTime, format: .number, unit: "s")
                 rangeRow(icon: "drop.fill", label: "Output", min: recipe.minOutput, max: recipe.maxOutput, format: .number.precision(.fractionLength(1)), unit: "g")
