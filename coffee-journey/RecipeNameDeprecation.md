@@ -8,9 +8,12 @@ The phases are ordered so the app keeps compiling and working after each one. Th
 
 Resolve these before starting Phase 2:
 
-- [ ] **Uniqueness:** must each brewer + grinder pair be unique per coffee? Without names, two recipes with the same pair can't be told apart. If yes, `CreateRecipe` / `UpdateRecipe` should reject duplicates, and the form should warn like the coffee duplicate check does.
-- [ ] **Equipment deletion:** `Recipe.brewer` and `Recipe.grinder` use `deleteRule: .nullify`. Deleting equipment leaves recipes with no identity. Options: cascade-delete those recipes, block deleting equipment that recipes use, or keep the recipes and show "Unknown brewer/grinder".
-- [ ] **Existing data:** what happens to recipes that have no brewer or grinder, or that share a pair with another recipe on the same coffee? Merge them, keep them, or delete them in the migration?
+- [x] **Uniqueness:** must each brewer + grinder pair be unique per coffee? Without names, two recipes with the same pair can't be told apart. If yes, `CreateRecipe` / `UpdateRecipe` should reject duplicates, and the form should warn like the coffee duplicate check does.
+  - **Decision:** yes, unique per coffee. The form warns and disables Done (Phase 2); the use cases reject duplicates (Phase 3).
+- [x] **Equipment deletion:** `Recipe.brewer` and `Recipe.grinder` use `deleteRule: .nullify`. Deleting equipment leaves recipes with no identity. Options: cascade-delete those recipes, block deleting equipment that recipes use, or keep the recipes and show "Unknown brewer/grinder".
+  - **Decision:** keep `.nullify`. Recipes stay and show "Unknown Brewer" / "Unknown Grinder".
+- [x] **Existing data:** what happens to recipes that have no brewer or grinder, or that share a pair with another recipe on the same coffee? Merge them, keep them, or delete them in the migration?
+  - **Decision:** the V5 → V6 migration merges recipes that share a pair on the same coffee: ranges widen to cover all of them and their brews move onto one recipe. Recipes with missing equipment are kept.
 
 ## Phase 1: Display the equipment pair instead of the name
 
@@ -28,11 +31,11 @@ Resolve these before starting Phase 2:
 
 ## Phase 2: Forms and validation
 
-- [ ] `Views/Coffee/Details/RecipeFormContent.swift:33`: remove the "Recipe Name" text field and the `name` binding.
-- [ ] `Views/Coffee/Details/RecipeFormView.swift`: remove `name` state and loading; base `isFormValid` on brewer and grinder being selected (plus uniqueness, if decided).
-- [ ] `Views/Coffee/Shelf/SetupRecipeView.swift`: same validation change. This also fixes the bug at line 66, where Done is enabled but `submit()` silently returns when no brewer or grinder is selected.
-- [ ] Give the brewer and grinder Pickers a matching tag for the initial `nil` value (a "Select…" placeholder), so the selection is valid before the user picks.
-- [ ] When no brewers or grinders exist, show a way to add equipment instead of an empty picker.
+- [x] `Views/Coffee/Details/RecipeFormContent.swift:33`: remove the "Recipe Name" text field and the `name` binding.
+- [x] `Views/Coffee/Details/RecipeFormView.swift`: remove `name` state and loading; base `isFormValid` on brewer and grinder being selected (plus uniqueness, if decided).
+- [x] `Views/Coffee/Shelf/SetupRecipeView.swift`: same validation change. This also fixes the bug at line 66, where Done is enabled but `submit()` silently returns when no brewer or grinder is selected.
+- [x] Give the brewer and grinder Pickers a matching tag for the initial `nil` value (a "Select…" placeholder), so the selection is valid before the user picks.
+- [x] When no brewers or grinders exist, show a way to add equipment instead of an empty picker. (Decided: a message pointing to the Equipment tab, no new navigation.)
 
 **Verify:** creating a recipe without equipment is impossible. Done is disabled until both are picked, and saving with both works from both the New Recipe and Set Up Recipe screens.
 

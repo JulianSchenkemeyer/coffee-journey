@@ -18,7 +18,6 @@ struct SetupRecipeView: View {
 
     var coffee: Coffee
 
-    @State private var name: String = ""
     @State private var selectedBrewer: Equipment?
     @State private var selectedGrinder: Equipment?
     @State private var temperature: Int = RecipeConstants.Temperature.defaultValue
@@ -30,7 +29,6 @@ struct SetupRecipeView: View {
 
     var body: some View {
         RecipeFormContent(
-            name: $name,
             selectedBrewer: $selectedBrewer,
             selectedGrinder: $selectedGrinder,
             temperature: $temperature,
@@ -54,12 +52,8 @@ struct SetupRecipeView: View {
         }
     }
 
-    private var isNameValid: Bool {
-        !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
-
     private var isFormValid: Bool {
-        isNameValid
+        selectedBrewer != nil && selectedGrinder != nil
     }
 
     private func submit() {
@@ -69,7 +63,7 @@ struct SetupRecipeView: View {
             grinder: selectedGrinder,
             brewer: selectedBrewer,
             coffee: coffee,
-            name: name.trimmingCharacters(in: .whitespacesAndNewlines),
+            name: "",
             temperature: temperature,
             grindSetting: grindSetting,
             extractionTime: extractionTime,

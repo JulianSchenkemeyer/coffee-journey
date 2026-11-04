@@ -17,7 +17,6 @@ struct RecipeFormView: View {
     var coffee: Coffee
     var recipe: Recipe?
 
-    @State private var name: String = ""
     @State private var selectedBrewer: Equipment?
     @State private var selectedGrinder: Equipment?
     @State private var temperature: Int = RecipeConstants.Temperature.defaultValue
@@ -30,7 +29,6 @@ struct RecipeFormView: View {
     var body: some View {
         NavigationStack {
             RecipeFormContent(
-                name: $name,
                 selectedBrewer: $selectedBrewer,
                 selectedGrinder: $selectedGrinder,
                 temperature: $temperature,
@@ -38,7 +36,8 @@ struct RecipeFormView: View {
                 extractionTime: $extractionTime,
                 amountBeans: $amountBeans,
                 output: $output,
-                appliesGrinderStartingPoint: !isEditMode
+                appliesGrinderStartingPoint: !isEditMode,
+                isDuplicate: isDuplicate
             )
             .navigationTitle(isEditMode ? "Edit Recipe" : "New Recipe")
             .navigationBarTitleDisplayMode(.inline)
@@ -61,18 +60,19 @@ struct RecipeFormView: View {
 
     private var isEditMode: Bool { recipe != nil }
 
-    private var isNameValid: Bool {
-        !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    private var isDuplicate: Bool {
+        coffee.recipes.contains {
+            $0.id != recipe?.id && $0.brewer == selectedBrewer && $0.grinder == selectedGrinder
+        }
     }
 
     private var isFormValid: Bool {
-        isNameValid
+        selectedBrewer != nil && selectedGrinder != nil && !isDuplicate
     }
 
     private func loadRecipeData() {
         guard let recipe = recipe else { return }
 
-        name = recipe.name
         selectedBrewer = recipe.brewer
         selectedGrinder = recipe.grinder
         temperature = recipe.temperature
@@ -83,14 +83,13 @@ struct RecipeFormView: View {
     }
 
     private func submit() {
-        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard isFormValid else { return }
 
         do {
             if let recipe = recipe {
-                try updateRecipe(recipe, name: trimmedName)
+                try updateRecipe(recipe)
             } else {
-                try createNewRecipe(name: trimmedName)
+                try createNewRecipe()
             }
             dismiss()
         } catch {
@@ -98,9 +97,10 @@ struct RecipeFormView: View {
         }
     }
 
-    private func updateRecipe(_ recipe: Recipe, name: String) throws {
+    private func updateRecipe(_ recipe: Recipe) throws {
+        // Name is no longer editable; keep the stored value until the field is removed from the model.
         let request = UpdateRecipeRequest(
-            name: name,
+            name: recipe.name,
             brewer: selectedBrewer,
             grinder: selectedGrinder,
             temperature: temperature,
@@ -112,12 +112,12 @@ struct RecipeFormView: View {
         _ = try recipeUseCases.update(recipe, request)
     }
 
-    private func createNewRecipe(name: String) throws {
+    private func createNewRecipe() throws {
         let request = CreateRecipeRequest(
             grinder: selectedGrinder,
             brewer: selectedBrewer,
             coffee: coffee,
-            name: name,
+            name: "",
             temperature: temperature,
             grindSetting: grindSetting,
             extractionTime: extractionTime,

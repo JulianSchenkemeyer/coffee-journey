@@ -14,7 +14,6 @@ struct RecipeFormContent: View {
     @Query(filter: Equipment.isBrewer) private var brewers: [Equipment]
     @Query(filter: Equipment.isGrinder) private var grinders: [Equipment]
 
-    @Binding var name: String
     @Binding var selectedBrewer: Equipment?
     @Binding var selectedGrinder: Equipment?
     @Binding var temperature: Int
@@ -23,6 +22,7 @@ struct RecipeFormContent: View {
     @Binding var amountBeans: Double
     @Binding var output: Double
     var appliesGrinderStartingPoint: Bool = true
+    var isDuplicate: Bool = false
 
     private var grindStep: Double { selectedGrinder?.grindStep ?? RecipeConstants.GrindSetting.steppedStep }
     private var grindDigits: Int { selectedGrinder?.grindFractionDigits ?? 0 }
@@ -30,25 +30,41 @@ struct RecipeFormContent: View {
     var body: some View {
         Form {
             Section {
-                TextField("Recipe Name", text: $name)
-                    .textInputAutocapitalization(.words)
-
-                Picker("Brewer", selection: $selectedBrewer) {
-                    ForEach(brewers) { brewer in
-                        Text(brewer.name)
-                            .tag(brewer)
+                if brewers.isEmpty {
+                    Text("Add a brewer in the Equipment tab first.")
+                        .foregroundStyle(.secondary)
+                } else {
+                    Picker("Brewer", selection: $selectedBrewer) {
+                        Text("Select…")
+                            .tag(nil as Equipment?)
+                        ForEach(brewers) { brewer in
+                            Text(brewer.name)
+                                .tag(brewer as Equipment?)
+                        }
                     }
                 }
 
-                Picker("Grinder", selection: $selectedGrinder) {
-                    ForEach(grinders) { grinder in
-                        Text(grinder.name)
-                            .tag(grinder)
+                if grinders.isEmpty {
+                    Text("Add a grinder in the Equipment tab first.")
+                        .foregroundStyle(.secondary)
+                } else {
+                    Picker("Grinder", selection: $selectedGrinder) {
+                        Text("Select…")
+                            .tag(nil as Equipment?)
+                        ForEach(grinders) { grinder in
+                            Text(grinder.name)
+                                .tag(grinder as Equipment?)
+                        }
+                    }
+                    .onChange(of: selectedGrinder) { _, newGrinder in
+                        guard appliesGrinderStartingPoint, let newGrinder else { return }
+                        grindSetting = newGrinder.startingGrindSetting
                     }
                 }
-                .onChange(of: selectedGrinder) { _, newGrinder in
-                    guard appliesGrinderStartingPoint, let newGrinder else { return }
-                    grindSetting = newGrinder.startingGrindSetting
+
+                if isDuplicate {
+                    Text("A recipe for this brewer and grinder already exists")
+                        .foregroundStyle(.red)
                 }
             }
 
