@@ -35,11 +35,16 @@ struct RecipeCardGalleryView: View {
 
                     AddRecipeCardButtonView(coffee: coffee, isInteractive: isAddButtonVisible)
                         .frame(width: 300, height: 200)
-                        .onScrollVisibilityChange(threshold: 0.9) { isVisible in
-                            isAddButtonVisible = isVisible
-                        }
                 }
                 .scrollTargetLayout()
+            }
+            // onScrollVisibilityChange on the card stops firing after the details screen is re-entered,
+            // leaving the button disabled. The add card is always last, so derive its visibility (≥ 90%
+            // of its 300pt width) from how close the gallery is scrolled to its end.
+            .onScrollGeometryChange(for: Bool.self) { geometry in
+                geometry.visibleRect.maxX >= geometry.contentSize.width - 30
+            } action: { _, isVisible in
+                isAddButtonVisible = isVisible
             }
             .scrollTargetBehavior(.viewAligned)
             .scrollPosition(id: $visibleRecipeID)
