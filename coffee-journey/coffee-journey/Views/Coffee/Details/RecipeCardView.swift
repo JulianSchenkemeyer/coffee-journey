@@ -38,22 +38,9 @@ struct RecipeCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                if let grinder = recipe.grinder {
-                    Text(grinder.name)
-                        .font(.caption2.bold())
-                        .padding(4)
-                        .padding(.horizontal, 6)
-                        .background(Capsule().opacity(0.3))
-                }
-                
-                if let brewer = recipe.brewer {
-                    Text(brewer.name)
-                        .font(.caption2.bold())
-                        .padding(4)
-                        .padding(.horizontal, 6)
-                        .background(Capsule().opacity(0.3))
-                }
-             
+                Text(recipe.equipmentPairName)
+                    .font(.headline)
+
                 Spacer()
                 
                 Label("Recipe Actions", systemImage: "ellipsis")
@@ -107,7 +94,7 @@ struct RecipeCardView: View {
                 showDeleteConfirmation = true
             }
         }
-        .alert("Delete \(recipe.name)?", isPresented: $showDeleteConfirmation) {
+        .alert("Delete this recipe?", isPresented: $showDeleteConfirmation) {
             Button("Delete", role: .destructive) {
                 do {
                     try recipeUseCases.delete(recipe)
@@ -117,7 +104,7 @@ struct RecipeCardView: View {
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("This will permanently delete this recipe.")
+            Text("\(recipe.equipmentPairName) will be permanently deleted.")
         }
     }
 }

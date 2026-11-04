@@ -26,7 +26,7 @@ struct BrewParameterFormView: View {
         Form {
             Picker("Recipe", selection: $selectedRecipe) {
                 ForEach(coffee.recipes) { recipe in
-                    Text(recipe.name).tag(recipe)
+                    Text(recipe.equipmentPairName).tag(recipe)
                 }
             }
             .onChange(of: selectedRecipe) {

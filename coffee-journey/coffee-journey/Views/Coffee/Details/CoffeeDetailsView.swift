@@ -59,7 +59,7 @@ struct CoffeeDetailsView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 16) {
-                    Text(selectedRecipe.map { "Filtered by \($0.name)" } ?? "All Brews")
+                    Text(selectedRecipe.map { "Filtered by \($0.equipmentPairName)" } ?? "All Brews")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     

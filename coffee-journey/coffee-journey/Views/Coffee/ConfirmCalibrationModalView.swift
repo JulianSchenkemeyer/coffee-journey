@@ -20,7 +20,7 @@ struct ConfirmCalibrationModalView: View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 14) {
                 
-                Text(recipe.name)
+                Text(recipe.equipmentPairName)
                     .font(.title2)
                     .foregroundStyle(.secondary)
 

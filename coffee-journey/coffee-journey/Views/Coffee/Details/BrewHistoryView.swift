@@ -25,7 +25,7 @@ struct BrewHistoryView: View {
             selectedRecipe: selectedRecipe
         )
         .navigationTitle(coffee.name)
-        .navigationSubtitle(selectedRecipe.map { "Recipe: \($0.name)" } ?? "All Recipes")
+        .navigationSubtitle(selectedRecipe.map { "Recipe: \($0.equipmentPairName)" } ?? "All Recipes")
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
@@ -34,7 +34,7 @@ struct BrewHistoryView: View {
                             .tag(nil as Recipe?)
                         
                         ForEach(coffee.recipes) { recipe in
-                            Text(recipe.name)
+                            Text(recipe.equipmentPairName)
                                 .tag(recipe as Recipe?)
                         }
                     }
@@ -83,7 +83,7 @@ struct BrewHistoryList: View {
         List(brews) { brew in
             VStack(alignment: .leading, spacing: 8) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(brew.recipe?.name ?? "Unknown Recipe")
+                    Text(brew.recipe?.equipmentPairName ?? "Unknown Equipment")
                         .font(.headline)
                     
                     // Date and Rating
