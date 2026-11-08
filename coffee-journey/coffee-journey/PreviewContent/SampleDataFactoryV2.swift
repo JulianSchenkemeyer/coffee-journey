@@ -161,8 +161,7 @@ enum SampleDataFactoryV2 {
 
     struct RecipeBundle {
         let starlightEspresso: Recipe      // ZRECIPE pk 1
-        let apasFlatWhite: Recipe          // ZRECIPE pk 2
-        let apasEspresso: Recipe           // ZRECIPE pk 3
+        let apasFlatWhite: Recipe          // ZRECIPE pk 2 (pk 3 shared its brewer + grinder and was merged in)
         let henriqueEspresso: Recipe       // ZRECIPE pk 4
         let henriqueEspressoRobot: Recipe  // ZRECIPE pk 5
         let bergsonneEspresso: Recipe      // ZRECIPE pk 6
@@ -170,7 +169,7 @@ enum SampleDataFactoryV2 {
         let viennaEspresso: Recipe         // ZRECIPE pk 8
 
         var all: [Recipe] {
-            [starlightEspresso, apasFlatWhite, apasEspresso, henriqueEspresso,
+            [starlightEspresso, apasFlatWhite, henriqueEspresso,
              henriqueEspressoRobot, bergsonneEspresso, viennaFlatWhiteTravel, viennaEspresso]
         }
     }
@@ -215,13 +214,6 @@ enum SampleDataFactoryV2 {
                 minT: 96, maxT: 96, minG: 8.0, maxG: 9.0,
                 minExt: 30, maxExt: 43, minB: 18.0, maxB: 18.8,
                 minO: 36.0, maxO: 39.7, lastUsed: 794572963.828307
-            ),
-            apasEspresso: make(
-                coffee: coffees.apas,
-                brewer: equipment.picopresso, grinder: equipment.c40,
-                minT: 96, maxT: 96, minG: 9.0, maxG: 9.0,
-                minExt: 35, maxExt: 35, minB: 18.4, maxB: 18.4,
-                minO: 37.4, maxO: 37.4, lastUsed: 794416581.081216
             ),
             henriqueEspresso: make(
                 coffee: coffees.henrique,
@@ -303,13 +295,13 @@ enum SampleDataFactoryV2 {
             mk(794072148.524402, c.apas, r.apasFlatWhite, 18.3, 9.0, 96, 36, 3, 37.5, .thumbsUp),
             mk(794151805.810234, c.apas, r.apasFlatWhite, 18.0, 9.0, 96, 43, 3, 38.9, .thumbsUp),
             mk(794161469.754336, c.apas, r.apasFlatWhite, 18.5, 9.0, 96, 36, 4, 39.7, .thumbsUp),
-            mk(794230392.710901, c.apas, r.apasEspresso,  18.4, 9.0, 96, 39, 3, 36.4, .thumbsUp),
+            mk(794230392.710901, c.apas, r.apasFlatWhite, 18.4, 9.0, 96, 39, 3, 36.4, .thumbsUp),
             mk(794318027.798836, c.apas, r.apasFlatWhite, 18.8, 9.0, 96, 36, 3, 37.2, .thumbsUp),
             mk(794327452.534548, c.apas, r.apasFlatWhite, 18.7, 9.0, 96, 40, 3, 38.6, .thumbsUp),
-            mk(794328465.748970, c.apas, r.apasEspresso,  18.5, 9.0, 96, 40, 4, 38.6, .thumbsUp),
-            mk(794400869.696601, c.apas, r.apasEspresso,  18.8, 9.0, 96, 41, 3, 38.3, .thumbsUp),
-            mk(794416581.081029, c.apas, r.apasEspresso,  18.7, 9.0, 96, 40, 3, 38.7, .thumbsUp),
-            mk(794478786.874329, c.apas, r.apasEspresso,  18.4, 9.0, 94, 38, 3, 37.4, .thumbsDown),
+            mk(794328465.748970, c.apas, r.apasFlatWhite, 18.5, 9.0, 96, 40, 4, 38.6, .thumbsUp),
+            mk(794400869.696601, c.apas, r.apasFlatWhite, 18.8, 9.0, 96, 41, 3, 38.3, .thumbsUp),
+            mk(794416581.081029, c.apas, r.apasFlatWhite, 18.7, 9.0, 96, 40, 3, 38.7, .thumbsUp),
+            mk(794478786.874329, c.apas, r.apasFlatWhite, 18.4, 9.0, 94, 38, 3, 37.4, .thumbsDown),
             mk(794494276.405926, c.apas, r.apasFlatWhite, 18.7, 9.0, 96, 40, 3, 37.9, .thumbsUp),
             mk(794572963.828006, c.apas, r.apasFlatWhite, 18.5, 9.0, 96, 38, 3, 38.1, .thumbsUp),
             mk(794674315.894158, c.apas, r.apasFlatWhite, 18.4, 9.0, 96, 36, 3, 37.9, .thumbsDown),

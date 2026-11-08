@@ -63,4 +63,4 @@ Resolve these before starting Phase 2:
 
 ## Phase 5: Docs
 
-- [ ] Update `CLAUDE.md`: the schema version list (currently `SchemaV1`–`V3`) and a note that recipes are identified by their equipment pair.
+- [x] Update `CLAUDE.md`: the schema version list (currently `SchemaV1`–`V3`) and a note that recipes are identified by their equipment pair.
