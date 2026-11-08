@@ -54,10 +54,10 @@ Resolve these before starting Phase 2:
 
 ## Phase 4: Schema
 
-- [ ] Add `Persistence/Schema/SchemaV6.swift` with `Recipe` without `name`.
-- [ ] Add a V5 → V6 migration stage to `CoffeeJourneyMigrationPlan`, applying the "Existing data" decision above.
-- [ ] Point the model typealiases at `SchemaV6`.
-- [ ] Add a migration test: a V5 store with named recipes opens under V6 and keeps all parameters, brews and equipment links.
+- [x] Add `Persistence/Schema/SchemaV6.swift` with `Recipe` without `name`.
+- [x] Add a V5 → V6 migration stage to `CoffeeJourneyMigrationPlan`, applying the "Existing data" decision above.
+- [x] Point the model typealiases at `SchemaV6`.
+- [x] Add a migration test: a V5 store with named recipes opens under V6 and keeps all parameters, brews and equipment links.
 
 **Verify:** run the app against a V5 store seeded with sample data; recipes and brews are all still there.
 

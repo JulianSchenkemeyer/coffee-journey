@@ -8,8 +8,8 @@ import Foundation
 import SwiftData
 
 
-typealias MaintenanceTemplate = SchemaV5.MaintenanceTemplate
+typealias MaintenanceTemplate = SchemaV6.MaintenanceTemplate
 
-typealias MaintenanceTemplateStep = SchemaV5.MaintenanceTemplateStep
+typealias MaintenanceTemplateStep = SchemaV6.MaintenanceTemplateStep
 
-typealias MaintenanceInstance = SchemaV5.MaintenanceInstance
+typealias MaintenanceInstance = SchemaV6.MaintenanceInstance

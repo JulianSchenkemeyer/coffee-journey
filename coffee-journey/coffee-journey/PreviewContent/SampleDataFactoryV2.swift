@@ -177,7 +177,6 @@ enum SampleDataFactoryV2 {
 
     static func createRecipes(coffees: CoffeeBundle, equipment: EquipmentBundle) -> RecipeBundle {
         func make(
-            name: String,
             coffee: Coffee,
             brewer: Equipment,
             grinder: Equipment,
@@ -189,7 +188,6 @@ enum SampleDataFactoryV2 {
             lastUsed: Double
         ) -> Recipe {
             let r = Recipe(
-                name: name,
                 minTemperature: minT, maxTemperature: maxT,
                 minGrindSetting: minG, maxGrindSetting: maxG,
                 minExtractionTime: minExt, maxExtractionTime: maxExt,
@@ -205,56 +203,56 @@ enum SampleDataFactoryV2 {
 
         return RecipeBundle(
             starlightEspresso: make(
-                name: "Espresso", coffee: coffees.starlight,
+                coffee: coffees.starlight,
                 brewer: equipment.robot, grinder: equipment.c40red,
                 minT: 95, maxT: 95, minG: 13.0, maxG: 13.0,
                 minExt: 26, maxExt: 36, minB: 19.6, maxB: 20.6,
                 minO: 37.9, maxO: 39.0, lastUsed: 796488955.473844
             ),
             apasFlatWhite: make(
-                name: "Flat White", coffee: coffees.apas,
+                coffee: coffees.apas,
                 brewer: equipment.picopresso, grinder: equipment.c40,
                 minT: 96, maxT: 96, minG: 8.0, maxG: 9.0,
                 minExt: 30, maxExt: 43, minB: 18.0, maxB: 18.8,
                 minO: 36.0, maxO: 39.7, lastUsed: 794572963.828307
             ),
             apasEspresso: make(
-                name: "Espresso", coffee: coffees.apas,
+                coffee: coffees.apas,
                 brewer: equipment.picopresso, grinder: equipment.c40,
                 minT: 96, maxT: 96, minG: 9.0, maxG: 9.0,
                 minExt: 35, maxExt: 35, minB: 18.4, maxB: 18.4,
                 minO: 37.4, maxO: 37.4, lastUsed: 794416581.081216
             ),
             henriqueEspresso: make(
-                name: "Espresso", coffee: coffees.henrique,
+                coffee: coffees.henrique,
                 brewer: equipment.picopresso, grinder: equipment.c40,
                 minT: 96, maxT: 96, minG: 9.0, maxG: 12.0,
                 minExt: 30, maxExt: 38, minB: 18.0, maxB: 18.7,
                 minO: 36.0, maxO: 38.9, lastUsed: 794673684.718758
             ),
             henriqueEspressoRobot: make(
-                name: "Espresso Robot", coffee: coffees.henrique,
+                coffee: coffees.henrique,
                 brewer: equipment.robot, grinder: equipment.c40red,
                 minT: 94, maxT: 95, minG: 13.0, maxG: 14.0,
                 minExt: 29, maxExt: 34, minB: 18.5, maxB: 19.5,
                 minO: 36.9, maxO: 38.6, lastUsed: 795194928.720388
             ),
             bergsonneEspresso: make(
-                name: "Espresso", coffee: coffees.bergsonne,
+                coffee: coffees.bergsonne,
                 brewer: equipment.robot, grinder: equipment.c40red,
                 minT: 92, maxT: 92, minG: 14.0, maxG: 14.0,
                 minExt: 27, maxExt: 28, minB: 20.5, maxB: 20.7,
                 minO: 38.3, maxO: 39.7, lastUsed: 796288912.216993
             ),
             viennaFlatWhiteTravel: make(
-                name: "Flat White travel", coffee: coffees.vienna,
+                coffee: coffees.vienna,
                 brewer: equipment.picopresso, grinder: equipment.c40,
                 minT: 94, maxT: 94, minG: 8.0, maxG: 8.0,
                 minExt: 41, maxExt: 45, minB: 18.0, maxB: 18.3,
                 minO: 37.2, maxO: 39.3, lastUsed: 797176311.493362
             ),
             viennaEspresso: make(
-                name: "Espresso", coffee: coffees.vienna,
+                coffee: coffees.vienna,
                 brewer: equipment.robot, grinder: equipment.c40red,
                 minT: 92, maxT: 92, minG: 12.0, maxG: 12.0,
                 minExt: 30, maxExt: 35, minB: 18.3, maxB: 18.9,

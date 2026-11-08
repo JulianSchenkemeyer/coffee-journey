@@ -9,4 +9,4 @@ import Foundation
 import SwiftData
 
 
-typealias Refill = SchemaV5.Refill
+typealias Refill = SchemaV6.Refill

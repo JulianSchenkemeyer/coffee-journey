@@ -24,9 +24,8 @@ struct SwiftDataRecipeRepositoryTests {
     }
 
     @discardableResult
-    private func insertRecipe(name: String = "Espresso", into context: ModelContext) throws -> Recipe {
+    private func insertRecipe(into context: ModelContext) throws -> Recipe {
         let recipe = Recipe(
-            name: name,
             minTemperature: 90,
             maxTemperature: 96,
             minGrindSetting: 8.0,
@@ -82,8 +81,8 @@ struct SwiftDataRecipeRepositoryTests {
 
     @Test func fetchAllReturnsAllRecipes() throws {
         let (repository, context) = try prepareEnvironment()
-        try insertRecipe(name: "Espresso", into: context)
-        try insertRecipe(name: "Filter", into: context)
+        try insertRecipe(into: context)
+        try insertRecipe(into: context)
 
         let result = try repository.fetchAll()
 

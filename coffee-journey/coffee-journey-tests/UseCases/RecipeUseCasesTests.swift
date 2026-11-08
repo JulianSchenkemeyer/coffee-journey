@@ -46,7 +46,6 @@ struct RecipeUseCasesTests {
     // A recipe with a wide range to give calibration tests room to work with
     private func makeWideRecipe(into context: ModelContext) -> Recipe {
         let recipe = Recipe(
-            name: "Espresso",
             minTemperature: 88,
             maxTemperature: 98,
             minGrindSetting: 7.0,

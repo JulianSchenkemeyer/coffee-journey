@@ -21,8 +21,8 @@ enum EquipmentType: String, Codable, CaseIterable, CustomStringConvertible {
     }
 }
 
-typealias Equipment = SchemaV5.Equipment
-typealias GrinderOptions = SchemaV5.GrinderOptions
+typealias Equipment = SchemaV6.Equipment
+typealias GrinderOptions = SchemaV6.GrinderOptions
 
 
 extension Equipment {

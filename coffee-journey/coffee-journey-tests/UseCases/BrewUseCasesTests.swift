@@ -60,7 +60,6 @@ struct BrewDrinkTests {
 
     private func makeRecipe(brewer: Equipment, grinder: Equipment, into context: ModelContext) -> Recipe {
         let recipe = Recipe(
-            name: "Espresso",
             minTemperature: 90,
             maxTemperature: 96,
             minGrindSetting: 8.0,

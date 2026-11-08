@@ -51,7 +51,7 @@ enum BrewClarity: Int, CaseIterable, CustomStringConvertible {
     }
 }
 
-typealias Brew = SchemaV5.Brew
+typealias Brew = SchemaV6.Brew
 
 
 extension Brew {

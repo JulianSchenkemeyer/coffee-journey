@@ -8,7 +8,7 @@ import Foundation
 import SwiftData
 
 
-typealias Recipe = SchemaV5.Recipe
+typealias Recipe = SchemaV6.Recipe
 
 
 extension Recipe {
@@ -44,9 +44,7 @@ extension Recipe {
         brewer: Equipment? = nil,
         grinder: Equipment? = nil
     ) {
-        // `name` is deprecated; it stays in the schema until SchemaV6 drops it.
         self.init(
-            name: "",
             minTemperature: temperature,
             maxTemperature: temperature,
             minGrindSetting: grindSetting,

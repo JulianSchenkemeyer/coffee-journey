@@ -10,7 +10,7 @@ extension Recipe {
     @MainActor
     struct Mock {
         static let espresso = Recipe(temperature: 94, grindSetting: 10, extractionTime: 33, input: 18.4, output: 37.3, brewer: Equipment.Mock.picopresso, grinder: Equipment.Mock.c40)
-        static let espressoUsed = Recipe(name: "Default", minTemperature: 92, maxTemperature: 96, minGrindSetting: 9, maxGrindSetting: 11, minExtractionTime: 30, maxExtractionTime: 36, minBeans: 18.2, maxBeans: 18.6, minOutput: 37.0, maxOutput: 37.6, brewer: Equipment.Mock.picopresso, grinder: Equipment.Mock.c40)
+        static let espressoUsed = Recipe(minTemperature: 92, maxTemperature: 96, minGrindSetting: 9, maxGrindSetting: 11, minExtractionTime: 30, maxExtractionTime: 36, minBeans: 18.2, maxBeans: 18.6, minOutput: 37.0, maxOutput: 37.6, brewer: Equipment.Mock.picopresso, grinder: Equipment.Mock.c40)
         static var espressoEquipment: Recipe {
             let espresso = Recipe(temperature: 94, grindSetting: 10, extractionTime: 33, input: 18.4, output: 37.3)
             espresso.grinder = Equipment(name: "C40", brand: "Commandante", type: EquipmentType.grinder.rawValue, notes: "")
@@ -20,7 +20,7 @@ extension Recipe {
         }
 
         static let turbo = Recipe(temperature: 94, grindSetting: 14, extractionTime: 20, input: 18.3, output: 36.5, brewer: Equipment.Mock.leverMachine, grinder: Equipment.Mock.c40)
-        static let turboUsed = Recipe(name: "Turbo", minTemperature: 93, maxTemperature: 95, minGrindSetting: 13, maxGrindSetting: 15, minExtractionTime: 18, maxExtractionTime: 22, minBeans: 18.0, maxBeans: 18.6, minOutput: 36.8, maxOutput: 37.4, brewer: Equipment.Mock.leverMachine, grinder: Equipment.Mock.c40)
+        static let turboUsed = Recipe(minTemperature: 93, maxTemperature: 95, minGrindSetting: 13, maxGrindSetting: 15, minExtractionTime: 18, maxExtractionTime: 22, minBeans: 18.0, maxBeans: 18.6, minOutput: 36.8, maxOutput: 37.4, brewer: Equipment.Mock.leverMachine, grinder: Equipment.Mock.c40)
                                        
         static let allNew = [espresso, turbo]
         static let allUsed = [espressoUsed, turboUsed]
