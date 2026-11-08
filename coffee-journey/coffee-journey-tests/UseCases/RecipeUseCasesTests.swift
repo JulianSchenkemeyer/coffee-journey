@@ -172,6 +172,21 @@ struct RecipeUseCasesTests {
         #expect(try context.fetch(FetchDescriptor<Recipe>()).count == 2)
     }
 
+    @Test func createRecipeSetsLastUsedAndBecomesLastUsedRecipe() throws {
+        let (repository, context) = try prepareEnvironment()
+        let useCase = CreateRecipe(repository: repository)
+        let coffee = makeCoffee(into: context)
+        let brewer = makeEquipment("Robot", type: .machine, into: context)
+
+        let older = try useCase(request: makeCreateRequest(coffee: coffee, brewer: brewer, grinder: makeEquipment("C40", type: .grinder, into: context)))
+        // Backdate so two back-to-back `.now` timestamps can't tie
+        older.lastUsed = .now.addingTimeInterval(-3600)
+        let created = try useCase(request: makeCreateRequest(coffee: coffee, brewer: brewer, grinder: makeEquipment("K-Ultra", type: .grinder, into: context)))
+
+        #expect(created.lastUsed != nil)
+        #expect(coffee.lastUsedRecipe?.persistentModelID == created.persistentModelID)
+    }
+
     // MARK: - UpdateRecipe
 
     @Test func updateRecipeAppliesRequestFields() throws {

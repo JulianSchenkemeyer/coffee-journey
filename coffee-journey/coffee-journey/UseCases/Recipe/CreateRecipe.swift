@@ -28,6 +28,7 @@ import SwiftData
         )
         
         recipe.coffee = request.coffee
+        recipe.lastUsed = .now
         return try repository.create(recipe)
     }
 }
