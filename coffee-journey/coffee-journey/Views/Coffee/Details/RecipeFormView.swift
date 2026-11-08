@@ -61,9 +61,7 @@ struct RecipeFormView: View {
     private var isEditMode: Bool { recipe != nil }
 
     private var isDuplicate: Bool {
-        coffee.recipes.contains {
-            $0.id != recipe?.id && $0.brewer == selectedBrewer && $0.grinder == selectedGrinder
-        }
+        coffee.hasRecipe(brewer: selectedBrewer, grinder: selectedGrinder, excluding: recipe)
     }
 
     private var isFormValid: Bool {
@@ -83,13 +81,13 @@ struct RecipeFormView: View {
     }
 
     private func submit() {
-        guard isFormValid else { return }
+        guard isFormValid, let selectedBrewer, let selectedGrinder else { return }
 
         do {
             if let recipe = recipe {
-                try updateRecipe(recipe)
+                try updateRecipe(recipe, brewer: selectedBrewer, grinder: selectedGrinder)
             } else {
-                try createNewRecipe()
+                try createNewRecipe(brewer: selectedBrewer, grinder: selectedGrinder)
             }
             dismiss()
         } catch {
@@ -97,12 +95,10 @@ struct RecipeFormView: View {
         }
     }
 
-    private func updateRecipe(_ recipe: Recipe) throws {
-        // Name is no longer editable; keep the stored value until the field is removed from the model.
+    private func updateRecipe(_ recipe: Recipe, brewer: Equipment, grinder: Equipment) throws {
         let request = UpdateRecipeRequest(
-            name: recipe.name,
-            brewer: selectedBrewer,
-            grinder: selectedGrinder,
+            brewer: brewer,
+            grinder: grinder,
             temperature: temperature,
             grindSetting: grindSetting,
             extractionTime: extractionTime,
@@ -112,12 +108,11 @@ struct RecipeFormView: View {
         _ = try recipeUseCases.update(recipe, request)
     }
 
-    private func createNewRecipe() throws {
+    private func createNewRecipe(brewer: Equipment, grinder: Equipment) throws {
         let request = CreateRecipeRequest(
-            grinder: selectedGrinder,
-            brewer: selectedBrewer,
+            grinder: grinder,
+            brewer: brewer,
             coffee: coffee,
-            name: "",
             temperature: temperature,
             grindSetting: grindSetting,
             extractionTime: extractionTime,

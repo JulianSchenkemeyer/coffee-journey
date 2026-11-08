@@ -36,7 +36,6 @@ extension Recipe {
     }
     
     convenience init(
-        name: String,
         temperature: Int,
         grindSetting: Double,
         extractionTime: Int,
@@ -45,8 +44,9 @@ extension Recipe {
         brewer: Equipment? = nil,
         grinder: Equipment? = nil
     ) {
+        // `name` is deprecated; it stays in the schema until SchemaV6 drops it.
         self.init(
-            name: name,
+            name: "",
             minTemperature: temperature,
             maxTemperature: temperature,
             minGrindSetting: grindSetting,

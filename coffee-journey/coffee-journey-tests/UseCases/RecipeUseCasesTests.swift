@@ -62,12 +62,21 @@ struct RecipeUseCasesTests {
         return recipe
     }
 
-    private func makeCreateRequest(coffee: Coffee) -> CreateRecipeRequest {
+    private func makeEquipment(_ name: String, type: EquipmentType, into context: ModelContext) -> Equipment {
+        let equipment = Equipment(name: name, brand: "Generic", type: type.rawValue, notes: "")
+        context.insert(equipment)
+        return equipment
+    }
+
+    private func makeCreateRequest(
+        coffee: Coffee,
+        brewer: Equipment,
+        grinder: Equipment
+    ) -> CreateRecipeRequest {
         CreateRecipeRequest(
-            grinder: nil,
-            brewer: nil,
+            grinder: grinder,
+            brewer: brewer,
             coffee: coffee,
-            name: "Filter",
             temperature: 94,
             grindSetting: 20.0,
             extractionTime: 240,
@@ -82,8 +91,10 @@ struct RecipeUseCasesTests {
         let (repository, context) = try prepareEnvironment()
         let useCase = CreateRecipe(repository: repository)
         let coffee = makeCoffee(into: context)
+        let brewer = makeEquipment("Robot", type: .machine, into: context)
+        let grinder = makeEquipment("C40", type: .grinder, into: context)
 
-        try useCase(request: makeCreateRequest(coffee: coffee))
+        try useCase(request: makeCreateRequest(coffee: coffee, brewer: brewer, grinder: grinder))
 
         let all = try context.fetch(FetchDescriptor<Recipe>())
         #expect(all.count == 1)
@@ -93,10 +104,13 @@ struct RecipeUseCasesTests {
         let (repository, context) = try prepareEnvironment()
         let useCase = CreateRecipe(repository: repository)
         let coffee = makeCoffee(into: context)
+        let brewer = makeEquipment("Robot", type: .machine, into: context)
+        let grinder = makeEquipment("C40", type: .grinder, into: context)
 
-        let created = try useCase(request: makeCreateRequest(coffee: coffee))
+        let created = try useCase(request: makeCreateRequest(coffee: coffee, brewer: brewer, grinder: grinder))
 
-        #expect(created.name == "Filter")
+        #expect(created.brewer?.persistentModelID == brewer.persistentModelID)
+        #expect(created.grinder?.persistentModelID == grinder.persistentModelID)
         #expect(created.minTemperature == 94)
         #expect(created.maxTemperature == 94)
         #expect(created.minGrindSetting == 20.0)
@@ -112,10 +126,51 @@ struct RecipeUseCasesTests {
         let (repository, context) = try prepareEnvironment()
         let useCase = CreateRecipe(repository: repository)
         let coffee = makeCoffee(into: context)
+        let brewer = makeEquipment("Robot", type: .machine, into: context)
+        let grinder = makeEquipment("C40", type: .grinder, into: context)
 
-        let created = try useCase(request: makeCreateRequest(coffee: coffee))
+        let created = try useCase(request: makeCreateRequest(coffee: coffee, brewer: brewer, grinder: grinder))
 
-        #expect(created.name == "Filter")
+        let all = try context.fetch(FetchDescriptor<Recipe>())
+        #expect(all.map(\.persistentModelID) == [created.persistentModelID])
+    }
+
+    @Test func createRecipeRejectsDuplicateEquipmentPair() throws {
+        let (repository, context) = try prepareEnvironment()
+        let useCase = CreateRecipe(repository: repository)
+        let coffee = makeCoffee(into: context)
+        let brewer = makeEquipment("Robot", type: .machine, into: context)
+        let grinder = makeEquipment("C40", type: .grinder, into: context)
+        try useCase(request: makeCreateRequest(coffee: coffee, brewer: brewer, grinder: grinder))
+
+        #expect(throws: RecipeError.self) {
+            try useCase(request: makeCreateRequest(coffee: coffee, brewer: brewer, grinder: grinder))
+        }
+        #expect(try context.fetch(FetchDescriptor<Recipe>()).count == 1)
+    }
+
+    @Test func createRecipeAllowsSamePairOnAnotherCoffee() throws {
+        let (repository, context) = try prepareEnvironment()
+        let useCase = CreateRecipe(repository: repository)
+        let brewer = makeEquipment("Robot", type: .machine, into: context)
+        let grinder = makeEquipment("C40", type: .grinder, into: context)
+
+        try useCase(request: makeCreateRequest(coffee: makeCoffee(into: context), brewer: brewer, grinder: grinder))
+        try useCase(request: makeCreateRequest(coffee: makeCoffee(into: context), brewer: brewer, grinder: grinder))
+
+        #expect(try context.fetch(FetchDescriptor<Recipe>()).count == 2)
+    }
+
+    @Test func createRecipeAllowsSameBrewerWithAnotherGrinder() throws {
+        let (repository, context) = try prepareEnvironment()
+        let useCase = CreateRecipe(repository: repository)
+        let coffee = makeCoffee(into: context)
+        let brewer = makeEquipment("Robot", type: .machine, into: context)
+
+        try useCase(request: makeCreateRequest(coffee: coffee, brewer: brewer, grinder: makeEquipment("C40", type: .grinder, into: context)))
+        try useCase(request: makeCreateRequest(coffee: coffee, brewer: brewer, grinder: makeEquipment("K-Ultra", type: .grinder, into: context)))
+
+        #expect(try context.fetch(FetchDescriptor<Recipe>()).count == 2)
     }
 
     // MARK: - UpdateRecipe
@@ -124,10 +179,11 @@ struct RecipeUseCasesTests {
         let (repository, context) = try prepareEnvironment()
         let useCase = UpdateRecipe(repository: repository)
         let recipe = makeWideRecipe(into: context)
+        let brewer = makeEquipment("Robot", type: .machine, into: context)
+        let grinder = makeEquipment("C40", type: .grinder, into: context)
         let request = UpdateRecipeRequest(
-            name: "Updated Espresso",
-            brewer: nil,
-            grinder: nil,
+            brewer: brewer,
+            grinder: grinder,
             temperature: 93,
             grindSetting: 9.5,
             extractionTime: 30,
@@ -137,7 +193,8 @@ struct RecipeUseCasesTests {
 
         try useCase(recipe: recipe, request: request)
 
-        #expect(recipe.name == "Updated Espresso")
+        #expect(recipe.brewer?.persistentModelID == brewer.persistentModelID)
+        #expect(recipe.grinder?.persistentModelID == grinder.persistentModelID)
         #expect(recipe.minTemperature == 93)
         #expect(recipe.maxTemperature == 93)
         #expect(recipe.minGrindSetting == 9.5)
@@ -155,9 +212,8 @@ struct RecipeUseCasesTests {
         let useCase = UpdateRecipe(repository: repository)
         let recipe = makeWideRecipe(into: context)  // starts with wide ranges
         let request = UpdateRecipeRequest(
-            name: "Espresso",
-            brewer: nil,
-            grinder: nil,
+            brewer: makeEquipment("Robot", type: .machine, into: context),
+            grinder: makeEquipment("C40", type: .grinder, into: context),
             temperature: 93,
             grindSetting: 9.0,
             extractionTime: 30,
@@ -179,9 +235,8 @@ struct RecipeUseCasesTests {
         let useCase = UpdateRecipe(repository: repository)
         let recipe = makeWideRecipe(into: context)
         let request = UpdateRecipeRequest(
-            name: "Espresso",
-            brewer: nil,
-            grinder: nil,
+            brewer: makeEquipment("Robot", type: .machine, into: context),
+            grinder: makeEquipment("C40", type: .grinder, into: context),
             temperature: 93,
             grindSetting: 9.0,
             extractionTime: 30,
@@ -192,6 +247,50 @@ struct RecipeUseCasesTests {
         let result = try useCase(recipe: recipe, request: request)
 
         #expect(result.persistentModelID == recipe.persistentModelID)
+    }
+
+    private func makeUpdateRequest(brewer: Equipment, grinder: Equipment) -> UpdateRecipeRequest {
+        UpdateRecipeRequest(
+            brewer: brewer,
+            grinder: grinder,
+            temperature: 93,
+            grindSetting: 9.0,
+            extractionTime: 30,
+            amountBeans: 18.0,
+            output: 33.0
+        )
+    }
+
+    @Test func updateRecipeRejectsPairOfAnotherRecipe() throws {
+        let (repository, context) = try prepareEnvironment()
+        let create = CreateRecipe(repository: repository)
+        let useCase = UpdateRecipe(repository: repository)
+        let coffee = makeCoffee(into: context)
+        let brewer = makeEquipment("Robot", type: .machine, into: context)
+        let c40 = makeEquipment("C40", type: .grinder, into: context)
+        let kUltra = makeEquipment("K-Ultra", type: .grinder, into: context)
+        try create(request: makeCreateRequest(coffee: coffee, brewer: brewer, grinder: c40))
+        let other = try create(request: makeCreateRequest(coffee: coffee, brewer: brewer, grinder: kUltra))
+
+        #expect(throws: RecipeError.self) {
+            try useCase(recipe: other, request: makeUpdateRequest(brewer: brewer, grinder: c40))
+        }
+        #expect(other.grinder?.persistentModelID == kUltra.persistentModelID)
+        #expect(other.minTemperature == 94)
+    }
+
+    @Test func updateRecipeAllowsKeepingItsOwnPair() throws {
+        let (repository, context) = try prepareEnvironment()
+        let create = CreateRecipe(repository: repository)
+        let useCase = UpdateRecipe(repository: repository)
+        let coffee = makeCoffee(into: context)
+        let brewer = makeEquipment("Robot", type: .machine, into: context)
+        let grinder = makeEquipment("C40", type: .grinder, into: context)
+        let recipe = try create(request: makeCreateRequest(coffee: coffee, brewer: brewer, grinder: grinder))
+
+        try useCase(recipe: recipe, request: makeUpdateRequest(brewer: brewer, grinder: grinder))
+
+        #expect(recipe.minTemperature == 93)
     }
 
     // MARK: - DeleteRecipe

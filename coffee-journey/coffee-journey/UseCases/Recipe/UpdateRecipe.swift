@@ -13,7 +13,10 @@ import SwiftData
 
     @discardableResult
     func callAsFunction(recipe: Recipe, request: UpdateRecipeRequest) throws -> Recipe {
-        recipe.name = request.name
+        if recipe.coffee?.hasRecipe(brewer: request.brewer, grinder: request.grinder, excluding: recipe) == true {
+            throw RecipeError.duplicateEquipmentPair
+        }
+
         recipe.brewer = request.brewer
         recipe.grinder = request.grinder
         recipe.minTemperature = request.temperature

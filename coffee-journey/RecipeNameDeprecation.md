@@ -41,14 +41,14 @@ Resolve these before starting Phase 2:
 
 ## Phase 3: Domain layer
 
-- [ ] `Models/DTOs/CreateRecipeRequest.swift`: remove `name`. Make `brewer` and `grinder` non-optional if Phase 2 requires them.
-- [ ] `Models/DTOs/UpdateRecipeRequest.swift`: remove `name`; same optionality change.
-- [ ] `UseCases/Recipe/CreateRecipe.swift:17`: stop passing `name`; add the duplicate-pair check if decided.
-- [ ] `UseCases/Recipe/UpdateRecipe.swift:16`: stop setting `name`; add the duplicate-pair check if decided.
-- [ ] `Models/RecipeModel.swift:39,49`: remove `name` from the convenience initializer.
-- [ ] Update preview data: `PreviewContent/Recipe+PreviewMocks.swift`, `SampleDataFactory.swift`, `SampleDataFactoryV2.swift`. Give the mocks equipment so previews show real card headings.
-- [ ] Update tests that build recipes or requests with `name`: `coffee-journey-tests/UseCases/RecipeUseCasesTests.swift`, `BrewUseCasesTests.swift`, `EquipmentUseCasesTests.swift`, `CoffeeUseCasesTests.swift`, `coffee-journey-tests/Persistence/RecipeRepositoryTests.swift`, `CoffeeRepositoryTests.swift`, `PersistenceTransactionTests.swift`.
-- [ ] Add tests for the duplicate-pair rule, if decided.
+- [x] `Models/DTOs/CreateRecipeRequest.swift`: remove `name`. Make `brewer` and `grinder` non-optional if Phase 2 requires them.
+- [x] `Models/DTOs/UpdateRecipeRequest.swift`: remove `name`; same optionality change.
+- [x] `UseCases/Recipe/CreateRecipe.swift:17`: stop passing `name`; add the duplicate-pair check if decided.
+- [x] `UseCases/Recipe/UpdateRecipe.swift:16`: stop setting `name`; add the duplicate-pair check if decided.
+- [x] `Models/RecipeModel.swift:39,49`: remove `name` from the convenience initializer.
+- [x] Update preview data: `PreviewContent/Recipe+PreviewMocks.swift`, `SampleDataFactory.swift`, `SampleDataFactoryV2.swift`. Give the mocks equipment so previews show real card headings. (Only the convenience initializer drops `name`; `SampleDataFactoryV2` and other designated-initializer callers still pass it until Phase 4.)
+- [x] Update tests that build recipes or requests with `name`: `coffee-journey-tests/UseCases/RecipeUseCasesTests.swift`, `BrewUseCasesTests.swift`, `EquipmentUseCasesTests.swift`, `CoffeeUseCasesTests.swift`, `coffee-journey-tests/Persistence/RecipeRepositoryTests.swift`, `CoffeeRepositoryTests.swift`, `PersistenceTransactionTests.swift`. (Only `RecipeUseCasesTests`, `BrewUseCasesTests` and `RecipeRepositoryTests` needed changes; designated-initializer `name:` arguments stay until Phase 4.)
+- [x] Add tests for the duplicate-pair rule, if decided.
 
 **Verify:** run `BuildProject` and `XcodeListNavigatorIssues` filtered to test files before trusting test results (see the stale-test-build note in `CLAUDE.md`), then run all tests.
 

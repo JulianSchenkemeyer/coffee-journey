@@ -251,7 +251,6 @@ struct BrewDrinkTests {
         _ = makeEquipment(type: .machine, into: context)
         // Recipe with exact single-value ranges
         let recipe = Recipe(
-            name: "Espresso",
             temperature: 93,
             grindSetting: 9.0,
             extractionTime: 30,

@@ -6,9 +6,8 @@
 //
 
 struct UpdateRecipeRequest {
-    let name: String
-    let brewer: Equipment?
-    let grinder: Equipment?
+    let brewer: Equipment
+    let grinder: Equipment
     let temperature: Int
     let grindSetting: Double
     let extractionTime: Int

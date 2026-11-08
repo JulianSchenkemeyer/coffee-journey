@@ -48,7 +48,6 @@ struct SwiftDataRecipeRepositoryTests {
     @Test func createPersistsRecipe() throws {
         let (repository, context) = try prepareEnvironment()
         let recipe = Recipe(
-            name: "Flat White",
             temperature: 93,
             grindSetting: 9.0,
             extractionTime: 28,
@@ -60,7 +59,6 @@ struct SwiftDataRecipeRepositoryTests {
 
         let all = try context.fetch(FetchDescriptor<Recipe>())
         #expect(all.count == 1)
-        #expect(created.name == "Flat White")
         #expect(created.minTemperature == 93)
         #expect(created.maxTemperature == 93)
     }
@@ -68,7 +66,6 @@ struct SwiftDataRecipeRepositoryTests {
     @Test func createReturnsTheSameRecipe() throws {
         let (repository, _) = try prepareEnvironment()
         let recipe = Recipe(
-            name: "Flat White",
             temperature: 93,
             grindSetting: 9.0,
             extractionTime: 28,
@@ -107,14 +104,12 @@ struct SwiftDataRecipeRepositoryTests {
         let (repository, context) = try prepareEnvironment()
         let recipe = try insertRecipe(into: context)
 
-        recipe.name = "Updated Espresso"
         recipe.minTemperature = 92
         recipe.maxTemperature = 94
         let updated = try repository.update(recipe)
 
         let fetched = context.model(for: recipe.persistentModelID) as? Recipe
-        #expect(updated.name == "Updated Espresso")
-        #expect(fetched?.name == "Updated Espresso")
+        #expect(updated.minTemperature == 92)
         #expect(fetched?.minTemperature == 92)
         #expect(fetched?.maxTemperature == 94)
     }

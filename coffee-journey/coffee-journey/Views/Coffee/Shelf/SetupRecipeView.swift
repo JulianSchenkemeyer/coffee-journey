@@ -63,7 +63,6 @@ struct SetupRecipeView: View {
             grinder: selectedGrinder,
             brewer: selectedBrewer,
             coffee: coffee,
-            name: "",
             temperature: temperature,
             grindSetting: grindSetting,
             extractionTime: extractionTime,
