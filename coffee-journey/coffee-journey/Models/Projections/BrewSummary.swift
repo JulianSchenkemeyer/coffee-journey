@@ -35,3 +35,16 @@ extension BrewSummary {
         )
     }
 }
+
+
+extension BrewSummary {
+    init(recipe: Recipe) {
+        self.init(
+            amountCoffee: recipe.amountBeans,
+            grindSetting: recipe.grindSetting,
+            temperature: recipe.temperature,
+            extractionTime: recipe.extractionTime,
+            output: recipe.output
+        )
+    }
+}
