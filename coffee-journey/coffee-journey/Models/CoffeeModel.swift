@@ -16,7 +16,12 @@ extension Coffee {
     var lastUsedRecipe: Recipe? {
         recipes.max(by: { $0.lastUsed ?? .distantPast < $1.lastUsed ?? .distantPast })
     }
-    
+
+    // Most recently used first; never-used recipes last.
+    var recentRecipes: [Recipe] {
+        recipes.sorted { $0.lastUsed ?? .distantPast > $1.lastUsed ?? .distantPast }
+    }
+
     // Recipes are identified by their equipment pair, which must be unique per coffee.
     func hasRecipe(brewer: Equipment?, grinder: Equipment?, excluding excluded: Recipe? = nil) -> Bool {
         recipes.contains {

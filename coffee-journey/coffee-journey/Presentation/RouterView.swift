@@ -62,6 +62,8 @@ struct RouterView: View {
             CoffeeEditView(coffee: coffee)
         case .brewHistory(let coffee, let recipe):
             BrewHistoryView(coffee: coffee, recipe: recipe)
+        case .recipes(let coffee):
+            RecipeListView(coffee: coffee)
         case .equipmentDetails(let equipment):
             EquipmentDetailsView(equipment: equipment)
         }

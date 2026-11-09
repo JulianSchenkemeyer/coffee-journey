@@ -17,6 +17,7 @@ class Router {
         case coffeeDetails(Coffee)
         case editCoffee(Coffee)
         case brewHistory(Coffee, Recipe?)
+        case recipes(Coffee)
         case equipmentDetails(Equipment)
 
         /// How this route's destination animates in. Changing a case here is enough to switch a
@@ -30,6 +31,7 @@ class Router {
             // reads as arbitrary. Flip to `.zoom` and re-add a `zoomSource(_:)` anchor to revisit.
             case .editCoffee: .standard
             case .brewHistory: .standard
+            case .recipes: .standard
             }
         }
     }
