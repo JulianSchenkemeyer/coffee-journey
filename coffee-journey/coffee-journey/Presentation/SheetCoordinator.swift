@@ -10,7 +10,7 @@ import SwiftUI
 
 @Observable class SheetCoordinator {
     enum ActiveSheet: Identifiable {
-        case brew(Coffee)
+        case brew(Coffee, Recipe?)
         case refill(Coffee)
         case addCoffee
         case editRecipe(Coffee, Recipe?)

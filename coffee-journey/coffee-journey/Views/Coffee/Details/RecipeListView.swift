@@ -14,8 +14,10 @@ struct RecipeListView: View {
     var body: some View {
         List {
             ForEach(coffee.recentRecipes) { recipe in
-                RecipeRow(recipe: recipe)
-                    .recipeActions(coffee: coffee, recipe: recipe)
+                RouteLink(.recipeDetails(coffee, recipe)) {
+                    RecipeRow(recipe: recipe)
+                }
+                .recipeActions(coffee: coffee, recipe: recipe)
             }
         }
         .overlay {

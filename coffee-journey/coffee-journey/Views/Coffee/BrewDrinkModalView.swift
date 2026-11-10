@@ -40,9 +40,10 @@ struct BrewDrinkModalView: View {
     @State private var taste = RecipeConstants.Taste.defaultValue
     @State private var clarity = RecipeConstants.Clarity.defaultValue
 
-    init(coffee: Coffee) {
+    // Starts from `recipe`, or the coffee's last used recipe when none is given.
+    init(coffee: Coffee, recipe: Recipe? = nil) {
         self.coffee = coffee
-        let last = coffee.lastUsedRecipe
+        let last = recipe ?? coffee.lastUsedRecipe
         _selectedRecipe = State(initialValue: last)
         if let last {
             _usedCoffee = State(initialValue: last.amountBeans)

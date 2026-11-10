@@ -44,6 +44,18 @@ struct BrewTasteDistributionChartView: View {
             }
         }
         
+        // The recipe's min…max for this parameter; nil for bean age, which recipes don't define.
+        func range(of recipe: Recipe) -> ClosedRange<Double>? {
+            switch self {
+            case .Temperature: return Double(recipe.minTemperature)...Double(recipe.maxTemperature)
+            case .AmountCoffee: return recipe.minAmountBeans...recipe.maxAmountBeans
+            case .GrindSize: return recipe.minGrindSetting...recipe.maxGrindSetting
+            case .BrewTime: return Double(recipe.minExtractionTime)...Double(recipe.maxExtractionTime)
+            case .Output: return recipe.minOutput...recipe.maxOutput
+            case .BeanAge: return nil
+            }
+        }
+
         func unit() -> String {
             switch self {
             case .Temperature: return "°C"
@@ -59,6 +71,8 @@ struct BrewTasteDistributionChartView: View {
     @State private var option = Options.AmountCoffee
 
     let brews: [Brew]
+    // When set, its range for the selected parameter is drawn behind the brews.
+    var recipe: Recipe?
 
     /// Returns a stable spread offset in -0.3...0.3 for a given brew.
     ///
@@ -82,18 +96,34 @@ struct BrewTasteDistributionChartView: View {
             }
             .pickerStyle(.menu)
             
-            Chart(brews) { brew in
-                PointMark(
-                    x: .value(
-                        "Taste",
-                        Double(brew.taste) + spreadOffset(for: brew)
-                    ) ,
-                    y: .value(
-                        option.label,
-                        option.value(for: brew)
+            Chart {
+                if let range = recipe.flatMap({ option.range(of: $0) }) {
+                    RectangleMark(
+                        xStart: .value("Taste", 0),
+                        xEnd: .value("Taste", 6),
+                        yStart: .value(option.label, range.lowerBound),
+                        yEnd: .value(option.label, range.upperBound)
                     )
-                )
-                .foregroundStyle(by: .value("Brew Rating", brew.rating.rawValue))
+                    .foregroundStyle(Color.accentColor.opacity(0.15))
+
+                    RuleMark(y: .value(option.label, (range.lowerBound + range.upperBound) / 2))
+                        .foregroundStyle(Color.accentColor.opacity(0.6))
+                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [4, 3]))
+                }
+
+                ForEach(brews) { brew in
+                    PointMark(
+                        x: .value(
+                            "Taste",
+                            Double(brew.taste) + spreadOffset(for: brew)
+                        ) ,
+                        y: .value(
+                            option.label,
+                            option.value(for: brew)
+                        )
+                    )
+                    .foregroundStyle(by: .value("Brew Rating", brew.rating.rawValue))
+                }
             }
             .chartForegroundStyleScale([
                 "Good": .blue.opacity(0.4),
@@ -101,7 +131,8 @@ struct BrewTasteDistributionChartView: View {
             ])
             .chartXScale(domain: 0...6)
             .chartYScale(domain: {
-                let values = brews.map { option.value(for: $0) }
+                let range = recipe.flatMap { option.range(of: $0) }
+                let values = brews.map { option.value(for: $0) } + [range?.lowerBound, range?.upperBound].compactMap { $0 }
                 let min = max((values.min() ?? 0) - 1, 0)
                 let max = (values.max()  ?? 1) + 1
                 

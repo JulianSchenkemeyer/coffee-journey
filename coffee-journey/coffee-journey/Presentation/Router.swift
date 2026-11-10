@@ -18,6 +18,7 @@ class Router {
         case editCoffee(Coffee)
         case brewHistory(Coffee, Recipe?)
         case recipes(Coffee)
+        case recipeDetails(Coffee, Recipe)
         case equipmentDetails(Equipment)
 
         /// How this route's destination animates in. Changing a case here is enough to switch a
@@ -32,6 +33,7 @@ class Router {
             case .editCoffee: .standard
             case .brewHistory: .standard
             case .recipes: .standard
+            case .recipeDetails: .standard
             }
         }
     }

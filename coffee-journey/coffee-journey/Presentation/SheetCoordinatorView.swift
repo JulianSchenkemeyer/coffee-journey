@@ -50,8 +50,8 @@ struct SheetCoordinatorView<Content: View>: View {
     @ViewBuilder
     private func destinationView(for sheet: SheetCoordinator.ActiveSheet) -> some View {
         switch sheet {
-        case .brew(let coffee):
-            BrewDrinkModalView(coffee: coffee)
+        case .brew(let coffee, let recipe):
+            BrewDrinkModalView(coffee: coffee, recipe: recipe)
                 .presentationDetents([.fraction(0.9)])
         case .refill(let coffee):
             RefillBeansModalView(coffee: coffee)

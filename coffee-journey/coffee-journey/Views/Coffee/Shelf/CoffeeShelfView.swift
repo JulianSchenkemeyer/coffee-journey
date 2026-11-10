@@ -86,7 +86,7 @@ struct CoffeeShelfView: View {
                 }
                 .swipeActions(edge: .leading) {
                     Button("Brew", systemImage: CJSymbol.Action.brew) {
-                        sheetCoordinator.present(.brew(coffee))
+                        sheetCoordinator.present(.brew(coffee, nil))
                     }
                 }
                 .swipeActions(edge: .trailing) {

@@ -62,12 +62,20 @@ struct CoffeeDetailsView: View {
 
                     VStack(alignment: .leading, spacing: 0) {
                         ForEach(coffee.recentRecipes.prefix(3)) { recipe in
-                            RecipeRow(recipe: recipe)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                            RouteLink(.recipeDetails(coffee, recipe)) {
+                                HStack {
+                                    RecipeRow(recipe: recipe)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.footnote.weight(.semibold))
+                                        .foregroundStyle(.tertiary)
+                                }
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 10)
                                 .contentShape(.rect)
-                                .recipeActions(coffee: coffee, recipe: recipe)
+                            }
+                            .buttonStyle(.plain)
+                            .recipeActions(coffee: coffee, recipe: recipe)
 
                             Divider()
                                 .padding(.leading, 16)
@@ -118,7 +126,7 @@ struct CoffeeDetailsView: View {
             
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Brew", systemImage: CJSymbol.Action.brew) {
-                    sheetCoordinator.present(.brew(coffee), from: .brewCoffee(coffee))
+                    sheetCoordinator.present(.brew(coffee, nil), from: .brewCoffee(coffee))
                 }
             }
             .sheetZoomSource(.brewCoffee(coffee), in: sheetNamespace ?? fallbackSheetNamespace)
