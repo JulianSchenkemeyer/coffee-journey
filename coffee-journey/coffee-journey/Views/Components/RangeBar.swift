@@ -92,21 +92,22 @@ struct RangeBar<F: FormatStyle>: View where F.FormatInput == Double, F.FormatOut
 }
 
 
-// Track, min…max band and target dot. Positions are fractions of the track width.
+// Track, min…max band and target marker. Positions are fractions of the track width.
 private struct RangeBarTrack: View {
     let min: Double
     let max: Double
     let target: Double
 
-    @ScaledMetric private var dotSize: CGFloat = 12
+    @ScaledMetric private var markerHeight: CGFloat = 14
+    @ScaledMetric private var markerWidth: CGFloat = 3
 
     var body: some View {
         Canvas { context, size in
-            let trackHeight = dotSize / 2
-            let trackWidth = size.width - dotSize
+            let trackHeight = markerHeight / 2
+            let trackWidth = size.width - markerWidth
             let trackY = (size.height - trackHeight) / 2
-            // Inset by half a dot so the dot stays inside the canvas at either end.
-            let x = { (fraction: Double) in dotSize / 2 + trackWidth * fraction }
+            // Inset by half a marker so the marker stays inside the canvas at either end.
+            let x = { (fraction: Double) in markerWidth / 2 + trackWidth * fraction }
 
             let track = CGRect(x: x(0), y: trackY, width: trackWidth, height: trackHeight)
             context.fill(Capsule().path(in: track), with: .style(.quaternary))
@@ -116,11 +117,12 @@ private struct RangeBarTrack: View {
                 context.fill(Capsule().path(in: band), with: .color(.accentColor.opacity(0.4)))
             }
 
-            let dot = CGRect(x: x(target) - dotSize / 2, y: (size.height - dotSize) / 2, width: dotSize, height: dotSize)
-            context.fill(Circle().path(in: dot), with: .color(.accentColor))
+            // A slim marker rather than a dot, so a narrow band stays visible on both sides of it.
+            let marker = CGRect(x: x(target) - markerWidth / 2, y: 0, width: markerWidth, height: size.height)
+            context.fill(Capsule().path(in: marker), with: .color(.accentColor))
         }
         .frame(minWidth: 60)
-        .frame(height: dotSize)
+        .frame(height: markerHeight)
     }
 }
 
