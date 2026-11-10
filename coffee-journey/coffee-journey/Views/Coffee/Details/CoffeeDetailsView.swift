@@ -40,7 +40,8 @@ struct CoffeeDetailsView: View {
                     lastRefill: coffee.lastRefill,
                     totalBrews: coffee.totalBrews,
                     rating: coffee.rating,
-                    notes: coffee.notes
+                    notes: coffee.notes,
+                    forecast: SupplyForecast(brews: coffee.brews, amountLeft: coffee.amountLeft)
                 )
                 .frame(maxWidth: .infinity)
                 .padding(.top, 24)
@@ -95,7 +96,13 @@ struct CoffeeDetailsView: View {
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16))
                 }
 
-                BrewTasteDistributionChartView(brews: coffee.brews)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Best by Bean Age")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+
+                    BeanAgeChartView(curve: RestCurve(brews: coffee.brews), currentBeanAge: coffee.beanAge)
+                }
             }
             .padding(.horizontal, 24)
         }

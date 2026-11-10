@@ -262,9 +262,13 @@ enum SampleDataFactoryV2 {
             _ amountCoffee: Double, _ grind: Double, _ temp: Int,
             _ extTime: Int, _ taste: Int, _ output: Double, _ rating: BrewRating
         ) -> Brew {
+            // Days off roast at brew time, as recorded for real brews; nil before the roast date.
+            let beanAge = coffee.newestRefill.flatMap {
+                Calendar.current.dateComponents([.day], from: $0.roastDate, to: d(date)).day
+            }.flatMap { $0 >= 0 ? $0 : nil }
             let b = Brew(
                 date: d(date),
-                beanAge: nil,
+                beanAge: beanAge,
                 amountCoffee: amountCoffee,
                 grindSetting: grind,
                 temperature: temp,

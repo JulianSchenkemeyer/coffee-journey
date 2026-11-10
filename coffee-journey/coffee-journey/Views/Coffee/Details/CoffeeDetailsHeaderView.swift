@@ -6,6 +6,7 @@
 //
 import Foundation
 import SwiftUI
+import SwiftData
 
 
 struct CoffeeDetailsHeaderView: View {
@@ -16,6 +17,7 @@ struct CoffeeDetailsHeaderView: View {
     var totalBrews: Int
     var rating: Double
     var notes: String?
+    var forecast: SupplyForecast?
     
     
     
@@ -25,6 +27,13 @@ struct CoffeeDetailsHeaderView: View {
                 .font(.title2)
                 .monospaced()
                 .fontWeight(.semibold)
+
+            if let forecast {
+                let daysLeft = Swift.max(Int(forecast.daysLeft.rounded()), 1)
+                Text("≈ ^[\(daysLeft) day](inflect: true) left · \(forecast.gramsPerDay, format: .number.precision(.fractionLength(0)))\u{00A0}g/day")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
             
             Divider()
                 .padding(.horizontal)
@@ -108,4 +117,22 @@ struct CoffeeDetailsHeaderView: View {
         rating: 4,
         notes: "chocolate, red fruits"
     )
+}
+
+#Preview("Forecast", traits: .modifier(SampleDataModifier())) {
+    @Previewable @Query var coffees: [Coffee]
+    let coffee = coffees.max { $0.brews.count < $1.brews.count }
+
+    // Sample brews are months old, so forecast as of the latest one.
+    if let coffee, let latest = coffee.brews.map(\.date).max() {
+        CoffeeDetailsHeaderView(
+            amount: "250",
+            amountLeft: "120",
+            roastDate: .twoWeekAgo,
+            lastRefill: .oneWeekAgo,
+            totalBrews: coffee.brews.count,
+            rating: 4,
+            forecast: SupplyForecast(brews: coffee.brews, amountLeft: 120, now: latest)
+        )
+    }
 }
