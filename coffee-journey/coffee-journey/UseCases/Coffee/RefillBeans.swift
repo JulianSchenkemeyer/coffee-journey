@@ -15,6 +15,7 @@ import Foundation
     func callAsFunction(coffee: Coffee, refill: Refill, dumpRest: Bool = false) throws -> Coffee {
         coffee.refills.append(refill)
         
+        coffee.lastRefill = refill.date
         coffee.brewsSinceRefill = 0
         if dumpRest {
             coffee.amountLeft = refill.amount

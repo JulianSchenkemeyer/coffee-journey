@@ -216,6 +216,18 @@ struct CoffeeUseCasesTests {
         #expect(coffee.brewsSinceRefill == 0)
     }
 
+    @Test func refillBeansUpdatesLastRefill() throws {
+        let (repository, context) = try prepareEnvironment()
+        let useCase = RefillBeans(repository: repository)
+        let coffee = makeCoffee(into: context)
+        let refillDate = Date(timeIntervalSinceReferenceDate: 800_000_000)
+        let refill = Refill(amount: 200.0, roastDate: .now, date: refillDate)
+
+        try useCase(coffee: coffee, refill: refill)
+
+        #expect(coffee.lastRefill == refillDate)
+    }
+
     @Test func refillBeansAppendsRefillToHistory() throws {
         let (repository, context) = try prepareEnvironment()
         let useCase = RefillBeans(repository: repository)
